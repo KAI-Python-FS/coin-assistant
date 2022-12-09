@@ -27,6 +27,7 @@ INSTALLED_APPS = [
 
     'server.app.users',
     'server.app.purchases',
+    'server.app.goals',
 ]
 
 MIDDLEWARE = [
