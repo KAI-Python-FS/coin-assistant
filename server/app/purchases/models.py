@@ -5,6 +5,15 @@ from django.db import models
 User = get_user_model()
 
 
+class Category(models.Model):
+    """Модель категории покупки"""
+
+    name = models.CharField(
+        max_length=64,
+        verbose_name="Название категории"
+    )
+
+
 class Purchase(models.Model):
     """Модель покупки"""
 
@@ -25,6 +34,11 @@ class Purchase(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name="Покупатель",
+    )
+    category = models.ManyToManyField(
+        Category,
+        null=True,
+        verbose_name="Категория покупки",
     )
 
     class Meta:
