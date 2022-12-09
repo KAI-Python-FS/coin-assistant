@@ -7,6 +7,8 @@ authors = ["Maksimyuk <georgiy.maksimyuk@flatstack.dev>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 Django = "^4.1.4"
+python-decouple = "^3.6"
+django-split-settings = "^1.2.0"
 
 [tool.poetry.dev-dependencies]
 
