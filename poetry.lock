@@ -35,6 +35,14 @@ optional = false
 python-versions = ">=3.7,<4.0"
 
 [[package]]
+name = "psycopg2-binary"
+version = "2.9.5"
+description = "psycopg2 - Python-PostgreSQL Database Adapter"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "python-decouple"
 version = "3.6"
 description = "Strict separation of settings from code."
@@ -61,12 +69,13 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "83a503f032a5c50a57c8ff1fe5e0c46d49de9670c5a19700f92efe5e2b19544d"
+content-hash = "1fb88c44fea26937bd7ff4d078331cb08aab6b7f1cff0c489b099feb5196339a"
 
 [metadata.files]
 asgiref = []
 django = []
 django-split-settings = []
+psycopg2-binary = []
 python-decouple = [
     {file = "python-decouple-3.6.tar.gz", hash = "sha256:2838cdf77a5cf127d7e8b339ce14c25bceb3af3e674e039d4901ba16359968c7"},
     {file = "python_decouple-3.6-py3-none-any.whl", hash = "sha256:6cf502dc963a5c642ea5ead069847df3d916a6420cad5599185de6bab11d8c2e"},
