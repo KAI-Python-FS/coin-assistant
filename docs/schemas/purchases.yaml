@@ -1,0 +1,226 @@
+openapi: "3.0.2"
+info:
+  title: Описание API для Покупок
+  version: "1.0"
+servers:
+  - url: https://api.server.test/v1
+tags:
+  - name: "API покупок"
+    description: "API покупок пользователя"
+components:
+  schemas:
+    User:
+      type: object
+      description: "Пользователь"
+      properties:
+        id:
+          type: integer
+          description: "Уникальный ключ"
+        name:
+          type: string
+          description: "Имя пользователя"
+    PurchaseCategory:
+      type: object
+      description: 'Категория покупки'
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          description: "Уникальный ключ"
+        name:
+          type: string
+          description: "Название категории"
+    Purchase:
+      type: object
+      description: 'Покупка пользователя'
+      required:
+        - id
+        - name
+        - date
+      properties:
+        id:
+          type: integer
+          description: "Уникальный ключ"
+        name:
+          type: string
+          description: "Название покупки"
+        description:
+          type: string
+          description: "Описание покупки"
+        cost:
+          type: number
+          format: float
+          description: "Стоимость покупки"
+        date:
+          type: string
+          format: date-time
+          description: "Дата и время покупки"
+        category:
+          type: array
+          description: "Список категорий покупки"
+          items:
+            $ref: "#/components/schemas/PurchaseCategory"
+    PurchaseCreate:
+      type: object
+      description: 'Создание покупки пользователя'
+      required:
+        - name
+        - date
+        - cost
+      properties:
+        name:
+          type: string
+          description: "Название покупки"
+        description:
+          type: string
+          description: "Описание покупки"
+        cost:
+          type: number
+          format: float
+          description: "Стоимость покупки"
+        date:
+          type: string
+          format: date-time
+          description: "Дата и время покупки"
+        category:
+          type: array
+          description: "Список категорий покупки"
+          items:
+            type: integer
+        user:
+          type: integer
+          description: "Уникальный ключ пользователя"
+    PurchaseUpdate:
+      type: object
+      description: 'Обновление покупки пользователя'
+      properties:
+        name:
+          type: string
+          description: "Название покупки"
+        description:
+          type: string
+          description: "Описание покупки"
+        cost:
+          type: number
+          format: float
+          description: "Стоимость покупки"
+        date:
+          type: string
+          format: date-time
+          description: "Дата и время покупки"
+        category:
+          type: array
+          description: "Список категорий покупки"
+          items:
+            type: integer
+        user:
+          type: integer
+          description: "Уникальный ключ пользователя"
+
+  parameters:
+    purchase_id:
+      name: 'id'
+      in: 'path'
+      description: 'Уникальный ключ Покупок'
+      required: true
+      schema:
+        type: integer
+    user_id:
+      name: 'user_id'
+      in: 'query'
+      description: 'Уникальный ключ Пользователя'
+      required: false
+      schema:
+        type: integer
+    category_id:
+      name: 'category_id'
+      in: 'query'
+      description: 'Уникальный ключ Категории'
+      required: false
+      schema:
+        type: integer
+    purchase_date_start:
+      name: 'purchase_date_start'
+      in: 'query'
+      description: 'Начальная дата и время покупки'
+      required: false
+      schema:
+        type: string
+        format: date-time
+    purchase_date_finish:
+      name: 'purchase_date_finish'
+      in: 'query'
+      description: 'Конечная дата и время покупки'
+      required: false
+      schema:
+        type: string
+        format: date-time
+  responses:
+    success:
+      description: 'Успешная операция'
+      content:
+        application/json:
+          schema:
+            type: string
+paths:
+  /purchases:
+    get:
+      tags:
+        - API покупок
+      parameters:
+        - $ref: '#/components/parameters/user_id'
+        - $ref: '#/components/parameters/category_id'
+        - $ref: '#/components/parameters/purchase_date_start'
+        - $ref: '#/components/parameters/purchase_date_finish'
+      responses:
+        '200':
+          description: 'Успешная операция'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Purchase'
+    post:
+      tags:
+        - API покупок
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseCreate'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+  /purchases/{id}:
+    parameters:
+      - $ref: '#/components/parameters/purchase_id'
+    get:
+      tags:
+        - API покупок
+      description: 'Получение покупки'
+      responses:
+        '200':
+          $ref: '#/components/schemas/Purchase'
+    put:
+      tags:
+        - API покупок
+      description: 'Обновление покупки'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseCreate'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+    delete:
+      description: 'Удаление покупки'
+      tags:
+        - API покупок
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+
