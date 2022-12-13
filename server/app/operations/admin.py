@@ -4,4 +4,4 @@ from server.app.operations import models
 
 
 admin.site.register(models.Category)
-admin.site.register(models.Purchase)
+admin.site.register(models.Operation)

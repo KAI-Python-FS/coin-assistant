@@ -1,5 +1,9 @@
+from datetime import datetime
+
 from django.contrib.auth import get_user_model
 from django.db import models
+
+from server.app.operations.enums import OperationTypeEnum
 
 
 User = get_user_model()
@@ -21,18 +25,24 @@ class Category(models.Model):
         return f'{self.name}'
 
 
-class Purchase(models.Model):
-    """Модель покупки"""
+class Operation(models.Model):
+    """Модель операции"""
 
     name = models.TextField(
-        verbose_name="Наименование покупки",
+        verbose_name="Наименование операции",
     )
     description = models.TextField(
         null=True,
-        verbose_name="Описание покупки",
+        verbose_name="Описание операции",
     )
-    purchased_at = models.DateTimeField(
-        verbose_name="Дата покупки",
+    operation_at = models.DateTimeField(
+        default=datetime.now,
+        verbose_name="Дата операции",
+    )
+    operation_type = models.CharField(
+        verbose_name="Тип операции",
+        choices=OperationTypeEnum.choices,
+        max_length=64,
     )
     cost = models.FloatField(
         verbose_name="Стоимость",
@@ -45,12 +55,12 @@ class Purchase(models.Model):
     category = models.ManyToManyField(
         Category,
         null=True,
-        verbose_name="Категория покупки",
+        verbose_name="Категория операции",
     )
 
     class Meta:
-        verbose_name = 'Покупка'
-        verbose_name_plural = 'Покупки'
+        verbose_name = 'Операция'
+        verbose_name_plural = 'Операции'
 
     def __str__(self):
-        return f'{self.user}-at-{self.purchased_at}'
+        return f'{self.user}-at-{self.operation_at}-{self.name}'
