@@ -185,6 +185,7 @@ components:
 paths:
   /operations:
     get:
+      description: 'Получение списка операций пользователя'
       tags:
         - API операций
       parameters:
@@ -203,6 +204,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Operation'
     post:
+      description: 'Создание операции пользователя'
       tags:
         - API операций
       requestBody:
@@ -242,4 +244,3 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/success'
-
