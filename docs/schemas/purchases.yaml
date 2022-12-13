@@ -1,12 +1,12 @@
 openapi: "3.0.2"
 info:
-  title: Описание API для Покупок
+  title: Описание API для операций
   version: "1.0"
 servers:
   - url: https://api.server.test/v1
 tags:
-  - name: "API покупок"
-    description: "API покупок пользователя"
+  - name: "API операций"
+    description: "API операций пользователя"
 components:
   schemas:
     User:
@@ -19,9 +19,9 @@ components:
         name:
           type: string
           description: "Имя пользователя"
-    PurchaseCategory:
+    OperationCategory:
       type: object
-      description: 'Категория покупки'
+      description: 'Категория операции'
       required:
         - id
         - name
@@ -31,13 +31,14 @@ components:
           description: "Уникальный ключ"
         name:
           type: string
-          description: "Название категории"
-    Purchase:
+          description: "Название операции"
+    Operation:
       type: object
-      description: 'Покупка пользователя'
+      description: 'Операция пользователя'
       required:
         - id
         - name
+        - operation_type
         - date
       properties:
         id:
@@ -45,74 +46,81 @@ components:
           description: "Уникальный ключ"
         name:
           type: string
-          description: "Название покупки"
+          description: "Название операции"
+        operation_type:
+          type: string
+          description: "Тип операции"
         description:
           type: string
-          description: "Описание покупки"
+          description: "Описание операции"
         cost:
           type: number
           format: float
-          description: "Стоимость покупки"
+          description: "Стоимость операции"
         date:
           type: string
           format: date-time
-          description: "Дата и время покупки"
+          description: "Дата и время операции"
         category:
           type: array
-          description: "Список категорий покупки"
+          description: "Список категорий операций"
           items:
-            $ref: "#/components/schemas/PurchaseCategory"
-    PurchaseCreate:
+            $ref: "#/components/schemas/OperationCategory"
+    OperationCreate:
       type: object
-      description: 'Создание покупки пользователя'
+      description: 'Создание операции пользователя'
       required:
         - name
+        - operation_type
         - date
         - cost
       properties:
         name:
           type: string
-          description: "Название покупки"
+          description: "Название операции"
+        operation_type:
+          type: string
+          description: "Тип операции"
         description:
           type: string
-          description: "Описание покупки"
+          description: "Описание операции"
         cost:
           type: number
           format: float
-          description: "Стоимость покупки"
+          description: "Стоимость операции"
         date:
           type: string
           format: date-time
-          description: "Дата и время покупки"
+          description: "Дата и время операции"
         category:
           type: array
-          description: "Список категорий покупки"
+          description: "Список категорий операции"
           items:
             type: integer
         user:
           type: integer
           description: "Уникальный ключ пользователя"
-    PurchaseUpdate:
+    OperationUpdate:
       type: object
-      description: 'Обновление покупки пользователя'
+      description: 'Обновление операции пользователя'
       properties:
         name:
           type: string
-          description: "Название покупки"
+          description: "Название операции"
         description:
           type: string
-          description: "Описание покупки"
+          description: "Описание операции"
         cost:
           type: number
           format: float
-          description: "Стоимость покупки"
+          description: "Стоимость операции"
         date:
           type: string
           format: date-time
-          description: "Дата и время покупки"
+          description: "Дата и время операции"
         category:
           type: array
-          description: "Список категорий покупки"
+          description: "Список категорий операции"
           items:
             type: integer
         user:
@@ -120,10 +128,10 @@ components:
           description: "Уникальный ключ пользователя"
 
   parameters:
-    purchase_id:
+    operation_id:
       name: 'id'
       in: 'path'
-      description: 'Уникальный ключ Покупок'
+      description: 'Уникальный ключ операций'
       required: true
       schema:
         type: integer
@@ -141,22 +149,32 @@ components:
       required: false
       schema:
         type: integer
-    purchase_date_start:
-      name: 'purchase_date_start'
+    operation_date_start:
+      name: 'operation_date_start'
       in: 'query'
-      description: 'Начальная дата и время покупки'
+      description: 'Начальная дата и время операции'
       required: false
       schema:
         type: string
         format: date-time
-    purchase_date_finish:
-      name: 'purchase_date_finish'
+    operation_date_finish:
+      name: 'operation_date_finish'
       in: 'query'
-      description: 'Конечная дата и время покупки'
+      description: 'Конечная дата и время операции'
       required: false
       schema:
         type: string
         format: date-time
+    operation_type:
+      name: 'operation_date_finish'
+      in: 'query'
+      description: 'Конечная дата и время операции'
+      required: false
+      schema:
+        type: string
+        enum:
+          - "Трата"
+          - "Пополнение"
   responses:
     success:
       description: 'Успешная операция'
@@ -165,15 +183,16 @@ components:
           schema:
             type: string
 paths:
-  /purchases:
+  /operations:
     get:
       tags:
-        - API покупок
+        - API операций
       parameters:
         - $ref: '#/components/parameters/user_id'
+        - $ref: '#/components/parameters/operation_type'
         - $ref: '#/components/parameters/category_id'
-        - $ref: '#/components/parameters/purchase_date_start'
-        - $ref: '#/components/parameters/purchase_date_finish'
+        - $ref: '#/components/parameters/operation_date_start'
+        - $ref: '#/components/parameters/operation_date_finish'
       responses:
         '200':
           description: 'Успешная операция'
@@ -182,44 +201,44 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Purchase'
+                  $ref: '#/components/schemas/Operation'
     post:
       tags:
-        - API покупок
+        - API операций
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PurchaseCreate'
+              $ref: '#/components/schemas/OperationCreate'
       responses:
         '200':
           $ref: '#/components/responses/success'
-  /purchases/{id}:
+  /operations/{id}:
     parameters:
-      - $ref: '#/components/parameters/purchase_id'
+      - $ref: '#/components/parameters/operation_id'
     get:
       tags:
-        - API покупок
-      description: 'Получение покупки'
+        - API операций
+      description: 'Получение операции'
       responses:
         '200':
-          $ref: '#/components/schemas/Purchase'
+          $ref: '#/components/schemas/Operation'
     put:
       tags:
-        - API покупок
-      description: 'Обновление покупки'
+        - API операций
+      description: 'Обновление операции'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PurchaseCreate'
+              $ref: '#/components/schemas/OperationCreate'
       responses:
         '200':
           $ref: '#/components/responses/success'
     delete:
-      description: 'Удаление покупки'
+      description: 'Удаление операции'
       tags:
-        - API покупок
+        - API операций
       responses:
         '200':
           $ref: '#/components/responses/success'
