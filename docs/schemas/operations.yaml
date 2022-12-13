@@ -126,7 +126,37 @@ components:
         user:
           type: integer
           description: "Уникальный ключ пользователя"
-
+    Balance:
+      type: integer
+      description: 'Баланс пользователя'
+    CategoryDetailed:
+      type: object
+      description: "Детальная информация о сумме операций в разрезе категории"
+      properties:
+        name:
+          type: string
+          description: "Название категории"
+        sum:
+          type: number
+          format: float
+          description: "Сумма операций"
+    BalanceDetailed:
+      type: object
+      description: 'Детальный баланс пользователя'
+      properties:
+        spending:
+          type: array
+          description: 'Траты пользователя'
+          items:
+            $ref: "#/components/schemas/CategoryDetailed"
+        refill:
+          type: array
+          description: 'Поступления пользователя'
+          items:
+            $ref: "#/components/schemas/CategoryDetailed"
+        balance:
+          type: integer
+          description: 'Баланс'
   parameters:
     operation_id:
       name: 'id'
@@ -244,3 +274,31 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/success'
+  /balance:
+    get:
+      description: 'Получение информации о балансе'
+      tags:
+        - API операций
+      parameters:
+        - $ref: '#/components/parameters/user_id'
+      responses:
+        '200':
+          description: 'Успешная операция'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Balance'
+  /balance-detailed:
+    get:
+      description: 'Детальная информация о балансе'
+      tags:
+        - API операций
+      parameters:
+        - $ref: '#/components/parameters/user_id'
+      responses:
+        '200':
+          description: 'Успешная операция'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceDetailed'
