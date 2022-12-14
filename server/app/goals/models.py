@@ -52,7 +52,7 @@ class Goal(models.Model):
         verbose_name="Состояние цели"
     )
     value = models.FloatField(
-        default=0,
+        null=True,
         verbose_name="Значение цели",
     )
     rule = models.CharField(
