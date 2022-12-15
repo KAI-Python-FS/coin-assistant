@@ -26,7 +26,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Balance"
-  /balance-detailed:
+  /balance_detailed:
     get:
       description: "Детализация трат по категориям"
       tags:
@@ -38,6 +38,19 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BalanceDetailed"
+  /balance/balance_change:
+    post:
+      description: "Отчет об изменении баланса в разрезе месяцев по категориям"
+      tags:
+        - "API баланса"
+      responses:
+        "200":
+          description: "Файл отчета"
+          content:
+            application/xlsx:
+              schema:
+                type: string
+                format: binary
   /budget:
     get:
       description: "Получение списка бюджетов пользователя"
