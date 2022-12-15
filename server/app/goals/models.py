@@ -57,7 +57,7 @@ class Goal(models.Model):
     )
     rule = models.CharField(
         choices=enums.GoalRuleEnum.choices,
-        default=enums.GoalRuleEnum.lte,
+        default=enums.GoalRuleEnum.eq,
         max_length=16,
         verbose_name="Правило достижения цели",
     )

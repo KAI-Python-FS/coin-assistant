@@ -5,8 +5,8 @@ info:
 servers:
   - url: https://api.server.test/v1
 tags:
-  - name: "API целей"
-    description: "API работы с целями пользователя"
+  - name: "API целей накопления"
+    description: "API работы с целями накопления пользователя"
   - name: "API бюджета"
     description: "API работы с бюджетом пользователя"
 components:
@@ -52,6 +52,13 @@ components:
           type: number
           format: float
           description: "Значение"
+        rule:
+          type: string
+          description: "Правило"
+          enum:
+            - "Меньше"
+            - "Меньше или равно"
+            - "Равно"
     BudgetCreate:
       type: object
       description: "Добавление бюджета"
@@ -129,12 +136,6 @@ components:
         description:
           type: string
           description: "Описание"
-        type:
-          type: string
-          description: "Тип"
-          enum:
-            - "Трата"
-            - "Пополнение"
         category:
           type: string
           description: "Категория"
@@ -162,15 +163,91 @@ components:
           type: string
           description: "Правило достижения цели"
           enum:
-            - "Меньше"
-            - "Меньше или равно"
             - "Больше"
             - "Больше или равно"
             - "Равно"
     GoalCreate:
       type: object
-      description: "Добавление цели пользователя"
-
+      description: "Добавление цели накопления пользователем"
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: "Название"
+        description:
+          type: string
+          description: "Описание"
+        category:
+          type: string
+          description: "Категория"
+        start_date:
+          type: string
+          format: date
+          description: "Дата начала цели"
+        finish_date:
+          type: string
+          format: date
+          description: "Дата окончания цели"
+        state:
+          type: string
+          description: "Статус"
+          enum:
+            - "Успешно выполнена"
+            - "Не выполнена"
+            - "В процессе"
+            - "Неизвестно"
+        value:
+          type: number
+          format: float
+          description: "Значение"
+        rule:
+          type: string
+          description: "Правило достижения цели"
+          enum:
+            - "Больше"
+            - "Больше или равно"
+            - "Равно"
+    GoalUpdate:
+      type: object
+      description: "Обновление цели накопления пользователем"
+      properties:
+        name:
+          type: string
+          description: "Название"
+        description:
+          type: string
+          description: "Описание"
+        category:
+          type: string
+          description: "Категория"
+        start_date:
+          type: string
+          format: date
+          description: "Дата начала цели"
+        finish_date:
+          type: string
+          format: date
+          description: "Дата окончания цели"
+        state:
+          type: string
+          description: "Статус"
+          enum:
+            - "Успешно выполнена"
+            - "Не выполнена"
+            - "В процессе"
+            - "Неизвестно"
+        value:
+          type: number
+          format: float
+          description: "Значение"
+        rule:
+          type: string
+          description: "Правило достижения цели"
+          enum:
+            - "Больше"
+            - "Больше или равно"
+            - "Равно"
     User:
       type: object
       description: "Пользователь"
@@ -189,33 +266,61 @@ components:
       required: true
       schema:
         type: integer
+    budget_rule:
+      name: "budget_rule"
+      in: query
+      description: "Правило прохождения бюджета"
+      required: false
+      schema:
+        type: string
+        enum:
+          - "Меньше"
+          - "Меньше или равно"
     category_id:
-      name: 'category_id'
-      in: 'query'
-      description: 'Уникальный ключ Категории'
+      name: "category_id"
+      in: "query"
+      description: "Уникальный ключ Категории"
       required: false
       schema:
         type: integer
     finish_date:
-      name: 'finish_date'
-      in: 'query'
-      description: 'Конечная дата'
+      name: "finish_date"
+      in: "query"
+      description: "Конечная дата"
       required: false
       schema:
         type: string
         format: date
+    goal_id:
+      name: "goal_id"
+      in: "path"
+      description: "Уникальный идентификатор цели накопления"
+      required: true
+      schema:
+        type: integer
+    goal_rule:
+      name: "rule"
+      in: "query"
+      description: "Конечная дата"
+      required: false
+      schema:
+        type: string
+        enum:
+          - "Больше"
+          - "Больше или равно"
+          - "Равно"
     start_date:
-      name: 'start_date'
-      in: 'query'
-      description: 'Начальная дата'
+      name: "start_date"
+      in: "query"
+      description: "Начальная дата"
       required: false
       schema:
         type: string
         format: date
     state:
-      name: 'state'
-      in: 'query'
-      description: 'Статус'
+      name: "state"
+      in: "query"
+      description: "Статус"
       required: false
       schema:
         type: string
@@ -225,15 +330,15 @@ components:
           - "В процессе"
           - "Неизвестно"
     user_id:
-      name: 'user_id'
-      in: 'query'
-      description: 'Уникальный ключ Пользователя'
+      name: "user_id"
+      in: "query"
+      description: "Уникальный ключ Пользователя"
       required: true
       schema:
         type: integer
   responses:
     success:
-      description: 'Успешная операция'
+      description: "Успешная операция"
       content:
         application/json:
           schema:
@@ -241,16 +346,84 @@ components:
 paths:
   /budget:
     parameters:
-      - $ref: '#/components/parameters/user_id'
+      - $ref: "#/components/parameters/user_id"
     get:
       description: "Получение списка бюджетов пользователя"
       tags:
         - API бюджета
       parameters:
-        - $ref: '#/components/parameters/category_id'
-        - $ref: '#/components/parameters/state'
-        - $ref: '#/components/parameters/start_date'
-        - $ref: '#/components/parameters/finish_date'
+        - $ref: "#/components/parameters/category_id"
+        - $ref: "#/components/parameters/state"
+        - $ref: "#/components/parameters/start_date"
+        - $ref: "#/components/parameters/finish_date"
+        - $ref: "#/components/parameters/budget_rule"
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Budget"
+    post:
+      description: "Добавление бюджета пользователя"
+      tags:
+        - "API бюджета"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BudgetCreate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+  /budget/{budget_id}:
+    parameters:
+      - $ref: "#/components/parameters/budget_id"
+      - $ref: "#/components/parameters/user_id"
+    get:
+      description: "Получение одной записи бюджета пользователя"
+      tags:
+        - "API бюджета"
+      responses:
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Budget"
+    put:
+      description: "Обновление одной записи бюджета пользователя"
+      tags:
+        - "API бюджета"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BudgetUpdate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+    delete:
+      description: "Удаление бюджета"
+      tags:
+        - "API бюджета"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+  /goal:
+    get:
+      description: "Получение списка целей накопления пользователя"
+      tags:
+        - "API целей накопления"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+        - $ref: "#/components/parameters/category_id"
+        - $ref: "#/components/parameters/state"
+        - $ref: "#/components/parameters/start_date"
+        - $ref: "#/components/parameters/finish_date"
+        - $ref: "#/components/parameters/goal_rule"
       responses:
         '200':
           description: 'Успешная операция'
@@ -259,50 +432,49 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Budget'
+                  $ref: '#/components/schemas/Goal'
     post:
-      description: "Добавление бюджета пользователя"
+      description: 'Создание цели накопления пользователя'
       tags:
-        - API бюджета
+        - "API целей накопления"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BudgetCreate'
+              $ref: '#/components/schemas/GoalCreate'
       responses:
-        200:
+        '200':
           $ref: '#/components/responses/success'
-  /budget/{budget_id}:
+  /goal/{goal_id}:
     parameters:
-      - $ref: '#/components/parameters/budget_id'
-      - $ref: '#/components/parameters/user_id'
+      - $ref: '#/components/parameters/goal_id'
     get:
-      description: "Получение одной записи бюджета пользователя"
+      description: "Получение одной цели накопления пользователя"
       tags:
-        - API бюджета
+        - "API целей накопления"
       responses:
-        200:
+        "200":
           description: "Успешная операция"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Budget'
+                $ref: '#/components/schemas/Goal'
     put:
-      description: "Обновление одной записи бюджета пользователя"
       tags:
-        - API бюджета
+        - "API целей накопления"
+      description: 'Обновление цели накопления пользователя'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BudgetUpdate'
+              $ref: '#/components/schemas/GoalUpdate'
       responses:
-        200:
+        '200':
           $ref: '#/components/responses/success'
     delete:
-      description: "Удаление бюджета"
+      description: 'Удаление цели накопления пользователя'
       tags:
-        - API бюджета
+        - "API целей накопления"
       responses:
         '200':
           $ref: '#/components/responses/success'
