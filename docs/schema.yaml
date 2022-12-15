@@ -419,7 +419,7 @@ components:
   parameters:
     budget_id:
       name: "budget_id"
-      in: query
+      in: path
       description: "Уникальный ключ Бюджета"
       required: true
       schema:
@@ -439,6 +439,13 @@ components:
       in: "query"
       description: "Уникальный ключ Категории"
       required: false
+      schema:
+        type: integer
+    category_id_path:
+      name: "category_id"
+      in: "path"
+      description: "Уникальный ключ Категории"
+      required: true
       schema:
         type: integer
     finish_date:
@@ -658,7 +665,7 @@ paths:
           $ref: "#/components/responses/success"
   /category/{category_id}:
     parameters:
-      - $ref: "#/components/parameters/category_id"
+      - $ref: "#/components/parameters/category_id_path"
     get:
       tags:
         - API операций
