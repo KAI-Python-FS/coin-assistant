@@ -1,6 +1,55 @@
 
+from server.app.base.exceptions import ValidationException
+
 from .enums import OperationTypeEnum
-from .models import Operation
+from .models import Category, Operation
+
+
+class CategoryService:
+    """Класс описания бизнес логики работы с Категориями покупок"""
+
+    @classmethod
+    def create(cls, user=None, **category_data) -> Category:
+        """Создание категории"""
+        category = Category.objects.create(**category_data)
+        return category
+
+    @classmethod
+    def retrieve_single(cls, category_id: int) -> Category:
+        """Получение одной категории"""
+        try:
+            category = Category.objects.get(category_id)
+        except Category.DoesNotExist:
+            raise ValidationException(f"Категории с id={category_id} не найдено.")
+
+        return category
+
+    @classmethod
+    def update(cls, category_id: int, user=None, **category_data) -> Category:
+        """Обновление категории"""
+        try:
+            category = Category.objects.get(category_id)
+        except Category.DoesNotExist:
+            raise ValidationException(f"Категории с id={category_id} не найдено.")
+
+        return category
+
+    @classmethod
+    def delete(cls, category_id: int) -> bool:
+        """Удаление категории"""
+        try:
+            category = Category.objects.get(category_id)
+        except Category.DoesNotExist:
+            raise ValidationException(f"Категории с id={category_id} не найдено.")
+
+        category.delete()
+
+        return True
+
+    @classmethod
+    def retrieve_list(cls, **filters) -> list[Category | None]:
+        """Получение списка категорий согласно фильтрам"""
+        return Category.objects.all()
 
 
 class OperationService:
