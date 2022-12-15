@@ -35,6 +35,18 @@ optional = false
 python-versions = ">=3.7,<4.0"
 
 [[package]]
+name = "djangorestframework"
+version = "3.14.0"
+description = "Web APIs for Django, made easy."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+django = ">=3.0"
+pytz = "*"
+
+[[package]]
 name = "psycopg2-binary"
 version = "2.9.5"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
@@ -46,6 +58,14 @@ python-versions = ">=3.6"
 name = "python-decouple"
 version = "3.6"
 description = "Strict separation of settings from code."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "pytz"
+version = "2022.6"
+description = "World timezone definitions, modern and historical"
 category = "main"
 optional = false
 python-versions = "*"
@@ -69,16 +89,18 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "1fb88c44fea26937bd7ff4d078331cb08aab6b7f1cff0c489b099feb5196339a"
+content-hash = "d4d682b558c3e3a6ee87f8ae64ea95c71508541a1cebc7e55945867a92228ab1"
 
 [metadata.files]
 asgiref = []
 django = []
 django-split-settings = []
+djangorestframework = []
 psycopg2-binary = []
 python-decouple = [
     {file = "python-decouple-3.6.tar.gz", hash = "sha256:2838cdf77a5cf127d7e8b339ce14c25bceb3af3e674e039d4901ba16359968c7"},
     {file = "python_decouple-3.6-py3-none-any.whl", hash = "sha256:6cf502dc963a5c642ea5ead069847df3d916a6420cad5599185de6bab11d8c2e"},
 ]
+pytz = []
 sqlparse = []
 tzdata = []
