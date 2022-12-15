@@ -222,10 +222,9 @@ components:
         type: string
         format: date-time
     operation_type:
-      name: 'operation_date_finish'
+      name: 'operation_type'
       in: 'query'
-      description: 'Конечная дата и время операции'
-      required: false
+      description: 'Тип операции'
       schema:
         type: string
         enum:
