@@ -5,14 +5,14 @@ info:
 servers:
   - url: https://127.0.0.1:8000/
 tags:
-  - name: "API целей накопления"
-    description: "API работы с целями накопления пользователя"
-  - name: "API бюджета"
-    description: "API работы с бюджетом пользователя"
-  - name: "API операций"
-    description: "API операций пользователя"
   - name: "API баланса"
     description: "API баланса пользователя"
+  - name: "API операций"
+    description: "API операций пользователя"
+  - name: "API бюджета"
+    description: "API работы с бюджетом пользователя"
+  - name: "API целей накопления"
+    description: "API работы с целями накопления пользователя"
 paths:
   /balance:
     get:
