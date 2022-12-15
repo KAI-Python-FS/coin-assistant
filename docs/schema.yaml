@@ -1,0 +1,818 @@
+openapi: "3.0.2"
+info:
+  title: API Title
+  version: "1.0"
+servers:
+  - url: https://api.server.test/v1
+tags:
+  - name: "API целей накопления"
+    description: "API работы с целями накопления пользователя"
+  - name: "API бюджета"
+    description: "API работы с бюджетом пользователя"
+  - name: "API операций"
+    description: "API операций пользователя"
+  - name: "API баланса"
+    description: "API баланса пользователя"
+components:
+  schemas:
+    Balance:
+      type: integer
+      description: "Баланс пользователя"
+    BalanceDetailed:
+      type: object
+      description: "Детальный баланс пользователя"
+      properties:
+        spending:
+          type: array
+          description: "Траты пользователя"
+          items:
+            $ref: "#/components/schemas/CategoryDetailed"
+        refill:
+          type: array
+          description: "Поступления пользователя"
+          items:
+            $ref: "#/components/schemas/CategoryDetailed"
+        balance:
+          type: integer
+          description: "Баланс"
+    Budget:
+      type: object
+      description: "Бюджет пользователя"
+      properties:
+        id:
+          type: integer
+          description: "Уникальный ключ"
+        name:
+          type: string
+          description: "Название"
+        description:
+          type: string
+          description: "Описание"
+        category:
+          type: string
+          description: "Категория"
+        start_date:
+          type: string
+          format: date
+          description: "Дата начала бюджета"
+        finish_date:
+          type: string
+          format: date
+          description: "Дата окончания бюджета"
+        state:
+          type: string
+          description: "Статус"
+        value:
+          type: number
+          format: float
+          description: "Значение"
+        rule:
+          type: string
+          description: "Правило"
+          enum:
+            - "Меньше"
+            - "Меньше или равно"
+            - "Равно"
+    BudgetCreate:
+      type: object
+      description: "Добавление бюджета"
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+          description: "Название"
+        description:
+          type: string
+          description: "Описание"
+        category:
+          type: string
+          description: "Категория"
+        start_date:
+          type: string
+          format: date
+          description: "Дата начала цели"
+        finish_date:
+          type: string
+          format: date
+          description: "Дата окончания цели"
+        state:
+          type: string
+          description: "Статус"
+        value:
+          type: number
+          format: float
+          description: "Значение"
+    BudgetUpdate:
+      type: object
+      description: "Обновление бюджета"
+      properties:
+        name:
+          type: string
+          description: "Название"
+        description:
+          type: string
+          description: "Описание"
+        category:
+          type: string
+          description: "Категория"
+        start_date:
+          type: string
+          format: date
+          description: "Дата начала цели"
+        finish_date:
+          type: string
+          format: date
+          description: "Дата окончания цели"
+        state:
+          type: string
+          description: "Статус"
+          enum:
+            - "Успешно выполнена"
+            - "Не выполнена"
+            - "В процессе"
+            - "Неизвестно"
+        value:
+          type: number
+          format: float
+          description: "Значение"
+    Category:
+      type: object
+      description: "Категория операции"
+      properties:
+        id:
+          type: integer
+          description: "Уникальный ключ"
+        name:
+          type: string
+          description: "Название категории"
+    CategoryCreate:
+      type: object
+      description: "Создание категории операции"
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: "Название категории"
+    CategoryDetailed:
+      type: object
+      description: "Детальная информация о сумме операций в разрезе категории"
+      properties:
+        name:
+          type: string
+          description: "Название категории"
+        sum:
+          type: number
+          format: float
+          description: "Сумма операций"
+    CategoryUpdate:
+      type: object
+      description: "Обновление категория операции"
+      properties:
+        name:
+          type: string
+          description: "Название категории"
+    Goal:
+      type: object
+      description: "Цель пользователя"
+      properties:
+        id:
+          type: integer
+          description: "Уникальный ключ"
+        name:
+          type: string
+          description: "Название"
+        description:
+          type: string
+          description: "Описание"
+        category:
+          type: string
+          description: "Категория"
+        start_date:
+          type: string
+          format: date
+          description: "Дата начала цели"
+        finish_date:
+          type: string
+          format: date
+          description: "Дата окончания цели"
+        state:
+          type: string
+          description: "Статус"
+          enum:
+            - "Успешно выполнена"
+            - "Не выполнена"
+            - "В процессе"
+            - "Неизвестно"
+        value:
+          type: number
+          format: float
+          description: "Значение"
+        rule:
+          type: string
+          description: "Правило достижения цели"
+          enum:
+            - "Больше"
+            - "Больше или равно"
+            - "Равно"
+    GoalCreate:
+      type: object
+      description: "Добавление цели накопления пользователем"
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: "Название"
+        description:
+          type: string
+          description: "Описание"
+        category:
+          type: string
+          description: "Категория"
+        start_date:
+          type: string
+          format: date
+          description: "Дата начала цели"
+        finish_date:
+          type: string
+          format: date
+          description: "Дата окончания цели"
+        state:
+          type: string
+          description: "Статус"
+          enum:
+            - "Успешно выполнена"
+            - "Не выполнена"
+            - "В процессе"
+            - "Неизвестно"
+        value:
+          type: number
+          format: float
+          description: "Значение"
+        rule:
+          type: string
+          description: "Правило достижения цели"
+          enum:
+            - "Больше"
+            - "Больше или равно"
+            - "Равно"
+    GoalUpdate:
+      type: object
+      description: "Обновление цели накопления пользователем"
+      properties:
+        name:
+          type: string
+          description: "Название"
+        description:
+          type: string
+          description: "Описание"
+        category:
+          type: string
+          description: "Категория"
+        start_date:
+          type: string
+          format: date
+          description: "Дата начала цели"
+        finish_date:
+          type: string
+          format: date
+          description: "Дата окончания цели"
+        state:
+          type: string
+          description: "Статус"
+          enum:
+            - "Успешно выполнена"
+            - "Не выполнена"
+            - "В процессе"
+            - "Неизвестно"
+        value:
+          type: number
+          format: float
+          description: "Значение"
+        rule:
+          type: string
+          description: "Правило достижения цели"
+          enum:
+            - "Больше"
+            - "Больше или равно"
+            - "Равно"
+    Operation:
+      type: object
+      description: "Операция пользователя"
+      required:
+        - id
+        - name
+        - operation_type
+        - date
+      properties:
+        id:
+          type: integer
+          description: "Уникальный ключ"
+        name:
+          type: string
+          description: "Название операции"
+        operation_type:
+          type: string
+          description: "Тип операции"
+        description:
+          type: string
+          description: "Описание операции"
+        cost:
+          type: number
+          format: float
+          description: "Стоимость операции"
+        date:
+          type: string
+          format: date-time
+          description: "Дата и время операции"
+        category:
+          type: array
+          description: "Список категорий операций"
+          items:
+            $ref: "#/components/schemas/OperationCategory"
+    OperationCategory:
+      type: object
+      description: "Категория операции"
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          description: "Уникальный ключ"
+        name:
+          type: string
+          description: "Название операции"
+    OperationCreate:
+      type: object
+      description: "Создание операции пользователя"
+      required:
+        - name
+        - operation_type
+        - date
+        - cost
+      properties:
+        name:
+          type: string
+          description: "Название операции"
+        operation_type:
+          type: string
+          description: "Тип операции"
+        description:
+          type: string
+          description: "Описание операции"
+        cost:
+          type: number
+          format: float
+          description: "Стоимость операции"
+        date:
+          type: string
+          format: date-time
+          description: "Дата и время операции"
+        category:
+          type: array
+          description: "Список категорий операции"
+          items:
+            type: integer
+        user:
+          type: integer
+          description: "Уникальный ключ пользователя"
+    OperationUpdate:
+      type: object
+      description: "Обновление операции пользователя"
+      properties:
+        name:
+          type: string
+          description: "Название операции"
+        description:
+          type: string
+          description: "Описание операции"
+        cost:
+          type: number
+          format: float
+          description: "Стоимость операции"
+        date:
+          type: string
+          format: date-time
+          description: "Дата и время операции"
+        category:
+          type: array
+          description: "Список категорий операции"
+          items:
+            type: integer
+        user:
+          type: integer
+          description: "Уникальный ключ пользователя"
+    User:
+      type: object
+      description: "Пользователь"
+      properties:
+        id:
+          type: integer
+          description: "Уникальный ключ"
+        name:
+          type: string
+          description: "Имя пользователя"
+  parameters:
+    budget_id:
+      name: "budget_id"
+      in: query
+      description: "Уникальный ключ Бюджета"
+      required: true
+      schema:
+        type: integer
+    budget_rule:
+      name: "budget_rule"
+      in: query
+      description: "Правило прохождения бюджета"
+      required: false
+      schema:
+        type: string
+        enum:
+          - "Меньше"
+          - "Меньше или равно"
+    category_id:
+      name: "category_id"
+      in: "query"
+      description: "Уникальный ключ Категории"
+      required: false
+      schema:
+        type: integer
+    finish_date:
+      name: "finish_date"
+      in: "query"
+      description: "Конечная дата"
+      required: false
+      schema:
+        type: string
+        format: date
+    goal_id:
+      name: "goal_id"
+      in: "path"
+      description: "Уникальный идентификатор цели накопления"
+      required: true
+      schema:
+        type: integer
+    goal_rule:
+      name: "rule"
+      in: "query"
+      description: "Конечная дата"
+      required: false
+      schema:
+        type: string
+        enum:
+          - "Больше"
+          - "Больше или равно"
+          - "Равно"
+    start_date:
+      name: "start_date"
+      in: "query"
+      description: "Начальная дата"
+      required: false
+      schema:
+        type: string
+        format: date
+    state:
+      name: "state"
+      in: "query"
+      description: "Статус"
+      required: false
+      schema:
+        type: string
+        enum:
+          - "Успешно выполнена"
+          - "Не выполнена"
+          - "В процессе"
+          - "Неизвестно"
+    operation_id:
+      name: "id"
+      in: "path"
+      description: "Уникальный ключ операций"
+      required: true
+      schema:
+        type: integer
+    operation_finish_date:
+      name: "operation_finish_date"
+      in: "query"
+      description: "Конечная дата и время операции"
+      required: false
+      schema:
+        type: string
+        format: date-time
+    operation_start_date:
+      name: "operation_start_date"
+      in: "query"
+      description: "Начальная дата и время операции"
+      required: false
+      schema:
+        type: string
+        format: date-time
+    operation_type:
+      name: "operation_type"
+      in: "query"
+      description: "Тип операции"
+      schema:
+        type: string
+        enum:
+          - "Трата"
+          - "Пополнение"
+    user_id:
+      name: "user_id"
+      in: "query"
+      description: "Уникальный ключ Пользователя"
+      required: true
+      schema:
+        type: integer
+  responses:
+    success:
+      description: "Успешная операция"
+      content:
+        application/json:
+          schema:
+            type: string
+paths:
+  /balance:
+    get:
+      description: "Получение информации о балансе"
+      tags:
+        - "API баланса"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Balance"
+  /balance-detailed:
+    get:
+      description: "Детальная информация о балансе"
+      tags:
+        - "API баланса"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BalanceDetailed"
+  /budget:
+    parameters:
+      - $ref: "#/components/parameters/user_id"
+    get:
+      description: "Получение списка бюджетов пользователя"
+      tags:
+        - API бюджета
+      parameters:
+        - $ref: "#/components/parameters/category_id"
+        - $ref: "#/components/parameters/state"
+        - $ref: "#/components/parameters/start_date"
+        - $ref: "#/components/parameters/finish_date"
+        - $ref: "#/components/parameters/budget_rule"
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Budget"
+    post:
+      description: "Добавление бюджета пользователя"
+      tags:
+        - "API бюджета"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BudgetCreate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+  /budget/{budget_id}:
+    parameters:
+      - $ref: "#/components/parameters/budget_id"
+      - $ref: "#/components/parameters/user_id"
+    get:
+      description: "Получение одной записи бюджета пользователя"
+      tags:
+        - "API бюджета"
+      responses:
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Budget"
+    put:
+      description: "Обновление одной записи бюджета пользователя"
+      tags:
+        - "API бюджета"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BudgetUpdate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+    delete:
+      description: "Удаление бюджета"
+      tags:
+        - "API бюджета"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+  /category:
+    get:
+      description: "Получение списка категорий"
+      tags:
+        - API операций
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+    post:
+      description: "Создание категории"
+      tags:
+        - API операций
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryCreate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+  /category/{category_id}:
+    parameters:
+      - $ref: "#/components/parameters/category_id"
+    get:
+      tags:
+        - API операций
+      description: "Получение категории"
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+    put:
+      tags:
+        - API операций
+      description: "Обновление категории"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryUpdate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+    delete:
+      description: "Удаление категории"
+      tags:
+        - API операций
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+  /goal:
+    get:
+      description: "Получение списка целей накопления пользователя"
+      tags:
+        - "API целей накопления"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+        - $ref: "#/components/parameters/category_id"
+        - $ref: "#/components/parameters/state"
+        - $ref: "#/components/parameters/start_date"
+        - $ref: "#/components/parameters/finish_date"
+        - $ref: "#/components/parameters/goal_rule"
+      responses:
+        '200':
+          description: 'Успешная операция'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Goal'
+    post:
+      description: 'Создание цели накопления пользователя'
+      tags:
+        - "API целей накопления"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoalCreate'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+  /goal/{goal_id}:
+    parameters:
+      - $ref: '#/components/parameters/goal_id'
+    get:
+      description: "Получение одной цели накопления пользователя"
+      tags:
+        - "API целей накопления"
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+    put:
+      tags:
+        - "API целей накопления"
+      description: 'Обновление цели накопления пользователя'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoalUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+    delete:
+      description: 'Удаление цели накопления пользователя'
+      tags:
+        - "API целей накопления"
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+  /operations:
+    get:
+      description: "Получение списка операций пользователя"
+      tags:
+        - API операций
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+        - $ref: "#/components/parameters/operation_type"
+        - $ref: "#/components/parameters/category_id"
+        - $ref: "#/components/parameters/operation_start_date"
+        - $ref: "#/components/parameters/operation_finish_date"
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Operation"
+    post:
+      description: "Создание операции пользователя"
+      tags:
+        - API операций
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OperationCreate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+  /operations/{id}:
+    parameters:
+      - $ref: "#/components/parameters/operation_id"
+    get:
+      tags:
+        - API операций
+      description: "Получение операции"
+      responses:
+        "200":
+          $ref: "#/components/schemas/Operation"
+    put:
+      tags:
+        - API операций
+      description: "Обновление операции"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OperationUpdate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+    delete:
+      description: "Удаление операции"
+      tags:
+        - API операций
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
