@@ -195,7 +195,7 @@ components:
       name: 'user_id'
       in: 'query'
       description: 'Уникальный ключ Пользователя'
-      required: false
+      required: true
       schema:
         type: integer
     category_id:
@@ -205,16 +205,16 @@ components:
       required: false
       schema:
         type: integer
-    operation_date_start:
-      name: 'operation_date_start'
+    operation_start_date:
+      name: 'operation_start_date'
       in: 'query'
       description: 'Начальная дата и время операции'
       required: false
       schema:
         type: string
         format: date-time
-    operation_date_finish:
-      name: 'operation_date_finish'
+    operation_finish_date:
+      name: 'operation_finish_date'
       in: 'query'
       description: 'Конечная дата и время операции'
       required: false
@@ -247,8 +247,8 @@ paths:
         - $ref: '#/components/parameters/user_id'
         - $ref: '#/components/parameters/operation_type'
         - $ref: '#/components/parameters/category_id'
-        - $ref: '#/components/parameters/operation_date_start'
-        - $ref: '#/components/parameters/operation_date_finish'
+        - $ref: '#/components/parameters/operation_start_date'
+        - $ref: '#/components/parameters/operation_finish_date'
       responses:
         '200':
           description: 'Успешная операция'
