@@ -3,7 +3,7 @@ info:
   title: API Title
   version: "1.0"
 servers:
-  - url: https://api.server.test/v1
+  - url: https://127.0.0.1:8000/
 tags:
   - name: "API целей накопления"
     description: "API работы с целями накопления пользователя"
@@ -287,6 +287,7 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/success"
+
 components:
   securitySchemes:
     bearerAuth:
