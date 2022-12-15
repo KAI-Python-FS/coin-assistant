@@ -11,24 +11,24 @@ components:
   schemas:
     Balance:
       type: integer
-      description: 'Баланс пользователя'
+      description: "Баланс пользователя"
     BalanceDetailed:
       type: object
-      description: 'Детальный баланс пользователя'
+      description: "Детальный баланс пользователя"
       properties:
         spending:
           type: array
-          description: 'Траты пользователя'
+          description: "Траты пользователя"
           items:
             $ref: "#/components/schemas/CategoryDetailed"
         refill:
           type: array
-          description: 'Поступления пользователя'
+          description: "Поступления пользователя"
           items:
             $ref: "#/components/schemas/CategoryDetailed"
         balance:
           type: integer
-          description: 'Баланс'
+          description: "Баланс"
     Category:
       type: object
       description: "Категория операции"
@@ -68,7 +68,7 @@ components:
           description: "Название категории"
     Operation:
       type: object
-      description: 'Операция пользователя'
+      description: "Операция пользователя"
       required:
         - id
         - name
@@ -102,7 +102,7 @@ components:
             $ref: "#/components/schemas/OperationCategory"
     OperationCategory:
       type: object
-      description: 'Категория операции'
+      description: "Категория операции"
       required:
         - id
         - name
@@ -115,7 +115,7 @@ components:
           description: "Название операции"
     OperationCreate:
       type: object
-      description: 'Создание операции пользователя'
+      description: "Создание операции пользователя"
       required:
         - name
         - operation_type
@@ -149,7 +149,7 @@ components:
           description: "Уникальный ключ пользователя"
     OperationUpdate:
       type: object
-      description: 'Обновление операции пользователя'
+      description: "Обновление операции пользователя"
       properties:
         name:
           type: string
@@ -185,46 +185,46 @@ components:
           description: "Имя пользователя"
   parameters:
     operation_id:
-      name: 'id'
-      in: 'path'
-      description: 'Уникальный ключ операций'
+      name: "id"
+      in: "path"
+      description: "Уникальный ключ операций"
       required: true
       schema:
         type: integer
     user_id:
-      name: 'user_id'
-      in: 'query'
-      description: 'Уникальный ключ Пользователя'
+      name: "user_id"
+      in: "query"
+      description: "Уникальный ключ Пользователя"
       required: true
       schema:
         type: integer
     category_id:
-      name: 'category_id'
-      in: 'query'
-      description: 'Уникальный ключ Категории'
+      name: "category_id"
+      in: "query"
+      description: "Уникальный ключ Категории"
       required: false
       schema:
         type: integer
     operation_start_date:
-      name: 'operation_start_date'
-      in: 'query'
-      description: 'Начальная дата и время операции'
+      name: "operation_start_date"
+      in: "query"
+      description: "Начальная дата и время операции"
       required: false
       schema:
         type: string
         format: date-time
     operation_finish_date:
-      name: 'operation_finish_date'
-      in: 'query'
-      description: 'Конечная дата и время операции'
+      name: "operation_finish_date"
+      in: "query"
+      description: "Конечная дата и время операции"
       required: false
       schema:
         type: string
         format: date-time
     operation_type:
-      name: 'operation_type'
-      in: 'query'
-      description: 'Тип операции'
+      name: "operation_type"
+      in: "query"
+      description: "Тип операции"
       schema:
         type: string
         enum:
@@ -232,7 +232,7 @@ components:
           - "Пополнение"
   responses:
     success:
-      description: 'Успешная операция'
+      description: "Успешная операция"
       content:
         application/json:
           schema:
@@ -240,149 +240,149 @@ components:
 paths:
   /operations:
     get:
-      description: 'Получение списка операций пользователя'
+      description: "Получение списка операций пользователя"
       tags:
         - API операций
       parameters:
-        - $ref: '#/components/parameters/user_id'
-        - $ref: '#/components/parameters/operation_type'
-        - $ref: '#/components/parameters/category_id'
-        - $ref: '#/components/parameters/operation_start_date'
-        - $ref: '#/components/parameters/operation_finish_date'
+        - $ref: "#/components/parameters/user_id"
+        - $ref: "#/components/parameters/operation_type"
+        - $ref: "#/components/parameters/category_id"
+        - $ref: "#/components/parameters/operation_start_date"
+        - $ref: "#/components/parameters/operation_finish_date"
       responses:
-        '200':
-          description: 'Успешная операция'
+        "200":
+          description: "Успешная операция"
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Operation'
+                  $ref: "#/components/schemas/Operation"
     post:
-      description: 'Создание операции пользователя'
+      description: "Создание операции пользователя"
       tags:
         - API операций
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OperationCreate'
+              $ref: "#/components/schemas/OperationCreate"
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        "200":
+          $ref: "#/components/responses/success"
   /operations/{id}:
     parameters:
-      - $ref: '#/components/parameters/operation_id'
+      - $ref: "#/components/parameters/operation_id"
     get:
       tags:
         - API операций
-      description: 'Получение операции'
+      description: "Получение операции"
       responses:
-        '200':
-          $ref: '#/components/schemas/Operation'
+        "200":
+          $ref: "#/components/schemas/Operation"
     put:
       tags:
         - API операций
-      description: 'Обновление операции'
+      description: "Обновление операции"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OperationUpdate'
+              $ref: "#/components/schemas/OperationUpdate"
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        "200":
+          $ref: "#/components/responses/success"
     delete:
-      description: 'Удаление операции'
+      description: "Удаление операции"
       tags:
         - API операций
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        "200":
+          $ref: "#/components/responses/success"
   /balance:
     get:
-      description: 'Получение информации о балансе'
+      description: "Получение информации о балансе"
       tags:
         - API операций
       parameters:
-        - $ref: '#/components/parameters/user_id'
+        - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
-          description: 'Успешная операция'
+        "200":
+          description: "Успешная операция"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Balance'
+                $ref: "#/components/schemas/Balance"
   /balance-detailed:
     get:
-      description: 'Детальная информация о балансе'
+      description: "Детальная информация о балансе"
       tags:
         - API операций
       parameters:
-        - $ref: '#/components/parameters/user_id'
+        - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
-          description: 'Успешная операция'
+        "200":
+          description: "Успешная операция"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BalanceDetailed'
+                $ref: "#/components/schemas/BalanceDetailed"
   /category:
     get:
-      description: 'Получение списка категорий'
+      description: "Получение списка категорий"
       tags:
         - API операций
       responses:
-        '200':
-          description: 'Успешная операция'
+        "200":
+          description: "Успешная операция"
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Category'
+                  $ref: "#/components/schemas/Category"
     post:
-      description: 'Создание категории'
+      description: "Создание категории"
       tags:
         - API операций
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CategoryCreate'
+              $ref: "#/components/schemas/CategoryCreate"
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        "200":
+          $ref: "#/components/responses/success"
   /category/{categoy_id}:
     parameters:
-      - $ref: '#/components/parameters/category_id'
+      - $ref: "#/components/parameters/category_id"
     get:
       tags:
         - API операций
-      description: 'Получение категории'
+      description: "Получение категории"
       responses:
-        '200':
-          description: 'Успешная операция'
+        "200":
+          description: "Успешная операция"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Category'
+                $ref: "#/components/schemas/Category"
     put:
       tags:
         - API операций
-      description: 'Обновление категории'
+      description: "Обновление категории"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CategoryUpdate'
+              $ref: "#/components/schemas/CategoryUpdate"
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        "200":
+          $ref: "#/components/responses/success"
     delete:
-      description: 'Удаление категории'
+      description: "Удаление категории"
       tags:
         - API операций
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        "200":
+          $ref: "#/components/responses/success"
