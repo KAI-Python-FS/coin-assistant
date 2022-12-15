@@ -28,7 +28,7 @@ class Goal(models.Model):
         choices=enums.GoalTypeEnum.choices,
         default=enums.GoalTypeEnum.SPENDING,
         max_length=32,
-        verbose_name="Категория операций цели",
+        verbose_name="Тип операций цели",
     )
     category = models.ForeignKey(
         "operations.Category",
@@ -57,7 +57,7 @@ class Goal(models.Model):
     )
     rule = models.CharField(
         choices=enums.GoalRuleEnum.choices,
-        default=enums.GoalRuleEnum.lte,
+        default=enums.GoalRuleEnum.eq,
         max_length=16,
         verbose_name="Правило достижения цели",
     )

@@ -25,4 +25,4 @@ class GoalRuleEnum(models.TextChoices):
     lte = "Меньше или равно"
     gt = "Больше"
     gte = "Больше или равно"
-    eq = "Равно"
+    eq = "Равно"  # Нужно ли??
