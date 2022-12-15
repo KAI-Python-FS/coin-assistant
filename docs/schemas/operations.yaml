@@ -9,29 +9,63 @@ tags:
     description: "API операций пользователя"
 components:
   schemas:
-    User:
+    Balance:
+      type: integer
+      description: 'Баланс пользователя'
+    BalanceDetailed:
       type: object
-      description: "Пользователь"
+      description: 'Детальный баланс пользователя'
+      properties:
+        spending:
+          type: array
+          description: 'Траты пользователя'
+          items:
+            $ref: "#/components/schemas/CategoryDetailed"
+        refill:
+          type: array
+          description: 'Поступления пользователя'
+          items:
+            $ref: "#/components/schemas/CategoryDetailed"
+        balance:
+          type: integer
+          description: 'Баланс'
+    Category:
+      type: object
+      description: "Категория операции"
       properties:
         id:
           type: integer
           description: "Уникальный ключ"
         name:
           type: string
-          description: "Имя пользователя"
-    OperationCategory:
+          description: "Название категории"
+    CategoryCreate:
       type: object
-      description: 'Категория операции'
+      description: "Создание категории операции"
       required:
-        - id
         - name
       properties:
-        id:
-          type: integer
-          description: "Уникальный ключ"
         name:
           type: string
-          description: "Название операции"
+          description: "Название категории"
+    CategoryDetailed:
+      type: object
+      description: "Детальная информация о сумме операций в разрезе категории"
+      properties:
+        name:
+          type: string
+          description: "Название категории"
+        sum:
+          type: number
+          format: float
+          description: "Сумма операций"
+    CategoryUpdate:
+      type: object
+      description: "Обновление категория операции"
+      properties:
+        name:
+          type: string
+          description: "Название категории"
     Operation:
       type: object
       description: 'Операция пользователя'
@@ -66,6 +100,19 @@ components:
           description: "Список категорий операций"
           items:
             $ref: "#/components/schemas/OperationCategory"
+    OperationCategory:
+      type: object
+      description: 'Категория операции'
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          description: "Уникальный ключ"
+        name:
+          type: string
+          description: "Название операции"
     OperationCreate:
       type: object
       description: 'Создание операции пользователя'
@@ -126,37 +173,16 @@ components:
         user:
           type: integer
           description: "Уникальный ключ пользователя"
-    Balance:
-      type: integer
-      description: 'Баланс пользователя'
-    CategoryDetailed:
+    User:
       type: object
-      description: "Детальная информация о сумме операций в разрезе категории"
+      description: "Пользователь"
       properties:
+        id:
+          type: integer
+          description: "Уникальный ключ"
         name:
           type: string
-          description: "Название категории"
-        sum:
-          type: number
-          format: float
-          description: "Сумма операций"
-    BalanceDetailed:
-      type: object
-      description: 'Детальный баланс пользователя'
-      properties:
-        spending:
-          type: array
-          description: 'Траты пользователя'
-          items:
-            $ref: "#/components/schemas/CategoryDetailed"
-        refill:
-          type: array
-          description: 'Поступления пользователя'
-          items:
-            $ref: "#/components/schemas/CategoryDetailed"
-        balance:
-          type: integer
-          description: 'Баланс'
+          description: "Имя пользователя"
   parameters:
     operation_id:
       name: 'id'
@@ -263,7 +289,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OperationCreate'
+              $ref: '#/components/schemas/OperationUpdate'
       responses:
         '200':
           $ref: '#/components/responses/success'
@@ -302,3 +328,62 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BalanceDetailed'
+  /category:
+    get:
+      description: 'Получение списка категорий'
+      tags:
+        - API операций
+      responses:
+        '200':
+          description: 'Успешная операция'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+    post:
+      description: 'Создание категории'
+      tags:
+        - API операций
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryCreate'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+  /category/{categoy_id}:
+    parameters:
+      - $ref: '#/components/parameters/category_id'
+    get:
+      tags:
+        - API операций
+      description: 'Получение категории'
+      responses:
+        '200':
+          description: 'Успешная операция'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+    put:
+      tags:
+        - API операций
+      description: 'Обновление категории'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+    delete:
+      description: 'Удаление категории'
+      tags:
+        - API операций
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
