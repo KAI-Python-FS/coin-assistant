@@ -323,7 +323,7 @@ components:
         cost:
           type: number
           format: float
-          description: "Стоимость операции"
+          description: "Размер операции"
         date:
           type: string
           format: date-time
@@ -367,7 +367,7 @@ components:
         cost:
           type: number
           format: float
-          description: "Стоимость операции"
+          description: "Размер операции"
         date:
           type: string
           format: date-time
@@ -393,7 +393,7 @@ components:
         cost:
           type: number
           format: float
-          description: "Стоимость операции"
+          description: "Размер операции"
         date:
           type: string
           format: date-time
@@ -550,7 +550,7 @@ paths:
                 $ref: "#/components/schemas/Balance"
   /balance-detailed:
     get:
-      description: "Детальная информация о балансе"
+      description: "Детализация трат по категориям"
       tags:
         - "API баланса"
       parameters:
