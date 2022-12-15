@@ -353,7 +353,7 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/success"
-  /category/{categoy_id}:
+  /category/{category_id}:
     parameters:
       - $ref: "#/components/parameters/category_id"
     get:
