@@ -50,11 +50,14 @@ class Operation(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name="operations",
         verbose_name="Покупатель",
     )
-    category = models.ManyToManyField(
+    category = models.ForeignKey(
         Category,
         null=True,
+        on_delete=models.CASCADE,
+        related_name="operations",
         verbose_name="Категория операции",
     )
 
