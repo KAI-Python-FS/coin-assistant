@@ -13,6 +13,289 @@ tags:
     description: "API операций пользователя"
   - name: "API баланса"
     description: "API баланса пользователя"
+paths:
+  /balance:
+    get:
+      description: "Получение информации о балансе"
+      tags:
+        - "API баланса"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Balance"
+  /balance-detailed:
+    get:
+      description: "Детализация трат по категориям"
+      tags:
+        - "API баланса"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BalanceDetailed"
+  /budget:
+    parameters:
+      - $ref: "#/components/parameters/user_id"
+    get:
+      description: "Получение списка бюджетов пользователя"
+      tags:
+        - API бюджета
+      parameters:
+        - $ref: "#/components/parameters/category_id"
+        - $ref: "#/components/parameters/state"
+        - $ref: "#/components/parameters/start_date"
+        - $ref: "#/components/parameters/finish_date"
+        - $ref: "#/components/parameters/budget_rule"
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Budget"
+    post:
+      description: "Добавление бюджета пользователя"
+      tags:
+        - "API бюджета"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BudgetCreate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+  /budget/{budget_id}:
+    parameters:
+      - $ref: "#/components/parameters/budget_id"
+      - $ref: "#/components/parameters/user_id"
+    get:
+      description: "Получение одной записи бюджета пользователя"
+      tags:
+        - "API бюджета"
+      responses:
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Budget"
+    put:
+      description: "Обновление одной записи бюджета пользователя"
+      tags:
+        - "API бюджета"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BudgetUpdate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+    delete:
+      description: "Удаление бюджета"
+      tags:
+        - "API бюджета"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+  /category:
+    get:
+      description: "Получение списка категорий"
+      tags:
+        - API операций
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+    post:
+      description: "Создание категории"
+      tags:
+        - API операций
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryCreate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+  /category/{category_id}:
+    parameters:
+      - $ref: "#/components/parameters/category_id_path"
+    get:
+      tags:
+        - API операций
+      description: "Получение категории"
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+    put:
+      tags:
+        - API операций
+      description: "Обновление категории"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryUpdate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+    delete:
+      description: "Удаление категории"
+      tags:
+        - API операций
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+  /goal:
+    get:
+      description: "Получение списка целей накопления пользователя"
+      tags:
+        - "API целей накопления"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+        - $ref: "#/components/parameters/category_id"
+        - $ref: "#/components/parameters/state"
+        - $ref: "#/components/parameters/start_date"
+        - $ref: "#/components/parameters/finish_date"
+        - $ref: "#/components/parameters/goal_rule"
+      responses:
+        '200':
+          description: 'Успешная операция'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Goal'
+    post:
+      description: 'Создание цели накопления пользователя'
+      tags:
+        - "API целей накопления"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoalCreate'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+  /goal/{goal_id}:
+    parameters:
+      - $ref: '#/components/parameters/goal_id'
+    get:
+      description: "Получение одной цели накопления пользователя"
+      tags:
+        - "API целей накопления"
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+    put:
+      tags:
+        - "API целей накопления"
+      description: 'Обновление цели накопления пользователя'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoalUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+    delete:
+      description: 'Удаление цели накопления пользователя'
+      tags:
+        - "API целей накопления"
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+  /operations:
+    get:
+      description: "Получение списка операций пользователя"
+      tags:
+        - API операций
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+        - $ref: "#/components/parameters/operation_type"
+        - $ref: "#/components/parameters/category_id"
+        - $ref: "#/components/parameters/operation_start_date"
+        - $ref: "#/components/parameters/operation_finish_date"
+      responses:
+        "200":
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Operation"
+    post:
+      description: "Создание операции пользователя"
+      tags:
+        - API операций
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OperationCreate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+  /operations/{id}:
+    parameters:
+      - $ref: "#/components/parameters/operation_id"
+    get:
+      tags:
+        - API операций
+      description: "Получение операции"
+      responses:
+        "200":
+          $ref: "#/components/schemas/Operation"
+    put:
+      tags:
+        - API операций
+      description: "Обновление операции"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OperationUpdate"
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+    delete:
+      description: "Удаление операции"
+      tags:
+        - API операций
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
 components:
   schemas:
     Balance:
@@ -540,286 +823,3 @@ components:
         application/json:
           schema:
             type: string
-paths:
-  /balance:
-    get:
-      description: "Получение информации о балансе"
-      tags:
-        - "API баланса"
-      parameters:
-        - $ref: "#/components/parameters/user_id"
-      responses:
-        "200":
-          description: "Успешная операция"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Balance"
-  /balance-detailed:
-    get:
-      description: "Детализация трат по категориям"
-      tags:
-        - "API баланса"
-      parameters:
-        - $ref: "#/components/parameters/user_id"
-      responses:
-        "200":
-          description: "Успешная операция"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BalanceDetailed"
-  /budget:
-    parameters:
-      - $ref: "#/components/parameters/user_id"
-    get:
-      description: "Получение списка бюджетов пользователя"
-      tags:
-        - API бюджета
-      parameters:
-        - $ref: "#/components/parameters/category_id"
-        - $ref: "#/components/parameters/state"
-        - $ref: "#/components/parameters/start_date"
-        - $ref: "#/components/parameters/finish_date"
-        - $ref: "#/components/parameters/budget_rule"
-      responses:
-        "200":
-          description: "Успешная операция"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Budget"
-    post:
-      description: "Добавление бюджета пользователя"
-      tags:
-        - "API бюджета"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BudgetCreate"
-      responses:
-        "200":
-          $ref: "#/components/responses/success"
-  /budget/{budget_id}:
-    parameters:
-      - $ref: "#/components/parameters/budget_id"
-      - $ref: "#/components/parameters/user_id"
-    get:
-      description: "Получение одной записи бюджета пользователя"
-      tags:
-        - "API бюджета"
-      responses:
-        200:
-          description: "Успешная операция"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Budget"
-    put:
-      description: "Обновление одной записи бюджета пользователя"
-      tags:
-        - "API бюджета"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BudgetUpdate"
-      responses:
-        "200":
-          $ref: "#/components/responses/success"
-    delete:
-      description: "Удаление бюджета"
-      tags:
-        - "API бюджета"
-      responses:
-        "200":
-          $ref: "#/components/responses/success"
-  /category:
-    get:
-      description: "Получение списка категорий"
-      tags:
-        - API операций
-      responses:
-        "200":
-          description: "Успешная операция"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Category"
-    post:
-      description: "Создание категории"
-      tags:
-        - API операций
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CategoryCreate"
-      responses:
-        "200":
-          $ref: "#/components/responses/success"
-  /category/{category_id}:
-    parameters:
-      - $ref: "#/components/parameters/category_id_path"
-    get:
-      tags:
-        - API операций
-      description: "Получение категории"
-      responses:
-        "200":
-          description: "Успешная операция"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Category"
-    put:
-      tags:
-        - API операций
-      description: "Обновление категории"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CategoryUpdate"
-      responses:
-        "200":
-          $ref: "#/components/responses/success"
-    delete:
-      description: "Удаление категории"
-      tags:
-        - API операций
-      responses:
-        "200":
-          $ref: "#/components/responses/success"
-  /goal:
-    get:
-      description: "Получение списка целей накопления пользователя"
-      tags:
-        - "API целей накопления"
-      parameters:
-        - $ref: "#/components/parameters/user_id"
-        - $ref: "#/components/parameters/category_id"
-        - $ref: "#/components/parameters/state"
-        - $ref: "#/components/parameters/start_date"
-        - $ref: "#/components/parameters/finish_date"
-        - $ref: "#/components/parameters/goal_rule"
-      responses:
-        '200':
-          description: 'Успешная операция'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Goal'
-    post:
-      description: 'Создание цели накопления пользователя'
-      tags:
-        - "API целей накопления"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GoalCreate'
-      responses:
-        '200':
-          $ref: '#/components/responses/success'
-  /goal/{goal_id}:
-    parameters:
-      - $ref: '#/components/parameters/goal_id'
-    get:
-      description: "Получение одной цели накопления пользователя"
-      tags:
-        - "API целей накопления"
-      responses:
-        "200":
-          description: "Успешная операция"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Goal'
-    put:
-      tags:
-        - "API целей накопления"
-      description: 'Обновление цели накопления пользователя'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GoalUpdate'
-      responses:
-        '200':
-          $ref: '#/components/responses/success'
-    delete:
-      description: 'Удаление цели накопления пользователя'
-      tags:
-        - "API целей накопления"
-      responses:
-        '200':
-          $ref: '#/components/responses/success'
-  /operations:
-    get:
-      description: "Получение списка операций пользователя"
-      tags:
-        - API операций
-      parameters:
-        - $ref: "#/components/parameters/user_id"
-        - $ref: "#/components/parameters/operation_type"
-        - $ref: "#/components/parameters/category_id"
-        - $ref: "#/components/parameters/operation_start_date"
-        - $ref: "#/components/parameters/operation_finish_date"
-      responses:
-        "200":
-          description: "Успешная операция"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Operation"
-    post:
-      description: "Создание операции пользователя"
-      tags:
-        - API операций
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/OperationCreate"
-      responses:
-        "200":
-          $ref: "#/components/responses/success"
-  /operations/{id}:
-    parameters:
-      - $ref: "#/components/parameters/operation_id"
-    get:
-      tags:
-        - API операций
-      description: "Получение операции"
-      responses:
-        "200":
-          $ref: "#/components/schemas/Operation"
-    put:
-      tags:
-        - API операций
-      description: "Обновление операции"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/OperationUpdate"
-      responses:
-        "200":
-          $ref: "#/components/responses/success"
-    delete:
-      description: "Удаление операции"
-      tags:
-        - API операций
-      responses:
-        "200":
-          $ref: "#/components/responses/success"
