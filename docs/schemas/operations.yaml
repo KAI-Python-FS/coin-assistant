@@ -3,7 +3,7 @@ info:
   title: Описание API для операций
   version: "1.0"
 servers:
-  - url: https://api.server.test/v1
+  - url: https://127.0.0.1:8000/
 tags:
   - name: "API операций"
     description: "API операций пользователя"

@@ -297,6 +297,10 @@ paths:
         "200":
           $ref: "#/components/responses/success"
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
   schemas:
     Balance:
       type: integer
@@ -823,3 +827,5 @@ components:
         application/json:
           schema:
             type: string
+security:
+  - bearerAuth: []
