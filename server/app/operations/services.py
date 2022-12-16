@@ -25,21 +25,22 @@ class CategoryService:
         return category
 
     @classmethod
-    def update(cls, category_id: int, user=None, **category_data) -> Category | None:
+    def update(cls, category_id: int, **category_data) -> Category | None:
         """Обновление категории"""
-        try:
-            category = Category.objects.get(category_id)
-        except Category.DoesNotExist:
+        category = cls.retrieve_single(category_id)
+        if not category:
             return None
+
+        category.name = category_data.pop("name")
+        category.save()
 
         return category
 
     @classmethod
     def delete(cls, category_id: int) -> bool | None:
         """Удаление категории"""
-        try:
-            category = Category.objects.get(category_id)
-        except Category.DoesNotExist:
+        category = cls.retrieve_single(category_id)
+        if not category:
             return None
 
         category.delete()

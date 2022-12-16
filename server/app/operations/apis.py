@@ -61,3 +61,22 @@ class CategoryConcreteView(APIView):
         return Response(
             data=output_serializer.data,
         )
+
+    def put(self, request, category_id: int):
+        """Обновление конкретной категории"""
+        serializer = serializers.CategoryUpdateInputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        result = self.service.update(
+            category_id=category_id,
+            **serializer.validated_data,
+        )
+        if not result:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        output_serializer = serializers.CategoryUpdateOutputSerializer(
+            instance=result
+        )
+        return Response(
+            data=output_serializer.data,
+        )

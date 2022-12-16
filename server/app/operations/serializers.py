@@ -24,3 +24,13 @@ class CategoryCreateInputSerializer(serializers.Serializer):
 
 class CategoryCreateOutputSerializer(CategoryRetrieveOutputSerializer):
     """Сериализатор исходящих данных создания Категории"""
+
+
+class CategoryUpdateInputSerializer(serializers.Serializer):
+    """Сериализатор входящих данных обновления Категории"""
+
+    name = serializers.CharField(required=True)
+
+
+class CategoryUpdateOutputSerializer(CategoryRetrieveOutputSerializer):
+    """Сериалиазтор исходящих данных обновления Категории"""
