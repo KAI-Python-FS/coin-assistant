@@ -1,8 +1,8 @@
 from django.urls import path
 
-from .apis import CreateCategoryView
+from .apis import ListCreateCategoryView
 
 
 category_patterns = [
-    path("", CreateCategoryView.as_view(), name="category")
+    path("", ListCreateCategoryView.as_view(), name="category")
 ]

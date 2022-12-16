@@ -49,7 +49,7 @@ class CategoryService:
     @classmethod
     def retrieve_list(cls, **filters) -> list[Category | None]:
         """Получение списка категорий согласно фильтрам"""
-        return Category.objects.all()
+        return Category.objects.filter(**filters).all()
 
 
 class OperationService:
