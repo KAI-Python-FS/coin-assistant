@@ -7,16 +7,19 @@ from . import serializers
 from .services import CategoryService
 
 
-class ListCreateCategoryView(APIView):
-    """Вью добавления категории и получения списка категорий"""
+class CategoryGeneralView(APIView):
+    """Вью работы без привязки к конкретной Категории"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.service = CategoryService()
 
     def post(self, request):
         """Добавление категории методом POST"""
         serializer = serializers.CategoryCreateInputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        service = CategoryService()
-        result = service.create(**serializer.validated_data)
+        result = self.service.create(**serializer.validated_data)
 
         output_serializer = serializers.CategoryCreateOutputSerializer(instance=result)
 
@@ -27,15 +30,34 @@ class ListCreateCategoryView(APIView):
 
     def get(self, request):
         """Получение списка категорий"""
-        service = CategoryService()
-
-        result = service.retrieve_list()
+        result = self.service.retrieve_list()
 
         output_serializer = serializers.CategoryListOutputSerializer(
             instance=result,
             many=True,
         )
 
+        return Response(
+            data=output_serializer.data,
+        )
+
+
+class CategoryConcreteView(APIView):
+    """Вью работы с конкретной записью Категории"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.service = CategoryService()
+
+    def get(self, request, category_id: int):
+        """Получение конкретной категории"""
+        result = self.service.retrieve_single(category_id)
+        if not result:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        output_serializer = serializers.CategoryRetrieveOutputSerializer(
+            instance=result
+        )
         return Response(
             data=output_serializer.data,
         )

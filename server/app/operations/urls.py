@@ -1,8 +1,9 @@
 from django.urls import path
 
-from .apis import ListCreateCategoryView
+from .apis import CategoryGeneralView, CategoryConcreteView
 
 
 category_patterns = [
-    path("", ListCreateCategoryView.as_view(), name="category")
+    path("", CategoryGeneralView.as_view(), name="category"),
+    path("<int:category_id>", CategoryConcreteView.as_view(), name="concrete_category"),
 ]

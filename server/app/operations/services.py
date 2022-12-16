@@ -15,32 +15,32 @@ class CategoryService:
         return category
 
     @classmethod
-    def retrieve_single(cls, category_id: int) -> Category:
+    def retrieve_single(cls, category_id: int) -> Category | None:
         """Получение одной категории"""
         try:
-            category = Category.objects.get(category_id)
+            category = Category.objects.get(pk=category_id)
         except Category.DoesNotExist:
-            raise ValidationException(f"Категории с id={category_id} не найдено.")
+            return None
 
         return category
 
     @classmethod
-    def update(cls, category_id: int, user=None, **category_data) -> Category:
+    def update(cls, category_id: int, user=None, **category_data) -> Category | None:
         """Обновление категории"""
         try:
             category = Category.objects.get(category_id)
         except Category.DoesNotExist:
-            raise ValidationException(f"Категории с id={category_id} не найдено.")
+            return None
 
         return category
 
     @classmethod
-    def delete(cls, category_id: int) -> bool:
+    def delete(cls, category_id: int) -> bool | None:
         """Удаление категории"""
         try:
             category = Category.objects.get(category_id)
         except Category.DoesNotExist:
-            raise ValidationException(f"Категории с id={category_id} не найдено.")
+            return None
 
         category.delete()
 
