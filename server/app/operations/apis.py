@@ -12,16 +12,15 @@ class CreateCategoryView(APIView):
 
     def post(self, request):
         """Добавление категории методом POST"""
-        serializer = CategoryCreateInputSerializer(request.data)
+        serializer = CategoryCreateInputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         service = CategoryService()
         result = service.create(**serializer.validated_data)
 
-        output_serializer = CategoryCreateOutputSerializer(result)
-        output_serializer.is_valid(raise_exception=True)
+        output_serializer = CategoryCreateOutputSerializer(instance=result)
 
         return Response(
-            data=output_serializer.validated_data,
+            data=output_serializer.data,
             status=status.HTTP_201_CREATED,
         )

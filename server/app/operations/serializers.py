@@ -1,12 +1,15 @@
 
 from rest_framework import serializers
 
+from .models import Category
 
-class CategoryGetSingleOutputSerializer(serializers.Serializer):
+
+class CategoryGetSingleOutputSerializer(serializers.ModelSerializer):
     """Сериализатор исходящих данных получения одной категории"""
 
-    id = serializers.IntegerField(required=True)
-    name = serializers.CharField(required=True)
+    class Meta:
+        model = Category
+        fields = ["id", "name"]
 
 
 class CategoryCreateInputSerializer(serializers.Serializer):

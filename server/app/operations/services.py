@@ -9,7 +9,7 @@ class CategoryService:
     """Класс описания бизнес логики работы с Категориями покупок"""
 
     @classmethod
-    def create(cls, user=None, **category_data) -> Category:
+    def create(cls, **category_data) -> Category:
         """Создание категории"""
         category = Category.objects.create(**category_data)
         return category
