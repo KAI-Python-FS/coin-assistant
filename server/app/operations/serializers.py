@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
 
-from .models import Category
+from .models import Category, Operation
 
 
 class CategoryRetrieveOutputSerializer(serializers.ModelSerializer):
@@ -33,4 +33,25 @@ class CategoryUpdateInputSerializer(serializers.Serializer):
 
 
 class CategoryUpdateOutputSerializer(CategoryRetrieveOutputSerializer):
-    """Сериалиазтор исходящих данных обновления Категории"""
+    """Сериалиазатор исходящих данных обновления Категории"""
+
+
+class OperationRetrieveOutputSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Operation
+
+
+class OperationCreateInputSerializer(serializers.Serializer):
+    """Сериализатор входящих данных создания Операции пользователя"""
+
+    name = serializers.CharField(required=True)
+    description = serializers.CharField(required=False)
+    operation_at = serializers.DateTimeField(required=False)
+    operation_type = serializers.CharField(required=True)
+    cost = serializers.FloatField(required=True)
+    category = serializers.IntegerField(required=False)
+
+
+class OperationCreateOutputSerializer(serializers.Serializer):
+    """Сериализатор исходящих данных создания Операции пользователя"""

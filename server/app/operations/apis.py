@@ -87,3 +87,7 @@ class CategoryConcreteView(APIView):
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(data=result)
+
+
+class OperationGeneralView(APIView):
+    """Вью Категорий без привязки к конкретной Категории"""

@@ -56,6 +56,9 @@ class CategoryService:
 class OperationService:
     """Класс описания бизнес логики работы с операциями пользователя"""
 
+    def __init__(self, user):
+        self.user = user
+
     @classmethod
     def create_operation(cls, user, **operation_data):
         """Создание записи операции пользователя"""
