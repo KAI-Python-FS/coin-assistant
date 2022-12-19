@@ -64,7 +64,7 @@ class CategoryConcreteView(APIView):
     def put(self, request, category_id: int):
         """Обновление конкретной категории"""
         try:
-            serializer = serializers.CategoryUpdateInputSerializer(data=request.data)
+            serializer = serializers.CategoryUpdateInputSerializer.parse_obj(request.data)
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
