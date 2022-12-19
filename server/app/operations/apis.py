@@ -1,5 +1,5 @@
 
-from pydantic import parse_obj_as
+from pydantic import ValidationError
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -17,10 +17,12 @@ class CategoryGeneralView(APIView):
 
     def post(self, request):
         """Добавление категории методом POST"""
-        serializer = serializers.CategoryCreateInputSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        try:
+            serializer = serializers.CategoryCreateInputSerializer.parse_obj(request.data)
+        except ValidationError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        result = self.service.create(**serializer.validated_data)
+        result = self.service.create(**serializer.dict())
 
         output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(result)
         return Response(
@@ -54,18 +56,21 @@ class CategoryConcreteView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(result)
+
         return Response(
             data=output_deserialized.dict(),
         )
 
     def put(self, request, category_id: int):
         """Обновление конкретной категории"""
-        serializer = serializers.CategoryUpdateInputSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        try:
+            serializer = serializers.CategoryUpdateInputSerializer(data=request.data)
+        except ValidationError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         result = self.service.update(
             category_id=category_id,
-            **serializer.validated_data,
+            **serializer.dict(),
         )
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)

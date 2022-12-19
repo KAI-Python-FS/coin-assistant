@@ -33,7 +33,7 @@ class CategoryCreateOutputSerializer(BaseCategorySerializer):
     """Сериализатор исходящих данных создания Категории"""
 
 
-class CategoryUpdateInputSerializer(serializers.Serializer):
+class CategoryUpdateInputSerializer(BaseModel):
     """Сериализатор входящих данных обновления Категории"""
 
     name: str
