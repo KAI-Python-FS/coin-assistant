@@ -59,19 +59,21 @@ class OperationService:
     def __init__(self, user) -> None:
         self.user = user
 
-    @classmethod
-    def create_operation(cls, user, **operation_data) -> Operation:
+    def create(self, **operation_data) -> Operation:
         """Создание записи операции пользователя"""
         operation = Operation.objects.create(
-            user=user,
+            user=self.user,
             **operation_data,
         )
 
         return operation
 
-    @classmethod
-    def retrieve_list(cls, **filters) -> list[Operation | None]:
-        return Operation.objects.filter(**filters).all()
+    def retrieve_list(self, **filters) -> list[Operation | None]:
+        return Operation.objects.filter(
+            user=self.user
+        ).filter(
+            **filters
+        ).all()
 
 
     # @classmethod

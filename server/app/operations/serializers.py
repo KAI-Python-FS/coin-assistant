@@ -1,7 +1,9 @@
+import datetime
 
 from pydantic import BaseModel
 from rest_framework import serializers
 
+from .enums import OperationTypeEnum
 from .models import Category, Operation
 
 
@@ -49,16 +51,20 @@ class OperationRetrieveOutputSerializer(serializers.ModelSerializer):
         model = Operation
 
 
-class OperationCreateInputSerializer(serializers.Serializer):
+class BaseCategorySerializer(BaseModel):
+    """Сериализатор всех данных одной операции"""
+
+    name: str
+    description: str | None
+    operation_at: datetime.datetime | None
+    operation_type: OperationTypeEnum
+    cost: float
+    category: BaseCategorySerializer | None
+
+
+class OperationCreateInputSerializer(BaseCategorySerializer):
     """Сериализатор входящих данных создания Операции пользователя"""
 
-    name = serializers.CharField(required=True)
-    description = serializers.CharField(required=False)
-    operation_at = serializers.DateTimeField(required=False)
-    operation_type = serializers.CharField(required=True)
-    cost = serializers.FloatField(required=True)
-    category = serializers.IntegerField(required=False)
 
-
-class OperationCreateOutputSerializer(serializers.Serializer):
+class OperationCreateOutputSerializer(BaseCategorySerializer):
     """Сериализатор исходящих данных создания Операции пользователя"""

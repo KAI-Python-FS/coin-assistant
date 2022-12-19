@@ -91,10 +91,19 @@ class CategoryConcreteView(APIView):
 class OperationGeneralView(APIView):
     """Вью Категорий без привязки к конкретной Категории"""
 
-    def __init__(self, user, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.service = OperationService(user=user)
-
     def post(self, request):
         """Добавление операции методом POST"""
+        try:
+            serializer = serializers.OperationCreateInputSerializer.parse_obj(request.data)
+        except ValidationError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        result = OperationService(user=request.user).create(**serializer.dict())
+
+        output_deserialized = serializers.OperationCreateOutputSerializer.from_orm(result)
+        return Response(
+            data=output_deserialized.dict(),
+            status=status.HTTP_201_CREATED,
+        )
+
 
