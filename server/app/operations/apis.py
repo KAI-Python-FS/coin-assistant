@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from . import serializers
-from .services import CategoryService
+from .services import CategoryService, OperationService
 
 
 class CategoryGeneralView(APIView):
@@ -90,3 +90,11 @@ class CategoryConcreteView(APIView):
 
 class OperationGeneralView(APIView):
     """Вью Категорий без привязки к конкретной Категории"""
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.service = OperationService(user=user)
+
+    def post(self, request):
+        """Добавление операции методом POST"""
+
