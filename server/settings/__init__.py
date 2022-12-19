@@ -20,6 +20,7 @@ _ENV = environ['DJANGO_ENV']
 
 _base_settings = (
     'components/common.py',
+    'components/rest_framework.py',
 
     # Select the right env:
     'environments/{0}.py'.format(_ENV),
