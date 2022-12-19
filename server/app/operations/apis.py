@@ -24,7 +24,7 @@ class CategoryGeneralView(APIView):
 
         output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(result)
         return Response(
-            data=output_deserialized,
+            data=output_deserialized.dict(),
             status=status.HTTP_201_CREATED,
         )
 
@@ -32,15 +32,9 @@ class CategoryGeneralView(APIView):
         """Получение списка категорий"""
         result = self.service.retrieve_list()
 
-        # output_deserialized = serializers.CategoryListItemOutputSerializer.from_orm(result)
-        # output_deserialized = [
-        #     serializers.CategoryListItemOutputSerializer.from_orm(each_result)
-        #     for each_result in result
-        # ]
-
         return Response(
             data=[
-                serializers.CategoryListItemOutputSerializer.from_orm(each_result)
+                serializers.CategoryListItemOutputSerializer.from_orm(each_result).dict()
                 for each_result in result
             ],
         )
@@ -61,7 +55,7 @@ class CategoryConcreteView(APIView):
 
         output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(result)
         return Response(
-            data=output_deserialized,
+            data=output_deserialized.dict(),
         )
 
     def put(self, request, category_id: int):
@@ -78,7 +72,7 @@ class CategoryConcreteView(APIView):
 
         output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(result)
         return Response(
-            data=output_deserialized,
+            data=output_deserialized.dict(),
         )
 
     def delete(self, request, category_id: int):
