@@ -21,10 +21,9 @@ class CategoryGeneralView(APIView):
 
         result = self.service.create(**serializer.validated_data)
 
-        output_serializer = serializers.CategoryCreateOutputSerializer(instance=result)
-
+        output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(result)
         return Response(
-            data=output_serializer.data,
+            data=output_deserialized,
             status=status.HTTP_201_CREATED,
         )
 
@@ -32,13 +31,10 @@ class CategoryGeneralView(APIView):
         """Получение списка категорий"""
         result = self.service.retrieve_list()
 
-        output_serializer = serializers.CategoryListOutputSerializer(
-            instance=result,
-            many=True,
-        )
+        output_deserialized = serializers.CategoryListOutputSerializer.from_orm(list(result))
 
         return Response(
-            data=output_serializer.data,
+            data=output_deserialized,
         )
 
 
@@ -55,11 +51,9 @@ class CategoryConcreteView(APIView):
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        output_serializer = serializers.CategoryRetrieveOutputSerializer(
-            instance=result
-        )
+        output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(result)
         return Response(
-            data=output_serializer.data,
+            data=output_deserialized,
         )
 
     def put(self, request, category_id: int):
@@ -74,11 +68,9 @@ class CategoryConcreteView(APIView):
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        output_serializer = serializers.CategoryUpdateOutputSerializer(
-            instance=result
-        )
+        output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(result)
         return Response(
-            data=output_serializer.data,
+            data=output_deserialized,
         )
 
     def delete(self, request, category_id: int):

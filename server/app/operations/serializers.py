@@ -1,38 +1,55 @@
 
+from pydantic import BaseModel
 from rest_framework import serializers
 
 from .models import Category, Operation
 
 
-class CategoryRetrieveOutputSerializer(serializers.ModelSerializer):
+class BaseCategorySerializer(BaseModel):
+    """Сериализатор всех данных одной категории"""
+
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True
+
+class CategoryRetrieveOutputSerializer(BaseCategorySerializer):
     """Сериализатор исходящих данных получения одной категории"""
 
-    class Meta:
-        model = Category
-        fields = ["id", "name"]
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True
 
 
-class CategoryListOutputSerializer(CategoryRetrieveOutputSerializer):
+class CategoryListOutputSerializer(BaseModel):
     """Сериализатор получения списка Категорий"""
 
+    __root__: list[BaseCategorySerializer]
 
-class CategoryCreateInputSerializer(serializers.Serializer):
+    class Config:
+        orm_mode = True
+
+
+class CategoryCreateInputSerializer(BaseModel):
     """Сериализатор входящих данных создания Категории"""
 
-    name = serializers.CharField(required=True)
+    name: str
 
 
-class CategoryCreateOutputSerializer(CategoryRetrieveOutputSerializer):
+class CategoryCreateOutputSerializer(BaseCategorySerializer):
     """Сериализатор исходящих данных создания Категории"""
 
 
 class CategoryUpdateInputSerializer(serializers.Serializer):
     """Сериализатор входящих данных обновления Категории"""
 
-    name = serializers.CharField(required=True)
+    name: str
 
 
-class CategoryUpdateOutputSerializer(CategoryRetrieveOutputSerializer):
+class CategoryUpdateOutputSerializer(BaseCategorySerializer):
     """Сериалиазатор исходящих данных обновления Категории"""
 
 
