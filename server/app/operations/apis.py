@@ -1,4 +1,5 @@
 
+from pydantic import parse_obj_as
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -31,10 +32,17 @@ class CategoryGeneralView(APIView):
         """Получение списка категорий"""
         result = self.service.retrieve_list()
 
-        output_deserialized = serializers.CategoryListOutputSerializer.from_orm(list(result))
+        # output_deserialized = serializers.CategoryListItemOutputSerializer.from_orm(result)
+        # output_deserialized = [
+        #     serializers.CategoryListItemOutputSerializer.from_orm(each_result)
+        #     for each_result in result
+        # ]
 
         return Response(
-            data=output_deserialized,
+            data=[
+                serializers.CategoryListItemOutputSerializer.from_orm(each_result)
+                for each_result in result
+            ],
         )
 
 

@@ -14,23 +14,13 @@ class BaseCategorySerializer(BaseModel):
     class Config:
         orm_mode = True
 
+
 class CategoryRetrieveOutputSerializer(BaseCategorySerializer):
     """Сериализатор исходящих данных получения одной категории"""
 
-    id: int
-    name: str
 
-    class Config:
-        orm_mode = True
-
-
-class CategoryListOutputSerializer(BaseModel):
+class CategoryListItemOutputSerializer(BaseCategorySerializer):
     """Сериализатор получения списка Категорий"""
-
-    __root__: list[BaseCategorySerializer]
-
-    class Config:
-        orm_mode = True
 
 
 class CategoryCreateInputSerializer(BaseModel):
