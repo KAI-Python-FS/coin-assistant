@@ -3,9 +3,15 @@ from typing import Any
 from django.http.request import QueryDict
 
 
-def query_parameters_to_dict(query_dict: QueryDict) -> dict[str, Any]:
+def query_parameters_to_dict(query_dict: QueryDict, list_params: list[str] = None) -> dict[str, Any]:
     """Возвращает словарь параметров, переданных в запросе"""
+    if not list_params:
+        list_params = []
+
     return {
-        key: value
-        for key, value in query_dict.items()
+        each_key: (
+            query_dict.getlist(each_key) if each_key in list_params
+            else each_value
+        )
+        for each_key, each_value in query_dict.items()
     }

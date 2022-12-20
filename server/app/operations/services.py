@@ -1,5 +1,5 @@
 
-from server.app.base.exceptions import ValidationException
+from django.db.models import Q
 
 from .enums import OperationTypeEnum
 from .models import Category, Operation
@@ -69,11 +69,23 @@ class OperationService:
         return operation
 
     def retrieve_list(self, **filters) -> list[Operation | None]:
-        return Operation.objects.filter(
-            user=self.user
-        ).filter(
-            **filters
-        ).all()
+        """Возвращает список Операций пользователя"""
+        qs = Operation.objects.filter(user=self.user)
+
+        for each_filter_key, each_filter_value in filters.items():
+            match each_filter_key:
+                case "by_operation_type":
+                    qs = qs.filter(operation_type=each_filter_value)
+                case "by_categories":
+                    qs = qs.filter(category_id__in=each_filter_value)
+                case "by_operation_start_date":
+                    qs = qs.filter(operation_at__gte=each_filter_value)
+                case "by_operation_finish_date":
+                    qs = qs.filter(operation_at__lte=each_filter_value)
+                case _:
+                    raise Exception("Неизвестный фильтр")
+
+        return qs.all()
 
 
     # @classmethod

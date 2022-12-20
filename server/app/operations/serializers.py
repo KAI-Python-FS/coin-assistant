@@ -75,5 +75,14 @@ class OperationCreateOutputSerializer(BaseOperationSerializer):
     """Сериализатор исходящих данных создания Операции пользователя"""
 
 
+class OperationListFilterSerializer(BaseModel):
+    """Сериализатор фильтров списка Операций пользователя"""
+
+    by_operation_type: OperationTypeEnum | None
+    by_categories: list[int] | None
+    by_operation_start_date: datetime.datetime | None
+    by_operation_finish_date: datetime.datetime | None
+
+
 class OperationListItemOutputSerializer(BaseOperationSerializer):
     """Сериалиазатор исходящих данных получения списка Операций пользователя"""
