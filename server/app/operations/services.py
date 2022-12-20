@@ -86,22 +86,3 @@ class OperationService:
                     raise Exception("Неизвестный фильтр")
 
         return qs.all()
-
-
-    # @classmethod
-    # def create_spending(cls, user: int, **operation_data):
-    #     """Создание записи траты у пользователя"""
-    #     Operation.objects.create(
-    #         user=user,
-    #         operation_type=OperationTypeEnum.SPENDING,
-    #         **operation_data
-    #     )
-    #
-    # @classmethod
-    # def create_refill(cls, user: int, **operation_data):
-    #     """Создание записи пополнения у пользователя"""
-    #     Operation.objects.create(
-    #         user=user,
-    #         operation_type=OperationTypeEnum.REFILL,
-    #         **operation_data
-    #     )

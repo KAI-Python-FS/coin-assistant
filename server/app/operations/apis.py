@@ -113,7 +113,7 @@ class OperationGeneralView(APIView):
         """Получение списка Операций"""
         query_params = query_parameters_to_dict(
             request.query_params,
-            list_params=["by_categories"]
+            list_params=("by_categories",)
         )
         try:
             filter_serializer = serializers.OperationListFilterSerializer(**query_params)

@@ -3,7 +3,7 @@ from typing import Any
 from django.http.request import QueryDict
 
 
-def query_parameters_to_dict(query_dict: QueryDict, list_params: list[str] = None) -> dict[str, Any]:
+def query_parameters_to_dict(query_dict: QueryDict, list_params: list[str] | tuple[str] = None) -> dict[str, Any]:
     """Возвращает словарь параметров, переданных в запросе"""
     if not list_params:
         list_params = []
