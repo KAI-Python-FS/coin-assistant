@@ -131,3 +131,19 @@ class OperationGeneralView(APIView):
         )
 
 
+class OperationConcreteView(APIView):
+    """Вью работы с конкретной записью Операции"""
+
+    def get(self, request: Request, operation_id: int):
+        """Получение конкретной операции"""
+        service = OperationService(user=request.user)
+
+        result = service.retrieve_single(operation_id)
+        if not result:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        output_deserialized = serializers.OperationRetrieveOutputSerializer.from_orm(result)
+
+        return Response(
+            data=output_deserialized.dict(),
+        )

@@ -86,3 +86,7 @@ class OperationListFilterSerializer(BaseModel):
 
 class OperationListItemOutputSerializer(BaseOperationSerializer):
     """Сериалиазатор исходящих данных получения списка Операций пользователя"""
+
+
+class OperationRetrieveOutputSerializer(BaseOperationSerializer):
+    """Сериализатор исходящих данных получения одной Операции"""

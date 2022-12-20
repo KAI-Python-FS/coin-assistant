@@ -271,7 +271,7 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/success"
-  /operations/{id}:
+  /operation/{id}:
     parameters:
       - $ref: "#/components/parameters/operation_id"
     get:

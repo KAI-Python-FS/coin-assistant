@@ -1,7 +1,4 @@
 
-from django.db.models import Q
-
-from .enums import OperationTypeEnum
 from .models import Category, Operation
 
 
@@ -86,3 +83,12 @@ class OperationService:
                     raise Exception("Неизвестный фильтр")
 
         return qs.all()
+
+    def retrieve_single(self, operation_id: int) -> Category | None:
+        """Получение одной операции пользователя"""
+        try:
+            operation = Operation.objects.get(pk=operation_id, user=self.user)
+        except Operation.DoesNotExist:
+            return None
+
+        return operation
