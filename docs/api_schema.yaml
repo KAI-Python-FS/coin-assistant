@@ -3,7 +3,7 @@ info:
   title: API Title
   version: "1.0"
 servers:
-  - url: https://127.0.0.1:8000/
+  - url: http://127.0.0.1:8000/
 tags:
   - name: "API баланса"
     description: "API баланса пользователя"
@@ -116,7 +116,7 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/success"
-  /category:
+  /category/:
     get:
       description: "Получение списка категорий"
       tags:
