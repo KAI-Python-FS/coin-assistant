@@ -2,6 +2,7 @@
 from pydantic import ValidationError
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework.views import APIView
 
 from . import serializers
@@ -15,7 +16,7 @@ class CategoryGeneralView(APIView):
         super().__init__(*args, **kwargs)
         self.service = CategoryService()
 
-    def post(self, request):
+    def post(self, request: Request):
         """Добавление категории методом POST"""
         try:
             serializer = serializers.CategoryCreateInputSerializer.parse_obj(request.data)
@@ -30,7 +31,7 @@ class CategoryGeneralView(APIView):
             status=status.HTTP_201_CREATED,
         )
 
-    def get(self, request):
+    def get(self, request: Request):
         """Получение списка категорий"""
         result = self.service.retrieve_list()
 
@@ -49,7 +50,7 @@ class CategoryConcreteView(APIView):
         super().__init__(*args, **kwargs)
         self.service = CategoryService()
 
-    def get(self, request, category_id: int):
+    def get(self, request: Request, category_id: int):
         """Получение конкретной категории"""
         result = self.service.retrieve_single(category_id)
         if not result:
@@ -61,7 +62,7 @@ class CategoryConcreteView(APIView):
             data=output_deserialized.dict(),
         )
 
-    def put(self, request, category_id: int):
+    def put(self, request: Request, category_id: int):
         """Обновление конкретной категории"""
         try:
             serializer = serializers.CategoryUpdateInputSerializer.parse_obj(request.data)
@@ -80,7 +81,7 @@ class CategoryConcreteView(APIView):
             data=output_deserialized.dict(),
         )
 
-    def delete(self, request, category_id: int):
+    def delete(self, request: Request, category_id: int):
         """Удаление конкретной категории"""
         result = self.service.delete(category_id=category_id)
         if not result:
@@ -91,7 +92,7 @@ class CategoryConcreteView(APIView):
 class OperationGeneralView(APIView):
     """Вью Категорий без привязки к конкретной Категории"""
 
-    def post(self, request):
+    def post(self, request: Request):
         """Добавление операции методом POST"""
         try:
             serializer = serializers.OperationCreateInputSerializer.parse_obj(request.data)
@@ -106,5 +107,7 @@ class OperationGeneralView(APIView):
             data=output_deserialized.dict(),
             status=status.HTTP_201_CREATED,
         )
+
+    # def get(self, request):
 
 
