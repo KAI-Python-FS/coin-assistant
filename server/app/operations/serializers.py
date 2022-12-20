@@ -45,15 +45,10 @@ class CategoryUpdateOutputSerializer(BaseCategorySerializer):
     """Сериалиазатор исходящих данных обновления Категории"""
 
 
-class OperationRetrieveOutputSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Operation
-
-
-class BaseCategorySerializer(BaseModel):
+class BaseOperationSerializer(BaseModel):
     """Сериализатор всех данных одной операции"""
 
+    id: int
     name: str
     description: str | None
     operation_at: datetime.datetime | None
@@ -61,10 +56,13 @@ class BaseCategorySerializer(BaseModel):
     cost: float
     category: BaseCategorySerializer | None
 
+    class Config:
+        orm_mode = True
 
-class OperationCreateInputSerializer(BaseCategorySerializer):
+
+class OperationCreateInputSerializer(BaseOperationSerializer):
     """Сериализатор входящих данных создания Операции пользователя"""
 
 
-class OperationCreateOutputSerializer(BaseCategorySerializer):
+class OperationCreateOutputSerializer(BaseOperationSerializer):
     """Сериализатор исходящих данных создания Операции пользователя"""

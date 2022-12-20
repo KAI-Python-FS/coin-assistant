@@ -98,7 +98,8 @@ class OperationGeneralView(APIView):
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        result = OperationService(user=request.user).create(**serializer.dict())
+        service = OperationService(user=request.user)
+        result = service.create(**serializer.dict(exclude_none=True))
 
         output_deserialized = serializers.OperationCreateOutputSerializer.from_orm(result)
         return Response(
