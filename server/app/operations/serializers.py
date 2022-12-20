@@ -68,7 +68,7 @@ class OperationCreateInputSerializer(BaseModel):
     operation_at: datetime.datetime | None
     operation_type: OperationTypeEnum
     cost: float
-    category: BaseCategorySerializer | None
+    category: int | None
 
 
 class OperationCreateOutputSerializer(BaseOperationSerializer):

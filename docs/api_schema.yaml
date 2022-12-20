@@ -240,7 +240,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/success'
-  /operations:
+  /operation/:
     get:
       description: "Получение списка операций пользователя"
       tags:
@@ -644,7 +644,6 @@ components:
       required:
         - name
         - operation_type
-        - date
         - cost
       properties:
         name:
@@ -653,6 +652,9 @@ components:
         operation_type:
           type: string
           description: "Тип операции"
+          enum:
+            - Трата
+            - Пополнение
         description:
           type: string
           description: "Описание операции"
@@ -665,13 +667,8 @@ components:
           format: date-time
           description: "Дата и время операции"
         category:
-          type: array
-          description: "Список категорий операции"
-          items:
-            type: integer
-        user:
           type: integer
-          description: "Уникальный ключ пользователя"
+          description: "Категория операции"
     OperationUpdate:
       type: object
       description: "Обновление операции пользователя"
@@ -695,9 +692,6 @@ components:
           description: "Список категорий операции"
           items:
             type: integer
-        user:
-          type: integer
-          description: "Уникальный ключ пользователя"
     User:
       type: object
       description: "Пользователь"
