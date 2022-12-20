@@ -60,9 +60,20 @@ class BaseOperationSerializer(BaseModel):
         orm_mode = True
 
 
-class OperationCreateInputSerializer(BaseOperationSerializer):
+class OperationCreateInputSerializer(BaseModel):
     """Сериализатор входящих данных создания Операции пользователя"""
+
+    name: str
+    description: str | None
+    operation_at: datetime.datetime | None
+    operation_type: OperationTypeEnum
+    cost: float
+    category: BaseCategorySerializer | None
 
 
 class OperationCreateOutputSerializer(BaseOperationSerializer):
     """Сериализатор исходящих данных создания Операции пользователя"""
+
+
+class OperationListItemOutputSerializer(BaseOperationSerializer):
+    """Сериалиазатор исходящих данных получения списка Операций пользователя"""
