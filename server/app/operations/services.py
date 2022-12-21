@@ -7,19 +7,26 @@ from .models import Category, Operation
 class CategoryService:
     """Класс описания бизнес логики работы с Категориями покупок"""
 
+    def __init__(self):
+        self.model = Category
+
     def create(self, **category_data) -> Category:
         """Создание категории"""
-        category = Category.objects.create(**category_data)
+        category = self.model.objects.create(**category_data)
         return category
 
     def retrieve_single(self, category_id: int) -> Category | None:
         """Получение одной категории"""
         try:
-            category = Category.objects.get(pk=category_id)
-        except Category.DoesNotExist:
+            category = self.model.objects.get(pk=category_id)
+        except self.model.DoesNotExist:
             return None
 
         return category
+
+    def retrieve_list(self, **filters) -> list[Category | None]:
+        """Получение списка категорий согласно фильтрам"""
+        return self.model.objects.filter(**filters).all()
 
     def update(self, category_id: int, **category_data) -> Category | None:
         """Обновление категории"""
@@ -42,11 +49,6 @@ class CategoryService:
 
         return True
 
-    @classmethod
-    def retrieve_list(cls, **filters) -> list[Category | None]:
-        """Получение списка категорий согласно фильтрам"""
-        return Category.objects.filter(**filters).all()
-
 
 class OperationService:
     """Класс описания бизнес логики работы с операциями пользователя"""
@@ -57,7 +59,7 @@ class OperationService:
 
     def create(self, **operation_data) -> Operation:
         """Создание записи операции пользователя"""
-        operation = Operation.objects.create(
+        operation = self.model.objects.create(
             user=self.user,
             **operation_data,
         )
@@ -66,7 +68,7 @@ class OperationService:
 
     def retrieve_list(self, **filters) -> list[Operation | None]:
         """Возвращает список Операций пользователя"""
-        qs = Operation.objects.filter(user=self.user)
+        qs = self.model.objects.filter(user=self.user)
 
         for each_filter_key, each_filter_value in filters.items():
             match each_filter_key:
@@ -86,8 +88,8 @@ class OperationService:
     def retrieve_single(self, operation_id: int) -> Operation | None:
         """Получение одной операции пользователя"""
         try:
-            operation = Operation.objects.get(pk=operation_id, user=self.user)
-        except Operation.DoesNotExist:
+            operation = self.model.objects.get(pk=operation_id, user=self.user)
+        except self.model.DoesNotExist:
             return None
 
         return operation
