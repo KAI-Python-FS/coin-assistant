@@ -9,6 +9,26 @@ from server.app.goals import enums
 User = get_user_model()
 
 
+class GoalQuerySet(models.QuerySet):
+    """Кварисеты модели Целей"""
+
+    def goals(self) -> models.QuerySet:
+        """Возвращает цели накопления пользователя"""
+        return self.filter(
+            goal_type=enums.GoalTypeEnum.REFILL
+        )
+
+    def budgets(self) -> models.QuerySet:
+        """Возвращает цели трат пользователя - бюджет"""
+        return self.filter(
+            goal_type=enums.GoalTypeEnum.SPENDING
+        )
+
+
+class GoalManager(models.Manager):
+    """Менеджер модели Целей"""
+
+
 class Goal(models.Model):
     """Модель Цели"""
 
@@ -61,6 +81,8 @@ class Goal(models.Model):
         max_length=16,
         verbose_name="Правило достижения цели",
     )
+
+    objects = GoalManager.from_queryset(GoalQuerySet)()
 
     class Meta:
         verbose_name = "Цель"
