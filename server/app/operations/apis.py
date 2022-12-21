@@ -151,7 +151,7 @@ class OperationConcreteView(APIView):
     def put(self, request: Request, operation_id: int) -> Response:
         """Обновление конкретной операции"""
         try:
-            serializer = serializers.CategoryCreateInputSerializer.parse_obj(request.data)
+            serializer = serializers.OperationUpdateInputSerializer.parse_obj(request.data)
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 

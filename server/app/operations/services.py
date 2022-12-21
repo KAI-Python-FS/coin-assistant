@@ -1,5 +1,6 @@
 
 from django.core.exceptions import FieldDoesNotExist
+from django.db.models.fields.related import ForeignKey
 
 from .models import Category, Operation
 
@@ -108,7 +109,7 @@ class OperationService:
             except FieldDoesNotExist:
                 break
 
-            operation.model_update_field = update_value
+            setattr(operation, model_update_field.attname, update_value)
         else:
             operation.save()
 
