@@ -82,7 +82,10 @@ class BaseModelCRUDService(InterfaceCRUDService):
             except FieldDoesNotExist:
                 break
 
-            setattr(object_, model_update_field.attname, update_value)
+            # Обновление только изменившихся данных
+            current_value = getattr(object_, model_update_field.attname)
+            if current_value != update_value:
+                setattr(object_, model_update_field.attname, update_value)
         else:
             object_.save()
 
