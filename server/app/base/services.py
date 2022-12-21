@@ -17,7 +17,7 @@ class InterfaceCRUDService:
     def retrieve_single(self, object_id: int, *args, **kwargs) -> Any:
         """Получение одной объекта"""
 
-    def retrieve_list(self, *args, **filters) -> list[Any]:
+    def retrieve_list(self, *args, **filters) -> Any:
         """Получение списка объектов"""
 
     def update(self, object_id: int, *args, **object_data) -> Any:
