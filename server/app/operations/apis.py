@@ -72,7 +72,7 @@ class CategoryConcreteView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         result = self.service.update(
-            category_id=category_id,
+            category_id,
             **serializer.dict(),
         )
         if not result:
@@ -85,7 +85,7 @@ class CategoryConcreteView(APIView):
 
     def delete(self, request: Request, category_id: int):
         """Удаление конкретной категории"""
-        result = self.service.delete(category_id=category_id)
+        result = self.service.delete(category_id)
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(data=result)

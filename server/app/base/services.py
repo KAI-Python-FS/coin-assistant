@@ -54,7 +54,7 @@ class BaseModelCRUDService(InterfaceCRUDService):
 
     def create(self, *args, **object_data: dict[str, Any]) -> Model:
         """Создание объекта"""
-        object_ = self.model.concrete_model(**object_data)
+        object_ = self.model.objects.create(**object_data)
         return object_
 
     def retrieve_single(self, object_id: int, *args, **kwargs) -> Model | None:
