@@ -134,11 +134,30 @@ class OperationGeneralView(APIView):
 class OperationConcreteView(APIView):
     """Вью работы с конкретной записью Операции"""
 
-    def get(self, request: Request, operation_id: int):
+    def get(self, request: Request, operation_id: int) -> Response:
         """Получение конкретной операции"""
         service = OperationService(user=request.user)
 
         result = service.retrieve_single(operation_id)
+        if not result:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        output_deserialized = serializers.OperationRetrieveOutputSerializer.from_orm(result)
+
+        return Response(
+            data=output_deserialized.dict(),
+        )
+
+    def put(self, request: Request, operation_id: int) -> Response:
+        """Обновление конкретной операции"""
+        try:
+            serializer = serializers.CategoryCreateInputSerializer.parse_obj(request.data)
+        except ValidationError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        service = OperationService(user=request.user)
+
+        result = service.update(operation_id, **serializer.dict(exclude_none=True))
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 

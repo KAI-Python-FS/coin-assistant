@@ -1,4 +1,6 @@
 
+from django.core.exceptions import FieldDoesNotExist
+
 from .models import Category, Operation
 
 
@@ -55,6 +57,7 @@ class OperationService:
 
     def __init__(self, user) -> None:
         self.user = user
+        self.model = Operation
 
     def create(self, **operation_data) -> Operation:
         """Создание записи операции пользователя"""
@@ -84,7 +87,7 @@ class OperationService:
 
         return qs.all()
 
-    def retrieve_single(self, operation_id: int) -> Category | None:
+    def retrieve_single(self, operation_id: int) -> Operation | None:
         """Получение одной операции пользователя"""
         try:
             operation = Operation.objects.get(pk=operation_id, user=self.user)
@@ -92,3 +95,22 @@ class OperationService:
             return None
 
         return operation
+
+    def update(self, operation_id: int, **operation_data) -> Operation | None:
+        """Обновление одной операции"""
+        operation = self.retrieve_single(operation_id)
+        if not operation:
+            return None
+
+        for update_field, update_value in operation_data.items():
+            try:
+                model_update_field = self.model._meta.get_field(update_field)
+            except FieldDoesNotExist:
+                break
+
+            operation.model_update_field = update_value
+        else:
+            operation.save()
+
+        return operation
+

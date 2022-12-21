@@ -688,10 +688,8 @@ components:
           format: date-time
           description: "Дата и время операции"
         category:
-          type: array
+          type: integer
           description: "Список категорий операции"
-          items:
-            type: integer
     User:
       type: object
       description: "Пользователь"

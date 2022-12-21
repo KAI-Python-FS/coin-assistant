@@ -90,3 +90,13 @@ class OperationListItemOutputSerializer(BaseOperationSerializer):
 
 class OperationRetrieveOutputSerializer(BaseOperationSerializer):
     """Сериализатор исходящих данных получения одной Операции"""
+
+
+class OperationUpdateInputSerializer(BaseModel):
+    """Сериализатор входящих данных обновления одной Операции"""
+
+    name: str | None
+    description: str | None
+    cost: float | None
+    date: datetime.datetime | None
+    category: int | None
