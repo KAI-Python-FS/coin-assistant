@@ -15,6 +15,7 @@ class CategoryGeneralView(APIView):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
         self.service = CategoryService()
 
     def post(self, request: Request):
@@ -104,6 +105,7 @@ class OperationGeneralView(APIView):
         result = service.create(**serializer.dict(exclude_none=True))
 
         output_deserialized = serializers.OperationCreateOutputSerializer.from_orm(result)
+
         return Response(
             data=output_deserialized.dict(),
             status=status.HTTP_201_CREATED,
@@ -156,7 +158,6 @@ class OperationConcreteView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         service = OperationService(user=request.user)
-
         result = service.update(operation_id, **serializer.dict(exclude_none=True))
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)

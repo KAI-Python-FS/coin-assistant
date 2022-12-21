@@ -1,6 +1,5 @@
 
 from django.core.exceptions import FieldDoesNotExist
-from django.db.models.fields.related import ForeignKey
 
 from .models import Category, Operation
 
@@ -8,14 +7,12 @@ from .models import Category, Operation
 class CategoryService:
     """Класс описания бизнес логики работы с Категориями покупок"""
 
-    @classmethod
-    def create(cls, **category_data) -> Category:
+    def create(self, **category_data) -> Category:
         """Создание категории"""
         category = Category.objects.create(**category_data)
         return category
 
-    @classmethod
-    def retrieve_single(cls, category_id: int) -> Category | None:
+    def retrieve_single(self, category_id: int) -> Category | None:
         """Получение одной категории"""
         try:
             category = Category.objects.get(pk=category_id)
@@ -24,10 +21,9 @@ class CategoryService:
 
         return category
 
-    @classmethod
-    def update(cls, category_id: int, **category_data) -> Category | None:
+    def update(self, category_id: int, **category_data) -> Category | None:
         """Обновление категории"""
-        category = cls.retrieve_single(category_id)
+        category = self.retrieve_single(category_id)
         if not category:
             return None
 
@@ -36,10 +32,9 @@ class CategoryService:
 
         return category
 
-    @classmethod
-    def delete(cls, category_id: int) -> bool | None:
+    def delete(self, category_id: int) -> bool | None:
         """Удаление категории"""
-        category = cls.retrieve_single(category_id)
+        category = self.retrieve_single(category_id)
         if not category:
             return None
 
