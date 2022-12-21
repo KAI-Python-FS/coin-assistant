@@ -117,3 +117,7 @@ class BaseModelUserFilterCRUDService(BaseModelCRUDService):
     def _filters_retrieve_list(self, **filters) -> Q:
         """Возвращает фильтры получения конкретной списка объектов согласно фильтрам"""
         return Q(user=self.user)
+
+    def create(self, *args, **object_data: dict[str, Any]) -> Model:
+        """Создание объекта"""
+        return super().create(user=self.user, *args, **object_data)
