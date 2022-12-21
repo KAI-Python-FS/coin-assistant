@@ -48,9 +48,9 @@ class BaseModelCRUDService(InterfaceCRUDService):
 
     def _get_qs_retrieve_list(self, **filters) -> QuerySet:
         """Возвращает кварисет получения списка записей объекта"""
-        qs_filters = self._filters_retrieve_single(**filters)
+        qs_filters = self._filters_retrieve_list(**filters)
 
-        return self.model.objects.filters(qs_filters).all()
+        return self.model.objects.filter(qs_filters).all()
 
     def create(self, *args, **object_data: dict[str, Any]) -> Model:
         """Создание объекта"""
@@ -70,8 +70,8 @@ class BaseModelCRUDService(InterfaceCRUDService):
         """Возвращает список объектов согласно фильтрам"""
         return self._get_qs_retrieve_list(**filters).all()  # type: ignore
 
-    def update(self, object_id: int, *args, **object_data) -> Model | None:
-        """Обновляет конкретный объекта"""
+    def update(self, object_id: int, **object_data) -> Model | None:
+        """Обновляет конкретный объект"""
         object_ = self.retrieve_single(object_id)
         if not object_:
             return None

@@ -1,53 +1,15 @@
 
 from django.core.exceptions import FieldDoesNotExist
 
+from server.app.base.services import BaseModelCRUDService, BaseModelUserFilterCRUDService
+
 from .models import Category, Operation
 
 
-class CategoryService:
+class CategoryService(BaseModelCRUDService):
     """Класс описания бизнес логики работы с Категориями покупок"""
 
-    def __init__(self):
-        self.model = Category
-
-    def create(self, **category_data) -> Category:
-        """Создание категории"""
-        category = self.model.objects.create(**category_data)
-        return category
-
-    def retrieve_single(self, category_id: int) -> Category | None:
-        """Получение одной категории"""
-        try:
-            category = self.model.objects.get(pk=category_id)
-        except self.model.DoesNotExist:
-            return None
-
-        return category
-
-    def retrieve_list(self, **filters) -> list[Category | None]:
-        """Получение списка категорий согласно фильтрам"""
-        return self.model.objects.filter(**filters).all()
-
-    def update(self, category_id: int, **category_data) -> Category | None:
-        """Обновление категории"""
-        category = self.retrieve_single(category_id)
-        if not category:
-            return None
-
-        category.name = category_data.pop("name")
-        category.save()
-
-        return category
-
-    def delete(self, category_id: int) -> bool | None:
-        """Удаление категории"""
-        category = self.retrieve_single(category_id)
-        if not category:
-            return None
-
-        category.delete()
-
-        return True
+    model = Category
 
 
 class OperationService:
