@@ -110,3 +110,12 @@ class OperationService:
 
         return operation
 
+    def delete(self, operation_id: int) -> bool | None:
+        """Удаление операции пользователя"""
+        operation = self.retrieve_single(operation_id)
+        if not operation:
+            return None
+
+        operation.delete()
+
+        return True

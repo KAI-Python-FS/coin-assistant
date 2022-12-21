@@ -167,3 +167,13 @@ class OperationConcreteView(APIView):
         return Response(
             data=output_deserialized.dict(),
         )
+
+    def delete(self, request: Request, operation_id: int) -> Response:
+        """Удаление конкретной операции"""
+        service = OperationService(user=request.user)
+
+        result = service.delete(operation_id=operation_id)
+        if not result:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(data=result)
