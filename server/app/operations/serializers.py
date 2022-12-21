@@ -45,15 +45,10 @@ class CategoryUpdateOutputSerializer(BaseCategorySerializer):
     """Сериалиазатор исходящих данных обновления Категории"""
 
 
-class OperationRetrieveOutputSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Operation
-
-
-class BaseCategorySerializer(BaseModel):
+class BaseOperationSerializer(BaseModel):
     """Сериализатор всех данных одной операции"""
 
+    id: int
     name: str
     description: str | None
     operation_at: datetime.datetime | None
@@ -61,10 +56,47 @@ class BaseCategorySerializer(BaseModel):
     cost: float
     category: BaseCategorySerializer | None
 
+    class Config:
+        orm_mode = True
 
-class OperationCreateInputSerializer(BaseCategorySerializer):
+
+class OperationCreateInputSerializer(BaseModel):
     """Сериализатор входящих данных создания Операции пользователя"""
 
+    name: str
+    description: str | None
+    operation_at: datetime.datetime | None
+    operation_type: OperationTypeEnum
+    cost: float
+    category: int | None
 
-class OperationCreateOutputSerializer(BaseCategorySerializer):
+
+class OperationCreateOutputSerializer(BaseOperationSerializer):
     """Сериализатор исходящих данных создания Операции пользователя"""
+
+
+class OperationListFilterSerializer(BaseModel):
+    """Сериализатор фильтров списка Операций пользователя"""
+
+    by_operation_type: OperationTypeEnum | None
+    by_categories: list[int] | None
+    by_operation_start_date: datetime.datetime | None
+    by_operation_finish_date: datetime.datetime | None
+
+
+class OperationListItemOutputSerializer(BaseOperationSerializer):
+    """Сериалиазатор исходящих данных получения списка Операций пользователя"""
+
+
+class OperationRetrieveOutputSerializer(BaseOperationSerializer):
+    """Сериализатор исходящих данных получения одной Операции"""
+
+
+class OperationUpdateInputSerializer(BaseModel):
+    """Сериализатор входящих данных обновления одной Операции"""
+
+    name: str | None
+    description: str | None
+    cost: float | None
+    date: datetime.datetime | None
+    category: int | None

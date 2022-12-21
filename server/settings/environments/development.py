@@ -16,6 +16,8 @@ from server.settings.components.common import (
 # Setting the development status:
 
 DEBUG = True
+# Для возможности выполнения запросов с web-интерфейса Swagger
+CORS_ORIGIN_ALLOW_ALL = True
 
 ALLOWED_HOSTS += [
     'localhost',

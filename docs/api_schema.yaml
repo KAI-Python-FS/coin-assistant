@@ -3,7 +3,7 @@ info:
   title: API Title
   version: "1.0"
 servers:
-  - url: https://127.0.0.1:8000/
+  - url: http://127.0.0.1:8000/
 tags:
   - name: "API баланса"
     description: "API баланса пользователя"
@@ -57,11 +57,11 @@ paths:
       tags:
         - API бюджета
       parameters:
-        - $ref: "#/components/parameters/category_id"
-        - $ref: "#/components/parameters/state"
-        - $ref: "#/components/parameters/start_date"
-        - $ref: "#/components/parameters/finish_date"
-        - $ref: "#/components/parameters/budget_rule"
+        - $ref: "#/components/parameters/by_categories"
+        - $ref: "#/components/parameters/by_state"
+        - $ref: "#/components/parameters/by_start_date"
+        - $ref: "#/components/parameters/by_finish_date"
+        - $ref: "#/components/parameters/by_budget_rule"
       responses:
         "200":
           description: "Успешная операция"
@@ -116,7 +116,7 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/success"
-  /category:
+  /category/:
     get:
       description: "Получение списка категорий"
       tags:
@@ -181,11 +181,11 @@ paths:
       tags:
         - "API целей накопления"
       parameters:
-        - $ref: "#/components/parameters/category_id"
-        - $ref: "#/components/parameters/state"
-        - $ref: "#/components/parameters/start_date"
-        - $ref: "#/components/parameters/finish_date"
-        - $ref: "#/components/parameters/goal_rule"
+        - $ref: "#/components/parameters/by_categories"
+        - $ref: "#/components/parameters/by_state"
+        - $ref: "#/components/parameters/by_start_date"
+        - $ref: "#/components/parameters/by_finish_date"
+        - $ref: "#/components/parameters/by_goal_rule"
       responses:
         '200':
           description: 'Успешная операция'
@@ -240,16 +240,16 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/success'
-  /operations:
+  /operation/:
     get:
       description: "Получение списка операций пользователя"
       tags:
         - API операций
       parameters:
-        - $ref: "#/components/parameters/operation_type"
-        - $ref: "#/components/parameters/category_id"
-        - $ref: "#/components/parameters/operation_start_date"
-        - $ref: "#/components/parameters/operation_finish_date"
+        - $ref: "#/components/parameters/by_operation_type"
+        - $ref: "#/components/parameters/by_categories"
+        - $ref: "#/components/parameters/by_start_date"
+        - $ref: "#/components/parameters/by_finish_date"
       responses:
         "200":
           description: "Успешная операция"
@@ -271,7 +271,7 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/success"
-  /operations/{id}:
+  /operation/{id}:
     parameters:
       - $ref: "#/components/parameters/operation_id"
     get:
@@ -644,7 +644,6 @@ components:
       required:
         - name
         - operation_type
-        - date
         - cost
       properties:
         name:
@@ -653,6 +652,9 @@ components:
         operation_type:
           type: string
           description: "Тип операции"
+          enum:
+            - Трата
+            - Пополнение
         description:
           type: string
           description: "Описание операции"
@@ -665,13 +667,8 @@ components:
           format: date-time
           description: "Дата и время операции"
         category:
-          type: array
-          description: "Список категорий операции"
-          items:
-            type: integer
-        user:
           type: integer
-          description: "Уникальный ключ пользователя"
+          description: "Категория операции"
     OperationUpdate:
       type: object
       description: "Обновление операции пользователя"
@@ -691,13 +688,8 @@ components:
           format: date-time
           description: "Дата и время операции"
         category:
-          type: array
-          description: "Список категорий операции"
-          items:
-            type: integer
-        user:
           type: integer
-          description: "Уникальный ключ пользователя"
+          description: "Список категорий операции"
     User:
       type: object
       description: "Пользователь"
@@ -716,8 +708,29 @@ components:
       required: true
       schema:
         type: integer
-    budget_rule:
-      name: "budget_rule"
+    category_id_path:
+      name: "category_id"
+      in: "path"
+      description: "Уникальный ключ Категории"
+      required: true
+      schema:
+        type: integer
+    goal_id:
+      name: "goal_id"
+      in: "path"
+      description: "Уникальный идентификатор цели накопления"
+      required: true
+      schema:
+        type: integer
+    operation_id:
+      name: "id"
+      in: "path"
+      description: "Уникальный ключ операций"
+      required: true
+      schema:
+        type: integer
+    by_budget_rule:
+      name: "by_budget_rule"
       in: query
       description: "Правило прохождения бюджета"
       required: false
@@ -726,37 +739,18 @@ components:
         enum:
           - "Меньше"
           - "Меньше или равно"
-    category_id:
-      name: "category_id"
+
+    by_categories:
+      name: "by_categories"
       in: "query"
       description: "Уникальный ключ Категории"
       required: false
       schema:
-        type: integer
-    category_id_path:
-      name: "category_id"
-      in: "path"
-      description: "Уникальный ключ Категории"
-      required: true
-      schema:
-        type: integer
-    finish_date:
-      name: "finish_date"
-      in: "query"
-      description: "Конечная дата"
-      required: false
-      schema:
-        type: string
-        format: date
-    goal_id:
-      name: "goal_id"
-      in: "path"
-      description: "Уникальный идентификатор цели накопления"
-      required: true
-      schema:
-        type: integer
-    goal_rule:
-      name: "rule"
+        type: array
+        items:
+          type: integer
+    by_goal_rule:
+      name: "by_goal_rule"
       in: "query"
       description: "Конечная дата"
       required: false
@@ -766,16 +760,8 @@ components:
           - "Больше"
           - "Больше или равно"
           - "Равно"
-    start_date:
-      name: "start_date"
-      in: "query"
-      description: "Начальная дата"
-      required: false
-      schema:
-        type: string
-        format: date
-    state:
-      name: "state"
+    by_state:
+      name: "by_state"
       in: "query"
       description: "Статус"
       required: false
@@ -786,31 +772,32 @@ components:
           - "Не выполнена"
           - "В процессе"
           - "Неизвестно"
-    operation_id:
-      name: "id"
-      in: "path"
-      description: "Уникальный ключ операций"
-      required: true
+    by_start_date:
+      name: "by_start_date"
+      in: "query"
+      description: "Начальная дата"
+      required: false
       schema:
-        type: integer
-    operation_finish_date:
-      name: "operation_finish_date"
+        type: string
+        format: date
+    by_finish_date:
+      name: "by_finish_date"
       in: "query"
       description: "Конечная дата и время операции"
       required: false
       schema:
         type: string
         format: date-time
-    operation_start_date:
-      name: "operation_start_date"
+    by_operation_start_date:
+      name: "by_operation_start_date"
       in: "query"
       description: "Начальная дата и время операции"
       required: false
       schema:
         type: string
         format: date-time
-    operation_type:
-      name: "operation_type"
+    by_operation_type:
+      name: "by_operation_type"
       in: "query"
       description: "Тип операции"
       schema:
