@@ -116,4 +116,4 @@ class BaseModelUserFilterCRUDService(BaseModelCRUDService):
 
     def _filters_retrieve_list(self, **filters) -> Q:
         """Возвращает фильтры получения конкретной списка объектов согласно фильтрам"""
-        return Q(self.user)
+        return Q(user=self.user)

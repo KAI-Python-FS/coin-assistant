@@ -172,7 +172,7 @@ class OperationConcreteView(APIView):
         """Удаление конкретной операции"""
         service = OperationService(user=request.user)
 
-        result = service.delete(operation_id=operation_id)
+        result = service.delete(operation_id)
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
