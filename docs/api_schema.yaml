@@ -175,7 +175,7 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/success"
-  /goal:
+  /goal/:
     get:
       description: "Получение списка целей накопления пользователя"
       tags:
