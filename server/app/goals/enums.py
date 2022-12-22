@@ -18,7 +18,22 @@ class GoalStateEnum(models.TextChoices):
     unknown = "Неизвестно"
 
 
-class GoalRuleEnum(models.TextChoices):
+class BudgetRuleEnum(models.TextChoices):
+    """Справочник условий Бюджета"""
+    lt = "Меньше"
+    lte = "Меньше или равно"
+    eq = "Равно"  # Нужно ли??
+
+
+class GoalAccumulationEnum(models.TextChoices):
+    """Справочник условий Целей накопления"""
+
+    gt = "Больше"
+    gte = "Больше или равно"
+    eq = "Равно"  # Нужно ли??
+
+
+class GoalRuleEnum(BudgetRuleEnum, GoalAccumulationEnum):
     """Справочник условия достижения цели"""
 
     lt = "Меньше"
