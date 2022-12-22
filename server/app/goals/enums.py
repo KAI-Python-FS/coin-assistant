@@ -33,11 +33,18 @@ class GoalAccumulationEnum(models.TextChoices):
     eq = "Равно"  # Нужно ли??
 
 
-class GoalRuleEnum(BudgetRuleEnum, GoalAccumulationEnum):
-    """Справочник условия достижения цели"""
+# Собираем вручную уникальные значения возможных Целей пользователя
+UNIQUE_GOAL_ENUMS = [
+    (each_item.name, each_item.value)
+    for each_item in BudgetRuleEnum
+] + [
+    (each_item.name, each_item.value)
+    for each_item in GoalAccumulationEnum
+    if each_item != GoalAccumulationEnum.eq
+]
 
-    lt = "Меньше"
-    lte = "Меньше или равно"
-    gt = "Больше"
-    gte = "Больше или равно"
-    eq = "Равно"  # Нужно ли??
+
+GoalRuleEnum = models.TextChoices(
+    "GoalRuleEnum",
+    UNIQUE_GOAL_ENUMS,
+)
