@@ -118,3 +118,24 @@ class BudgetCreateInputSerializer(BaseModel):
 
 class BudgetCreateOutputSerializer(BaseBudgetSerializer):
     """Сериализатор исходящих данных создания Бюджета пользователя"""
+
+
+class BudgetRetrieveOutputSerializer(BaseBudgetSerializer):
+    """Сериализатор исходящих данных получения одного Бюджета пользователя"""
+
+
+class BudgetUpdateInputSerializer(BaseModel):
+    """Сериализатор входящих данных обновления Бюджета пользователя"""
+
+    name: str | None
+    description: str | None
+    category: int | None
+    start_date: datetime.date | None
+    finish_date: datetime.date | None
+    state: enums.GoalStateEnum | None
+    value: float | None
+    rule: enums.BudgetRuleEnum | None
+
+
+class BudgetUpdateOutputSerializer(BaseBudgetSerializer):
+    """Сериализатор исходящих данных обновления Бюджета пользователя"""

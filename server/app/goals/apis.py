@@ -144,3 +144,52 @@ class BudgetGeneralView(APIView):
             data=output_deserialized.dict(),
             status=status.HTTP_201_CREATED,
         )
+
+
+class BudgetConcreteView(APIView):
+    """Вью работы с конкретной записью Бюджета"""
+
+    def get(self, request: Request, budget_id: int) -> Response:
+        """Получение конкретного Бюджета пользователя"""
+        service = BudgetService(user=request.user)
+
+        result = service.retrieve_single(budget_id)
+        if not result:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        output_deserialized = serializers.BudgetRetrieveOutputSerializer.from_orm(result)
+
+        return Response(
+            data=output_deserialized.dict(),
+        )
+
+    def put(self, request: Request, budget_id: int) -> Response:
+        """Обновление конкретного Бюджета пользователя"""
+        try:
+            serializer = serializers.BudgetUpdateInputSerializer.parse_obj(request.data)
+        except ValidationError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        service = BudgetService(user=request.user)
+        result = service.update(
+            budget_id,
+            **serializer.dict(exclude_none=True),
+        )
+        if not result:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        output_deserialized = serializers.BudgetUpdateOutputSerializer.from_orm(result)
+
+        return Response(
+            data=output_deserialized.dict(),
+        )
+
+    def delete(self, request: Request, budget_id: int) -> Response:
+        """Удаление конкретного Бюджета пользователя"""
+        service = GoalRefillService(user=request.user)
+
+        result = service.delete(budget_id)
+        if not result:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(data=result)
