@@ -91,3 +91,13 @@ class GoalRefillConcreteView(APIView):
         return Response(
             data=output_deserialized.dict(),
         )
+
+    def delete(self, request: Request, goal_id: int) -> Response:
+        """Удаление конкретной Цели пользователя"""
+        service = GoalRefillService(user=request.user)
+
+        result = service.delete(goal_id)
+        if not result:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(data=result)
