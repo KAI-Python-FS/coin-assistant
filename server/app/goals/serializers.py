@@ -48,7 +48,7 @@ class GoalRefillCreateInputSerializer(BaseModel):
     name: str
     description: str | None
     category: int | None
-    start_date: datetime.date
+    start_date: datetime.date | None
     finish_date: datetime.date | None
     state: enums.GoalStateEnum
     value: float | None
@@ -61,3 +61,20 @@ class GoalRefillCreateOutputSerializer(BaseGoalSerializer):
 
 class GoalRefillRetrieveOutputSerializer(BaseGoalSerializer):
     """Сериализатор исходящих данных получения одной Цели накопления пользователя"""
+
+
+class GoalRefillUpdateInputSerializer(BaseModel):
+    """Сериализатор входящих данных обновления Цели накопления пользователя"""
+
+    name: str | None
+    description: str | None
+    category: int | None
+    start_date: datetime.date | None
+    finish_date: datetime.date | None
+    state: enums.GoalStateEnum | None
+    value: float | None
+    rule: enums.GoalRefillEnum | None
+
+
+class GoalRefillUpdateOutputSerializer(BaseGoalSerializer):
+    """Сериализатор исходящих данных обновления Цели накопления пользователя"""
