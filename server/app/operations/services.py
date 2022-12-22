@@ -1,3 +1,4 @@
+from typing import Any
 
 from django.db.models import Q
 
@@ -50,3 +51,12 @@ class OperationService(BaseModelUserFilterCRUDService):
                     raise Exception("Неизвестный фильтр")
 
         return filter_condition
+
+    def create(self, *args, **object_data: dict[str, Any]) -> Operation:
+        """Создание объекта"""
+        raw_category = object_data.get("category")
+        if raw_category is not None and isinstance(raw_category, int):
+            object_data.pop("category")
+            object_data["category_id"] = raw_category
+
+        return super().create(*args, **object_data)  # type: ignore
