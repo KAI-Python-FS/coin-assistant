@@ -9,8 +9,28 @@ from server.app.goals import enums
 User = get_user_model()
 
 
+class GoalQuerySet(models.QuerySet):
+    """Кварисеты модели Целей"""
+
+    def goals(self) -> models.QuerySet:
+        """Возвращает цели накопления пользователя"""
+        return self.filter(
+            goal_type=enums.GoalTypeEnum.REFILL
+        )
+
+    def budgets(self) -> models.QuerySet:
+        """Возвращает цели трат пользователя - бюджет"""
+        return self.filter(
+            goal_type=enums.GoalTypeEnum.SPENDING
+        )
+
+
+class GoalManager(models.Manager):
+    """Менеджер модели Целей"""
+
+
 class Goal(models.Model):
-    """Модель Цели"""
+    """Модель Цели траты или пополнения"""
 
     name = models.CharField(
         max_length=255,
@@ -20,9 +40,11 @@ class Goal(models.Model):
         null=True,
         verbose_name="Описание",
     )
-    user = models.ManyToManyField(
+    user = models.ForeignKey(
         User,
-        verbose_name="Покупатель",
+        on_delete=models.CASCADE,
+        related_name="goals",
+        verbose_name="Владелей цели",
     )
     goal_type = models.CharField(
         choices=enums.GoalTypeEnum.choices,
@@ -61,6 +83,8 @@ class Goal(models.Model):
         max_length=16,
         verbose_name="Правило достижения цели",
     )
+
+    objects = GoalManager.from_queryset(GoalQuerySet)()
 
     class Meta:
         verbose_name = "Цель"

@@ -18,11 +18,33 @@ class GoalStateEnum(models.TextChoices):
     unknown = "Неизвестно"
 
 
-class GoalRuleEnum(models.TextChoices):
-    """Справочник условия достижения цели"""
-
+class BudgetRuleEnum(models.TextChoices):
+    """Справочник условий Бюджета"""
     lt = "Меньше"
     lte = "Меньше или равно"
+    eq = "Равно"  # Нужно ли??
+
+
+class GoalRefillEnum(models.TextChoices):
+    """Справочник условий Целей накопления"""
+
     gt = "Больше"
     gte = "Больше или равно"
     eq = "Равно"  # Нужно ли??
+
+
+# Собираем вручную уникальные значения возможных Целей пользователя
+UNIQUE_GOAL_ENUMS = [
+    (each_item.name, each_item.value)
+    for each_item in BudgetRuleEnum
+] + [
+    (each_item.name, each_item.value)
+    for each_item in GoalRefillEnum
+    if each_item != GoalRefillEnum.eq
+]
+
+
+GoalRuleEnum = models.TextChoices(
+    "GoalRuleEnum",
+    UNIQUE_GOAL_ENUMS,
+)

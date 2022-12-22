@@ -18,7 +18,7 @@ class CategoryGeneralView(APIView):
 
         self.service = CategoryService()
 
-    def post(self, request: Request):
+    def post(self, request: Request) -> Response:
         """Добавление категории методом POST"""
         try:
             serializer = serializers.CategoryCreateInputSerializer.parse_obj(request.data)
@@ -33,7 +33,7 @@ class CategoryGeneralView(APIView):
             status=status.HTTP_201_CREATED,
         )
 
-    def get(self, request: Request):
+    def get(self, request: Request) -> Response:
         """Получение списка категорий"""
         result = self.service.retrieve_list()
 
