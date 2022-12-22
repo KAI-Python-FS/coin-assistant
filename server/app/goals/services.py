@@ -1,7 +1,9 @@
+from typing import Any
 
 from django.db.models.query import QuerySet
 
 from server.app.base.services import BaseModelUserFilterCRUDService
+
 from .models import Goal
 
 
@@ -21,3 +23,12 @@ class GoalService(BaseModelUserFilterCRUDService):
         qs_filters = self._filters_retrieve_list(**filters)
 
         return self.model.objects.goals.filter(qs_filters).all()
+
+    def create(self, *args, **object_data: dict[str, Any]) -> Goal:
+        """Создание объекта"""
+        raw_category = object_data.get("category")
+        if raw_category is not None and isinstance(raw_category, int):
+            object_data.pop("category")
+            object_data["category_id"] = raw_category
+
+        return super().create(*args, **object_data)  # type: ignore

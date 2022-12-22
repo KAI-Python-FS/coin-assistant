@@ -2,16 +2,22 @@ import datetime
 
 from pydantic import BaseModel
 
+from server.app.operations.serializers import BaseCategorySerializer
+
 from . import enums
 
 
+class BaseGoalCategorySerializer(BaseCategorySerializer):
+    """Сериализатор данных о категории"""
+
+
 class BaseGoalSerializer(BaseModel):
-    """Схема данных одной операции"""
+    """Сериализатор данных одной операции"""
 
     id: int
     name: str
     description: str | None
-    category: str
+    category: BaseGoalCategorySerializer | None
     start_date: datetime.date
     finish_date: datetime.date | None
     state: enums.GoalStateEnum
@@ -38,7 +44,7 @@ class GoalAccumulationCreateInputSerializer(BaseModel):
 
     name: str
     description: str | None
-    category: str
+    category: int | None
     start_date: datetime.date
     finish_date: datetime.date | None
     state: enums.GoalStateEnum
