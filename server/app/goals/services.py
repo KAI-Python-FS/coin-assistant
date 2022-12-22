@@ -23,7 +23,7 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
         """Возвращает кварисет получения списка записей объекта"""
         qs_filters = self._filters_retrieve_list(**filters)
 
-        return self.model.objects.goals.filter(qs_filters).all()
+        return self.model.objects.goals().filter(qs_filters).all()
 
     def create(self, *args, **object_data: dict[str, Any]) -> Goal:
         """Создание объекта"""
