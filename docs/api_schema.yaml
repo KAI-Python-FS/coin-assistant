@@ -401,6 +401,13 @@ components:
           type: number
           format: float
           description: "Значение"
+        rule:
+          type: string
+          description: "Правило"
+          enum:
+            - "Меньше"
+            - "Меньше или равно"
+            - "Равно"
     BudgetUpdate:
       type: object
       description: "Обновление бюджета"
@@ -434,6 +441,13 @@ components:
           type: number
           format: float
           description: "Значение"
+        rule:
+          type: string
+          description: "Правило"
+          enum:
+            - "Меньше"
+            - "Меньше или равно"
+            - "Равно"
     Category:
       type: object
       description: "Категория операции"
