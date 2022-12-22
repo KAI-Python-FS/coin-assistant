@@ -51,7 +51,7 @@ paths:
               schema:
                 type: string
                 format: binary
-  /budget:
+  /budget/:
     get:
       description: "Получение списка бюджетов пользователя"
       tags:
@@ -379,35 +379,7 @@ components:
           type: string
           description: "Описание"
         category:
-          type: string
-          description: "Категория"
-        start_date:
-          type: string
-          format: date
-          description: "Дата начала цели"
-        finish_date:
-          type: string
-          format: date
-          description: "Дата окончания цели"
-        state:
-          type: string
-          description: "Статус"
-        value:
-          type: number
-          format: float
-          description: "Значение"
-    BudgetUpdate:
-      type: object
-      description: "Обновление бюджета"
-      properties:
-        name:
-          type: string
-          description: "Название"
-        description:
-          type: string
-          description: "Описание"
-        category:
-          type: string
+          type: integer
           description: "Категория"
         start_date:
           type: string
@@ -429,6 +401,53 @@ components:
           type: number
           format: float
           description: "Значение"
+        rule:
+          type: string
+          description: "Правило"
+          enum:
+            - "Меньше"
+            - "Меньше или равно"
+            - "Равно"
+    BudgetUpdate:
+      type: object
+      description: "Обновление бюджета"
+      properties:
+        name:
+          type: string
+          description: "Название"
+        description:
+          type: string
+          description: "Описание"
+        category:
+          type: integer
+          description: "Категория"
+        start_date:
+          type: string
+          format: date
+          description: "Дата начала цели"
+        finish_date:
+          type: string
+          format: date
+          description: "Дата окончания цели"
+        state:
+          type: string
+          description: "Статус"
+          enum:
+            - "Успешно выполнена"
+            - "Не выполнена"
+            - "В процессе"
+            - "Неизвестно"
+        value:
+          type: number
+          format: float
+          description: "Значение"
+        rule:
+          type: string
+          description: "Правило"
+          enum:
+            - "Меньше"
+            - "Меньше или равно"
+            - "Равно"
     Category:
       type: object
       description: "Категория операции"

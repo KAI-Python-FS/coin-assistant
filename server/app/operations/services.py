@@ -19,7 +19,7 @@ class OperationService(BaseModelUserFilterCRUDService):
     model = Operation
 
     def _filters_retrieve_list(self, **filters) -> Q:
-        """Возвращает список Операций пользователя"""
+        """Возвращает условия фильтрации получения списка"""
         filter_condition = Q()
 
         base_filters = super()._filters_retrieve_list(**filters)
