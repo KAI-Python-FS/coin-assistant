@@ -186,7 +186,7 @@ class BudgetConcreteView(APIView):
 
     def delete(self, request: Request, budget_id: int) -> Response:
         """Удаление конкретного Бюджета пользователя"""
-        service = GoalRefillService(user=request.user)
+        service = BudgetService(user=request.user)
 
         result = service.delete(budget_id)
         if not result:
