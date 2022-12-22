@@ -24,6 +24,9 @@ class BaseGoalSerializer(BaseModel):
     value: float | None
     rule: enums.GoalAccumulationEnum
 
+    class Config:
+        orm_mode = True
+
 
 class GoalListFilterSerializer(BaseModel):
     """Сериализатор фильтров получения списка Целей накопления пользователя"""
