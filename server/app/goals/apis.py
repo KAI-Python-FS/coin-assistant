@@ -114,7 +114,7 @@ class BudgetGeneralView(APIView):
         )
 
         try:
-            filter_serializer = serializers.BudgetListItemOutputSerializer(**query_params)
+            filter_serializer = serializers.BudgetListFilterSerializer(**query_params)
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 

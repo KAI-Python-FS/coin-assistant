@@ -84,6 +84,29 @@ class GoalRefillUpdateOutputSerializer(BaseGoalSerializer):
 class BaseBudgetSerializer(BaseModel):
     """Сериализатор данных одного бюджета пользователя"""
 
+    id: int
+    name: str
+    description: str | None
+    category: BaseGoalCategorySerializer | None
+    start_date: datetime.date
+    finish_date: datetime.date | None
+    state: enums.GoalStateEnum
+    value: float | None
+    rule: enums.BudgetRuleEnum
+
+    class Config:
+        orm_mode = True
+
+
+class BudgetListFilterSerializer(BaseModel):
+    """Сериализатор фильтров получения списка Бюджетов пользователя"""
+
+    by_categories: list[int] | None
+    by_state: enums.GoalStateEnum | None
+    by_start_date: datetime.date | None
+    by_finish_date: datetime.date | None
+    by_goal_rule: enums.BudgetRuleEnum | None
+
 
 class BudgetListItemOutputSerializer(BaseBudgetSerializer):
     """Сериализатор исходящих данных одного Бюджета пользователя"""

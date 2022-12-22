@@ -2,6 +2,8 @@ from typing import Any
 
 from django.db.models.query import QuerySet
 
+from django.db.models import Q
+
 from server.app.base.services import BaseModelUserFilterCRUDService
 
 from .enums import GoalTypeEnum
@@ -24,6 +26,45 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
         qs_filters = self._filters_retrieve_list(**filters)
 
         return self.model.objects.goals().filter(qs_filters).all()
+
+    def _filters_retrieve_list(self, **filters) -> Q:
+        """Возвращает условия фильтрации получения списка объектов"""
+        base_filters = super()._filters_retrieve_list(**filters)
+
+        filter_condition = Q()
+        filter_condition.add(base_filters, Q.AND)
+
+        for each_filter_key, each_filter_value in filters.items():
+            match each_filter_key:
+                case "by_categories":
+                    filter_condition.add(
+                        Q(category_id__in=each_filter_value),
+                        Q.AND,
+                    )
+                case "by_state":
+                    filter_condition.add(
+                        Q(state=each_filter_value),
+                        Q.AND,
+                    )
+                case "by_start_date":
+                    filter_condition.add(
+                        Q(start_date__gte=each_filter_value),
+                        Q.AND,
+                    )
+                case "by_finish_date":
+                    filter_condition.add(
+                        Q(finish_date__lte=each_filter_value),
+                        Q.AND,
+                    )
+                case "by_budget_rule":
+                    filter_condition.add(
+                        Q(rule=each_filter_value),
+                        Q.AND,
+                    )
+                case _:
+                    raise Exception("Неизвестный фильтр")
+
+        return filter_condition
 
     def create(self, *args, **object_data: dict[str, Any]) -> Goal:
         """Создание объекта"""
@@ -56,6 +97,45 @@ class BudgetService(BaseModelUserFilterCRUDService):
         qs_filters = self._filters_retrieve_list(**filters)
 
         return self.model.objects.budgets().filter(qs_filters).all()
+
+    def _filters_retrieve_list(self, **filters) -> Q:
+        """Возвращает условия фильтрации получения списка объектов"""
+        base_filters = super()._filters_retrieve_list(**filters)
+
+        filter_condition = Q()
+        filter_condition.add(base_filters, Q.AND)
+
+        for each_filter_key, each_filter_value in filters.items():
+            match each_filter_key:
+                case "by_categories":
+                    filter_condition.add(
+                        Q(category_id__in=each_filter_value),
+                        Q.AND,
+                    )
+                case "by_state":
+                    filter_condition.add(
+                        Q(state=each_filter_value),
+                        Q.AND,
+                    )
+                case "by_start_date":
+                    filter_condition.add(
+                        Q(start_date__gte=each_filter_value),
+                        Q.AND,
+                    )
+                case "by_finish_date":
+                    filter_condition.add(
+                        Q(finish_date__lte=each_filter_value),
+                        Q.AND,
+                    )
+                case "by_budget_rule":
+                    filter_condition.add(
+                        Q(rule=each_filter_value),
+                        Q.AND,
+                    )
+                case _:
+                    raise Exception("Неизвестный фильтр")
+
+        return filter_condition
 
     def create(self, *args, **object_data: dict[str, Any]) -> Goal:
         """Создание объекта"""
