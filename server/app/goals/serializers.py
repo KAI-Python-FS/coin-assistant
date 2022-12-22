@@ -57,3 +57,7 @@ class GoalRefillCreateInputSerializer(BaseModel):
 
 class GoalRefillCreateOutputSerializer(BaseGoalSerializer):
     """Сериализатор исходящих данных создания Цели накопления пользователя"""
+
+
+class GoalRefillRetrieveOutputSerializer(BaseGoalSerializer):
+    """Сериализатор исходящих данных получения одной Цели накопления пользователя"""

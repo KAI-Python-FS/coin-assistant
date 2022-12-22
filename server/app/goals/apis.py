@@ -52,3 +52,21 @@ class GoalRefillGeneralView(APIView):
             data=output_deserialized.dict(),
             status=status.HTTP_201_CREATED,
         )
+
+
+class GoalRefillConcreteView(APIView):
+    """Вью работы с конкретной записью Цели накопления"""
+
+    def get(self, request: Request, goal_id: int) -> Response:
+        """Получение конкретной Цели накопления"""
+        service = GoalRefillService(user=request.user)
+
+        result = service.retrieve_single(goal_id)
+        if not result:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        output_deserialized = serializers.GoalRefillRetrieveOutputSerializer.from_orm(result)
+
+        return Response(
+            data=output_deserialized.dict(),
+        )
