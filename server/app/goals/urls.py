@@ -4,5 +4,5 @@ from . import apis
 
 
 goal_accumulation_patterns = [
-    path("", apis.GoalGeneralView.as_view(), name="goal-accumulation"),
+    path("", apis.GoalRefillGeneralView.as_view(), name="goal-accumulation"),
 ]

@@ -8,11 +8,11 @@ from rest_framework.views import APIView
 from server.app.base.adapters import query_parameters_to_dict
 
 from . import serializers
-from .services import GoalService
+from .services import GoalRefillService
 
 
-class GoalGeneralView(APIView):
-    """Вью без привязки к конкретой Цели"""
+class GoalRefillGeneralView(APIView):
+    """Вью без привязки к конкретой Цели накопления"""
 
     def get(self, request: Request) -> Response:
         """Получение списка Целей накопления пользователя"""
@@ -22,16 +22,16 @@ class GoalGeneralView(APIView):
         )
 
         try:
-            filter_serializer = serializers.GoalListFilterSerializer(**query_params)
+            filter_serializer = serializers.GoalRefillListFilterSerializer(**query_params)
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        service = GoalService(user=request.user)
+        service = GoalRefillService(user=request.user)
         result = service.retrieve_list(**filter_serializer.dict(exclude_none=True))
 
         return Response(
             data=[
-                serializers.GoalListItemOutputSerializer.from_orm(each_result).dict()
+                serializers.GoalRefillListItemOutputSerializer.from_orm(each_result).dict()
                 for each_result in result
             ]
         )
@@ -39,14 +39,14 @@ class GoalGeneralView(APIView):
     def post(self, request: Request) -> Response:
         """Добавление Цели накопления пользователем"""
         try:
-            serializer = serializers.GoalAccumulationCreateInputSerializer.parse_obj(request.data)
+            serializer = serializers.GoalRefillCreateInputSerializer.parse_obj(request.data)
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        service = GoalService(user=request.user)
+        service = GoalRefillService(user=request.user)
         result = service.create(**serializer.dict(exclude_none=True))
 
-        output_deserialized = serializers.GoalAccumulationCreateOutputSerializer.from_orm(result)
+        output_deserialized = serializers.GoalRefillCreateOutputSerializer.from_orm(result)
 
         return Response(
             data=output_deserialized.dict(),

@@ -25,7 +25,7 @@ class BudgetRuleEnum(models.TextChoices):
     eq = "Равно"  # Нужно ли??
 
 
-class GoalAccumulationEnum(models.TextChoices):
+class GoalRefillEnum(models.TextChoices):
     """Справочник условий Целей накопления"""
 
     gt = "Больше"
@@ -39,8 +39,8 @@ UNIQUE_GOAL_ENUMS = [
     for each_item in BudgetRuleEnum
 ] + [
     (each_item.name, each_item.value)
-    for each_item in GoalAccumulationEnum
-    if each_item != GoalAccumulationEnum.eq
+    for each_item in GoalRefillEnum
+    if each_item != GoalRefillEnum.eq
 ]
 
 

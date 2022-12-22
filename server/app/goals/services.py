@@ -8,7 +8,7 @@ from .enums import GoalTypeEnum
 from .models import Goal
 
 
-class GoalService(BaseModelUserFilterCRUDService):
+class GoalRefillService(BaseModelUserFilterCRUDService):
     """Класс описания бизнес логики работы с Целями пользователей"""
 
     model = Goal

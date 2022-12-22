@@ -22,27 +22,27 @@ class BaseGoalSerializer(BaseModel):
     finish_date: datetime.date | None
     state: enums.GoalStateEnum
     value: float | None
-    rule: enums.GoalAccumulationEnum
+    rule: enums.GoalRefillEnum
 
     class Config:
         orm_mode = True
 
 
-class GoalListFilterSerializer(BaseModel):
+class GoalRefillListFilterSerializer(BaseModel):
     """Сериализатор фильтров получения списка Целей накопления пользователя"""
 
     by_categories: list[int] | None
     by_state: enums.GoalStateEnum | None
     by_start_date: datetime.date | None
     by_finish_date: datetime.date | None
-    by_goal_rule: enums.GoalAccumulationEnum | None
+    by_goal_rule: enums.GoalRefillEnum | None
 
 
-class GoalListItemOutputSerializer(BaseGoalSerializer):
+class GoalRefillListItemOutputSerializer(BaseGoalSerializer):
     """Сериализатор исходящих данных одной цели накопления пользователя"""
 
 
-class GoalAccumulationCreateInputSerializer(BaseModel):
+class GoalRefillCreateInputSerializer(BaseModel):
     """Сериализатор входящих данных создания Цели накопления пользователя"""
 
     name: str
@@ -52,8 +52,8 @@ class GoalAccumulationCreateInputSerializer(BaseModel):
     finish_date: datetime.date | None
     state: enums.GoalStateEnum
     value: float | None
-    rule: enums.GoalAccumulationEnum
+    rule: enums.GoalRefillEnum
 
 
-class GoalAccumulationCreateOutputSerializer(BaseGoalSerializer):
+class GoalRefillCreateOutputSerializer(BaseGoalSerializer):
     """Сериализатор исходящих данных создания Цели накопления пользователя"""
