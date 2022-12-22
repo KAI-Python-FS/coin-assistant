@@ -30,7 +30,7 @@ class GoalManager(models.Manager):
 
 
 class Goal(models.Model):
-    """Модель Цели"""
+    """Модель Цели траты или пополнения"""
 
     name = models.CharField(
         max_length=255,
@@ -40,9 +40,11 @@ class Goal(models.Model):
         null=True,
         verbose_name="Описание",
     )
-    user = models.ManyToManyField(
+    user = models.ForeignKey(
         User,
-        verbose_name="Покупатель",
+        on_delete=models.CASCADE,
+        related_name="goals",
+        verbose_name="Владелей цели",
     )
     goal_type = models.CharField(
         choices=enums.GoalTypeEnum.choices,
