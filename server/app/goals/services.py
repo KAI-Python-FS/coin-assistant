@@ -17,7 +17,7 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
         """Возвращает кварисет получения конкретной записи объекта"""
         qs_filters = self._filters_retrieve_single(object_id)
 
-        return self.model.objects.goals.filter(qs_filters)
+        return self.model.objects.goals().filter(qs_filters)
 
     def _get_qs_retrieve_list(self, **filters) -> QuerySet:
         """Возвращает кварисет получения списка записей объекта"""
