@@ -45,6 +45,7 @@ class GoalRefillListItemOutputSerializer(BaseGoalSerializer):
 class GoalRefillCreateInputSerializer(BaseModel):
     """Сериализатор входящих данных создания Цели накопления пользователя"""
 
+    id: int
     name: str
     description: str | None
     category: int | None
@@ -86,3 +87,11 @@ class BaseBudgetSerializer(BaseModel):
 
 class BudgetListItemOutputSerializer(BaseBudgetSerializer):
     """Сериализатор исходящих данных одного Бюджета пользователя"""
+
+
+class BudgetCreateInputSerializer(BaseModel):
+    """Сериализатор входящих данных создания Бюджета пользователя"""
+
+
+class BudgetCreateOutputSerializer(BaseBudgetSerializer):
+    """Сериализатор исходящих данных создания Бюджета пользователя"""

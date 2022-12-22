@@ -127,3 +127,20 @@ class BudgetGeneralView(APIView):
                 for each_result in result
             ]
         )
+
+    def post(self, request: Request) -> Response:
+        """Добавление Бюджета пользователя"""
+        try:
+            serializer = serializers.BudgetCreateInputSerializer.parse_obj(request.data)
+        except ValidationError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        service = BudgetService(user=request.user)
+        result = service.create(**serializer.dict(exclude_none=True))
+
+        output_deserialized = serializers.BudgetCreateOutputSerializer.from_orm(result)
+
+        return Response(
+            data=output_deserialized.dict(),
+            status=status.HTTP_201_CREATED,
+        )

@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from server.app.goals.urls import goal_accumulation_patterns
+from server.app.goals.urls import goal_accumulation_patterns, budget_patterns
 from server.app.operations.urls import category_patterns, operation_patterns
 
 urlpatterns = [
@@ -24,4 +24,5 @@ urlpatterns = [
     path('category/', include(category_patterns)),
     path('operation/', include(operation_patterns)),
     path('goal/', include(goal_accumulation_patterns)),
+    path('budget/', include(budget_patterns)),
 ]
