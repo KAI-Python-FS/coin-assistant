@@ -78,3 +78,11 @@ class GoalRefillUpdateInputSerializer(BaseModel):
 
 class GoalRefillUpdateOutputSerializer(BaseGoalSerializer):
     """Сериализатор исходящих данных обновления Цели накопления пользователя"""
+
+
+class BaseBudgetSerializer(BaseModel):
+    """Сериализатор данных одного бюджета пользователя"""
+
+
+class BudgetListItemOutputSerializer(BaseBudgetSerializer):
+    """Сериализатор исходящих данных одного Бюджета пользователя"""

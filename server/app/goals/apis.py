@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from server.app.base.adapters import query_parameters_to_dict
 
 from . import serializers
-from .services import GoalRefillService
+from .services import BudgetService, GoalRefillService
 
 
 class GoalRefillGeneralView(APIView):
@@ -101,3 +101,29 @@ class GoalRefillConcreteView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(data=result)
+
+
+class BudgetGeneralView(APIView):
+    """Вью без привязки к конкретному Бюджету пользователя"""
+
+    def get(self, request: Request) -> Response:
+        """Получение списка Бюджетов пользователя"""
+        query_params = query_parameters_to_dict(
+            request.query_params,
+            list_params=("by_categories",)
+        )
+
+        try:
+            filter_serializer = serializers.BudgetListItemOutputSerializer(**query_params)
+        except ValidationError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        service = BudgetService(user=request.user)
+        result = service.retrieve_list(**filter_serializer.dict(exclude_none=True))
+
+        return Response(
+            data=[
+                serializers.BudgetListItemOutputSerializer.from_orm(each_result).dict()
+                for each_result in result
+            ]
+        )
