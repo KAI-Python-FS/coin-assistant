@@ -16,3 +16,15 @@ class BalanceCurrentView(APIView):
         result = service.retrieve_current_balance()
 
         return Response(data=result)
+
+
+class BalanceDetailedView(APIView):
+    """Вью работы с детализацией Баланса пользователя"""
+
+    def get(self, request: Request) -> Response:
+        """Получение детализированной информации о Балансе пользователя"""
+        service = BalanceService(request.user)
+
+        result = service.retrieve_current_balance_detailed()
+
+        return Response(data=result)

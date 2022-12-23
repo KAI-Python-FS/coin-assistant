@@ -2,6 +2,7 @@ from django.urls import path
 
 from .apis import (
     BalanceCurrentView,
+    BalanceDetailedView,
     CategoryGeneralView,
     CategoryConcreteView,
     OperationGeneralView,
@@ -21,4 +22,5 @@ operation_patterns = [
 
 balance_patterns = [
     path("", BalanceCurrentView.as_view(), name="balance-current"),
+    path("detailed/", BalanceDetailedView.as_view(), name="balance-detailed"),
 ]

@@ -100,3 +100,19 @@ class OperationUpdateInputSerializer(BaseModel):
     cost: float | None
     date: datetime.datetime | None
     category: int | None
+
+
+class BalanceDetailedOperationOutputSerializer(BaseModel):
+    """Сериализатор исходящих детализированных данных по одной Категории"""
+
+    category_id: str
+    category_name: str
+    total: float
+
+
+class BalanceDetailedOutputSerializer(BaseModel):
+    """Сериализатор исходящих детализированных данных о текущем балансе пользователя"""
+
+    spending: list[BalanceDetailedOperationOutputSerializer]
+    refill: list[BalanceDetailedOperationOutputSerializer]
+    balance: float

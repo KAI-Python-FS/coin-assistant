@@ -48,6 +48,7 @@ class BaseModelCRUDService(InterfaceCRUDService):
 
     def _get_qs_retrieve_list(self, **filters) -> QuerySet:
         """Возвращает кварисет получения списка записей объекта"""
+        # TODO добавить select_related в связанных моделях
         qs_filters = self._filters_retrieve_list(**filters)
 
         return self.model.objects.filter(qs_filters).all()
