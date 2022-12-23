@@ -81,8 +81,12 @@ paths:
             schema:
               $ref: "#/components/schemas/BudgetCreateInput"
       responses:
-        "200":
-          $ref: "#/components/responses/success"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BudgetOutput"
   /budget/{budget_id}:
     parameters:
       - $ref: "#/components/parameters/budget_id"
@@ -107,8 +111,12 @@ paths:
             schema:
               $ref: "#/components/schemas/BudgetUpdateInput"
       responses:
-        "200":
-          $ref: "#/components/responses/success"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BudgetOutput"
     delete:
       description: "Удаление бюджета"
       tags:
@@ -140,8 +148,12 @@ paths:
             schema:
               $ref: "#/components/schemas/CategoryCreateInput"
       responses:
-        "200":
-          $ref: "#/components/responses/success"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryOutput"
   /category/{category_id}:
     parameters:
       - $ref: "#/components/parameters/category_id_path"
@@ -150,7 +162,7 @@ paths:
         - API операций
       description: "Получение категории"
       responses:
-        "200":
+        200:
           description: "Успешная операция"
           content:
             application/json:
@@ -166,8 +178,12 @@ paths:
             schema:
               $ref: "#/components/schemas/CategoryUpdateInput"
       responses:
-        "200":
-          $ref: "#/components/responses/success"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryOutput"
     delete:
       description: "Удаление категории"
       tags:
@@ -205,8 +221,12 @@ paths:
             schema:
               $ref: '#/components/schemas/GoalCreateInput'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoalOutput'
   /goal/{goal_id}:
     parameters:
       - $ref: '#/components/parameters/goal_id'
@@ -215,7 +235,7 @@ paths:
       tags:
         - "API целей накопления"
       responses:
-        "200":
+        200:
           description: "Успешная операция"
           content:
             application/json:
@@ -231,8 +251,12 @@ paths:
             schema:
               $ref: '#/components/schemas/GoalUpdateInput'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoalOutput'
     delete:
       description: 'Удаление цели накопления пользователя'
       tags:
@@ -269,8 +293,12 @@ paths:
             schema:
               $ref: "#/components/schemas/OperationCreateInput"
       responses:
-        "200":
-          $ref: "#/components/responses/success"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationOutput'
   /operation/{id}:
     parameters:
       - $ref: "#/components/parameters/operation_id"
@@ -279,8 +307,12 @@ paths:
         - API операций
       description: "Получение операции"
       responses:
-        "200":
-          $ref: "#/components/schemas/OperationOutput"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationOutput'
     put:
       tags:
         - API операций
@@ -291,8 +323,12 @@ paths:
             schema:
               $ref: "#/components/schemas/OperationUpdateInput"
       responses:
-        "200":
-          $ref: "#/components/responses/success"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationOutput'
     delete:
       description: "Удаление операции"
       tags:
