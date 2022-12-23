@@ -325,7 +325,8 @@ components:
           items:
             $ref: "#/components/schemas/CategoryDetailed"
         balance:
-          type: integer
+          type: number
+          format: float
           description: "Баланс"
     Budget:
       type: object
@@ -471,13 +472,16 @@ components:
       type: object
       description: "Детальная информация о сумме операций в разрезе категории"
       properties:
-        name:
+        category_id:
+          type: integer
+          description: "Уникальный ключ категории"
+        category_name:
           type: string
           description: "Название категории"
-        sum:
+        total:
           type: number
           format: float
-          description: "Сумма операций"
+          description: "Итого"
     CategoryUpdate:
       type: object
       description: "Обновление категория операции"
