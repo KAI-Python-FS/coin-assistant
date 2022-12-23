@@ -1,6 +1,8 @@
 
 import datetime
 
+from pytz import UTC
+
 import factory
 import factory.fuzzy
 
@@ -26,7 +28,7 @@ class BaseGoalFactory(DjangoModelFactory):
     category = factory.SubFactory(CategoryFactory)
     user = factory.SubFactory(UserFactory)
     start_date = factory.fuzzy.FuzzyDateTime(  # type: ignore
-        datetime.datetime(2020, 1, 1)
+        datetime.datetime(2020, 1, 1, tzinfo=UTC)
     )
     finish_date = factory.LazyAttribute(
         lambda o: o.start_dt + datetime.timedelta(days=60),
