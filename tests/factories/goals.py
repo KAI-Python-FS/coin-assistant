@@ -31,7 +31,7 @@ class BaseGoalFactory(DjangoModelFactory):
         datetime.datetime(2020, 1, 1, tzinfo=UTC)
     )
     finish_date = factory.LazyAttribute(
-        lambda o: o.start_dt + datetime.timedelta(days=60),
+        lambda o: o.start_date + datetime.timedelta(days=60),
     )
     value = factory.fuzzy.FuzzyFloat(  # type: ignore
         0.1, 10 ** 7,

@@ -1,3 +1,5 @@
+import pytest
+
 from server.app.goals.models import Goal
 from tests.factories.goals import BudgetFactory, GoalRefillFactory
 
@@ -5,6 +7,7 @@ from tests.factories.goals import BudgetFactory, GoalRefillFactory
 class TestGoalManager:
     """Проверка работы менеджера"""
 
+    @pytest.mark.django_db()
     def test_goal_queryset(self):
         """Тест проверки получения целей накопления"""
         budgets, goal_refills = (
