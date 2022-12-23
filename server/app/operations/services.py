@@ -1,10 +1,12 @@
 from typing import Any
 
-from django.db.models import Q
+from django.db.models import Sum, Q
 
 from server.app.base.services import BaseModelCRUDService, BaseModelUserFilterCRUDService
 
+from .enums import OperationTypeEnum
 from .models import Category, Operation
+from .dataclasses import BalanceDetailedByCategories, BalanceDetailedByCategoriesCategoryItem
 
 
 class CategoryService(BaseModelCRUDService):
@@ -60,3 +62,83 @@ class OperationService(BaseModelUserFilterCRUDService):
             object_data["category_id"] = raw_category
 
         return super().create(*args, **object_data)  # type: ignore
+
+
+class BalanceService:
+    """
+    Класс описания бизнес логики работы с Балансом пользователя.
+
+    Баланс - это сумма всех операций пополнения минус сумма всех операций списания
+    """
+
+    def __init__(self, user):
+        super().__init__()
+
+        self.user = user
+
+    def retrieve_current_balance(self) -> float:
+        """Получение текущего баланса текущего пользователя"""
+        balance = Operation.objects.filter(
+            user=self.user
+        ).aggregate(
+            refill=Sum(
+                "cost",
+                filter=Q(operation_type=OperationTypeEnum.REFILL.value)
+            ),
+            spending=Sum(
+                "cost",
+                filter=Q(operation_type=OperationTypeEnum.SPENDING.value)
+            )
+        )
+
+        return balance["refill"] or 0 - balance["spending"] or 0
+
+    def retrieve_current_balance_detailed(self) -> BalanceDetailedByCategories:
+        """Получение детализированного представления текущего баланса текущего пользователя"""
+        # TODO вот бы это реализовать используя asyncio
+        current_balance = self.retrieve_current_balance()
+
+        categories_qs = (
+            Operation.objects.filter(
+                user=self.user
+            ).values(
+                "category__pk",
+                "category__name",
+                "cost",
+            ).annotate(
+                refill=Sum(
+                    "cost",
+                    filter=Q(operation_type=OperationTypeEnum.REFILL.value),
+                ),
+                spending=Sum(
+                    "cost",
+                    filter=Q(operation_type=OperationTypeEnum.SPENDING.value),
+                ),
+            ).all()
+        )
+
+        detailed_info: list[dict[str, Any]] = list(categories_qs)
+
+        result = BalanceDetailedByCategories(
+            balance=current_balance,
+            spending=[
+                BalanceDetailedByCategoriesCategoryItem(
+                    category_id=each_detailed_info["category__pk"],
+                    category_name=each_detailed_info["category__name"],
+                    total=each_detailed_info["spending"],
+                )
+                for each_detailed_info in detailed_info
+                if each_detailed_info["spending"] is not None
+            ],
+            refill=[
+                BalanceDetailedByCategoriesCategoryItem(
+                    category_id=each_detailed_info["category__pk"],
+                    category_name=each_detailed_info["category__name"],
+                    total=each_detailed_info["refill"],
+                )
+                for each_detailed_info in detailed_info
+                if each_detailed_info["refill"] is not None
+            ]
+        )
+
+        return result

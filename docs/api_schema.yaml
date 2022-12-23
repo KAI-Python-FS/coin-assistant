@@ -14,7 +14,7 @@ tags:
   - name: "API целей накопления"
     description: "API работы с целями накопления пользователя"
 paths:
-  /balance:
+  /balance/:
     get:
       description: "Получение информации о балансе"
       tags:
@@ -26,7 +26,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Balance"
-  /balance_detailed:
+  /balance/detailed/:
     get:
       description: "Детализация трат по категориям"
       tags:
@@ -38,7 +38,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BalanceDetailed"
-  /balance/balance_change:
+  /balance/reports/change-by-mounths:
     post:
       description: "Отчет об изменении баланса в разрезе месяцев по категориям"
       tags:
@@ -325,7 +325,8 @@ components:
           items:
             $ref: "#/components/schemas/CategoryDetailed"
         balance:
-          type: integer
+          type: number
+          format: float
           description: "Баланс"
     Budget:
       type: object
@@ -471,13 +472,16 @@ components:
       type: object
       description: "Детальная информация о сумме операций в разрезе категории"
       properties:
-        name:
+        category_id:
+          type: integer
+          description: "Уникальный ключ категории"
+        category_name:
           type: string
           description: "Название категории"
-        sum:
+        total:
           type: number
           format: float
-          description: "Сумма операций"
+          description: "Итого"
     CategoryUpdate:
       type: object
       description: "Обновление категория операции"

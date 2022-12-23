@@ -44,6 +44,7 @@ class Operation(models.Model):
         choices=OperationTypeEnum.choices,
         max_length=64,
     )
+    # TODO добавить валидатор Стоимость > 0
     cost = models.FloatField(
         verbose_name="Стоимость",
     )
