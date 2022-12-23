@@ -102,7 +102,7 @@ class OperationUpdateInputSerializer(BaseModel):
     category: int | None
 
 
-class BalanceDetailedOperationOutputSerializer(BaseModel):
+class BalanceDetailedCategoryOutputSerializer(BaseModel):
     """Сериализатор исходящих детализированных данных по одной Категории"""
 
     category_id: str
@@ -113,6 +113,6 @@ class BalanceDetailedOperationOutputSerializer(BaseModel):
 class BalanceDetailedOutputSerializer(BaseModel):
     """Сериализатор исходящих детализированных данных о текущем балансе пользователя"""
 
-    spending: list[BalanceDetailedOperationOutputSerializer]
-    refill: list[BalanceDetailedOperationOutputSerializer]
+    spending: list[BalanceDetailedCategoryOutputSerializer]
+    refill: list[BalanceDetailedCategoryOutputSerializer]
     balance: float
