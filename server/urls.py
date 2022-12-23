@@ -17,10 +17,11 @@ from django.contrib import admin
 from django.urls import include, path
 
 from server.app.goals.urls import goal_accumulation_patterns, budget_patterns
-from server.app.operations.urls import category_patterns, operation_patterns
+from server.app.operations.urls import balance_patterns, category_patterns, operation_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('balance/', include(balance_patterns)),
     path('category/', include(category_patterns)),
     path('operation/', include(operation_patterns)),
     path('goal/', include(goal_accumulation_patterns)),
