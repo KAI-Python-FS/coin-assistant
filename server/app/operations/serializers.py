@@ -100,9 +100,3 @@ class OperationUpdateInputSerializer(BaseModel):
     cost: float | None
     date: datetime.datetime | None
     category: int | None
-
-
-class BalanceCurrentOutputSerializer(BaseModel):
-    """Сериализатор исходящих данных о балансе пользователя"""
-
-    balance: float = 0

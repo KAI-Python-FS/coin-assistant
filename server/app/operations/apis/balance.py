@@ -1,11 +1,8 @@
 
-from pydantic import ValidationError
-from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .. import serializers
 from ..services import BalanceService
 
 
@@ -18,8 +15,4 @@ class BalanceCurrentView(APIView):
 
         result = service.retrieve_current_balance()
 
-        output_deserialized = serializers.BalanceCurrentOutputSerializer.from_orm(result)
-
-        return Response(
-            data=output_deserialized,
-        )
+        return Response(data=result)

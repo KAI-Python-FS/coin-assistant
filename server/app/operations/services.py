@@ -79,9 +79,9 @@ class BalanceService:
 
     def retrieve_current_balance(self) -> QuerySet[dict[str, float]]:
         """Получение текущего баланса текущего пользователя"""
-        qs = Operation.objects.filter(
+        balance = Operation.objects.filter(
             user=self.user
-        ).annotate(
+        ).aggregate(
             refill=Sum(
                 "cost",
                 filter=Q(operation_type=OperationTypeEnum.REFILL.value)
@@ -90,11 +90,6 @@ class BalanceService:
                 "cost",
                 filter=Q(operation_type=OperationTypeEnum.SPENDING.value)
             )
-        ).annotate(
-            balance=F("refill") - F("spending")
-        ).values(
-            "balance",
         )
 
-        return qs.get()
-
+        return balance["refill"] or 0 - balance["spending"] or 0
