@@ -680,10 +680,7 @@ components:
           format: date-time
           description: "Дата и время операции"
         category:
-          type: array
-          description: "Список категорий операций"
-          items:
-            $ref: "#/components/schemas/OperationCategoryOutput"
+          $ref: "#/components/schemas/OperationCategoryOutput"
     OperationCategoryOutput:
       type: object
       description: "Категория операции"
