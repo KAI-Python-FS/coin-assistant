@@ -1,4 +1,7 @@
 
+from dataclasses import asdict
+
+
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -31,20 +34,12 @@ class BalanceDetailedView(APIView):
         output_deserialized = serializers.BalanceDetailedOutputSerializer(
             balance=result.balance,
             refill=[
-                serializers.BalanceDetailedCategoryOutputSerializer(
-                    category_id=each_refill.category_id,
-                    category_name=each_refill.category_name,
-                    total=each_refill.total,
-                )
+                serializers.BalanceDetailedCategoryOutputSerializer(**asdict(each_refill))
                 for each_refill in result.refill
             ],
             spending=[
-                serializers.BalanceDetailedCategoryOutputSerializer(
-                    category_id=each_refill.category_id,
-                    category_name=each_refill.category_name,
-                    total=each_refill.total,
-                )
-                for each_refill in result.spending
+                serializers.BalanceDetailedCategoryOutputSerializer(**asdict(each_spending))
+                for each_spending in result.spending
             ],
         )
 
