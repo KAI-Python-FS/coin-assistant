@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..services import BalanceService
+from .. import serializers
 
 
 class BalanceCurrentView(APIView):
@@ -27,4 +28,24 @@ class BalanceDetailedView(APIView):
 
         result = service.retrieve_current_balance_detailed()
 
-        return Response(data=result)
+        output_deserialized = serializers.BalanceDetailedOutputSerializer(
+            balance=result.balance,
+            refill=[
+                serializers.BalanceDetailedCategoryOutputSerializer(
+                    category_id=each_refill.category_id,
+                    category_name=each_refill.category_name,
+                    total=each_refill.total,
+                )
+                for each_refill in result.refill
+            ],
+            spending=[
+                serializers.BalanceDetailedCategoryOutputSerializer(
+                    category_id=each_refill.category_id,
+                    category_name=each_refill.category_name,
+                    total=each_refill.total,
+                )
+                for each_refill in result.spending
+            ],
+        )
+
+        return Response(data=output_deserialized.dict())
