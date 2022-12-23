@@ -25,7 +25,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Balance"
+                $ref: "#/components/schemas/BalanceOutput"
   /balance/detailed/:
     get:
       description: "Детализация трат по категориям"
@@ -37,7 +37,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BalanceDetailed"
+                $ref: "#/components/schemas/BalanceDetailedOutput"
   /balance/reports/change-by-mounths:
     post:
       description: "Отчет об изменении баланса в разрезе месяцев по категориям"
@@ -70,7 +70,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Budget"
+                  $ref: "#/components/schemas/BudgetOutput"
     post:
       description: "Добавление бюджета пользователя"
       tags:
@@ -79,10 +79,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BudgetCreate"
+              $ref: "#/components/schemas/BudgetCreateInput"
       responses:
-        "200":
-          $ref: "#/components/responses/success"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BudgetOutput"
   /budget/{budget_id}:
     parameters:
       - $ref: "#/components/parameters/budget_id"
@@ -96,7 +100,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Budget"
+                $ref: "#/components/schemas/BudgetOutput"
     put:
       description: "Обновление одной записи бюджета пользователя"
       tags:
@@ -105,10 +109,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BudgetUpdate"
+              $ref: "#/components/schemas/BudgetUpdateInput"
       responses:
-        "200":
-          $ref: "#/components/responses/success"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BudgetOutput"
     delete:
       description: "Удаление бюджета"
       tags:
@@ -129,7 +137,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Category"
+                  $ref: "#/components/schemas/CategoryOutput"
     post:
       description: "Создание категории"
       tags:
@@ -138,10 +146,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CategoryCreate"
+              $ref: "#/components/schemas/CategoryCreateInput"
       responses:
-        "200":
-          $ref: "#/components/responses/success"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryOutput"
   /category/{category_id}:
     parameters:
       - $ref: "#/components/parameters/category_id_path"
@@ -150,12 +162,12 @@ paths:
         - API операций
       description: "Получение категории"
       responses:
-        "200":
+        200:
           description: "Успешная операция"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Category"
+                $ref: "#/components/schemas/CategoryOutput"
     put:
       tags:
         - API операций
@@ -164,10 +176,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CategoryUpdate"
+              $ref: "#/components/schemas/CategoryUpdateInput"
       responses:
-        "200":
-          $ref: "#/components/responses/success"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryOutput"
     delete:
       description: "Удаление категории"
       tags:
@@ -194,7 +210,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Goal'
+                  $ref: '#/components/schemas/GoalOutput'
     post:
       description: 'Создание цели накопления пользователя'
       tags:
@@ -203,10 +219,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GoalCreate'
+              $ref: '#/components/schemas/GoalCreateInput'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoalOutput'
   /goal/{goal_id}:
     parameters:
       - $ref: '#/components/parameters/goal_id'
@@ -215,12 +235,12 @@ paths:
       tags:
         - "API целей накопления"
       responses:
-        "200":
+        200:
           description: "Успешная операция"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Goal'
+                $ref: '#/components/schemas/GoalOutput'
     put:
       tags:
         - "API целей накопления"
@@ -229,10 +249,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GoalUpdate'
+              $ref: '#/components/schemas/GoalUpdateInput'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoalOutput'
     delete:
       description: 'Удаление цели накопления пользователя'
       tags:
@@ -258,7 +282,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Operation"
+                  $ref: "#/components/schemas/OperationOutput"
     post:
       description: "Создание операции пользователя"
       tags:
@@ -267,10 +291,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/OperationCreate"
+              $ref: "#/components/schemas/OperationCreateInput"
       responses:
-        "200":
-          $ref: "#/components/responses/success"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationOutput'
   /operation/{id}:
     parameters:
       - $ref: "#/components/parameters/operation_id"
@@ -279,8 +307,12 @@ paths:
         - API операций
       description: "Получение операции"
       responses:
-        "200":
-          $ref: "#/components/schemas/Operation"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationOutput'
     put:
       tags:
         - API операций
@@ -289,10 +321,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/OperationUpdate"
+              $ref: "#/components/schemas/OperationUpdateInput"
       responses:
-        "200":
-          $ref: "#/components/responses/success"
+        200:
+          description: "Успешная операция"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationOutput'
     delete:
       description: "Удаление операции"
       tags:
@@ -307,10 +343,10 @@ components:
       type: http
       scheme: bearer
   schemas:
-    Balance:
+    BalanceOutput:
       type: integer
       description: "Баланс пользователя"
-    BalanceDetailed:
+    BalanceDetailedOutput:
       type: object
       description: "Детальный баланс пользователя"
       properties:
@@ -318,17 +354,17 @@ components:
           type: array
           description: "Траты пользователя"
           items:
-            $ref: "#/components/schemas/CategoryDetailed"
+            $ref: "#/components/schemas/CategoryDetailedOutput"
         refill:
           type: array
           description: "Поступления пользователя"
           items:
-            $ref: "#/components/schemas/CategoryDetailed"
+            $ref: "#/components/schemas/CategoryDetailedOutput"
         balance:
           type: number
           format: float
           description: "Баланс"
-    Budget:
+    BudgetOutput:
       type: object
       description: "Бюджет пользователя"
       properties:
@@ -366,7 +402,7 @@ components:
             - "Меньше"
             - "Меньше или равно"
             - "Равно"
-    BudgetCreate:
+    BudgetCreateInput:
       type: object
       description: "Добавление бюджета"
       required:
@@ -409,7 +445,7 @@ components:
             - "Меньше"
             - "Меньше или равно"
             - "Равно"
-    BudgetUpdate:
+    BudgetUpdateInput:
       type: object
       description: "Обновление бюджета"
       properties:
@@ -449,7 +485,7 @@ components:
             - "Меньше"
             - "Меньше или равно"
             - "Равно"
-    Category:
+    CategoryOutput:
       type: object
       description: "Категория операции"
       properties:
@@ -459,7 +495,7 @@ components:
         name:
           type: string
           description: "Название категории"
-    CategoryCreate:
+    CategoryCreateInput:
       type: object
       description: "Создание категории операции"
       required:
@@ -468,7 +504,7 @@ components:
         name:
           type: string
           description: "Название категории"
-    CategoryDetailed:
+    CategoryDetailedOutput:
       type: object
       description: "Детальная информация о сумме операций в разрезе категории"
       properties:
@@ -482,16 +518,16 @@ components:
           type: number
           format: float
           description: "Итого"
-    CategoryUpdate:
+    CategoryUpdateInput:
       type: object
       description: "Обновление категория операции"
       properties:
         name:
           type: string
           description: "Название категории"
-    Goal:
+    GoalOutput:
       type: object
-      description: "Цель пользователя"
+      description: "Цель накопления пользователя"
       properties:
         id:
           type: integer
@@ -532,7 +568,7 @@ components:
             - "Больше"
             - "Больше или равно"
             - "Равно"
-    GoalCreate:
+    GoalCreateInput:
       type: object
       description: "Добавление цели накопления пользователем"
       required:
@@ -574,7 +610,7 @@ components:
             - "Больше"
             - "Больше или равно"
             - "Равно"
-    GoalUpdate:
+    GoalUpdateInput:
       type: object
       description: "Обновление цели накопления пользователем"
       properties:
@@ -614,7 +650,7 @@ components:
             - "Больше"
             - "Больше или равно"
             - "Равно"
-    Operation:
+    OperationOutput:
       type: object
       description: "Операция пользователя"
       required:
@@ -644,11 +680,8 @@ components:
           format: date-time
           description: "Дата и время операции"
         category:
-          type: array
-          description: "Список категорий операций"
-          items:
-            $ref: "#/components/schemas/OperationCategory"
-    OperationCategory:
+          $ref: "#/components/schemas/OperationCategoryOutput"
+    OperationCategoryOutput:
       type: object
       description: "Категория операции"
       required:
@@ -661,7 +694,7 @@ components:
         name:
           type: string
           description: "Название операции"
-    OperationCreate:
+    OperationCreateInput:
       type: object
       description: "Создание операции пользователя"
       required:
@@ -692,7 +725,7 @@ components:
         category:
           type: integer
           description: "Категория операции"
-    OperationUpdate:
+    OperationUpdateInput:
       type: object
       description: "Обновление операции пользователя"
       properties:
@@ -713,16 +746,6 @@ components:
         category:
           type: integer
           description: "Список категорий операции"
-    User:
-      type: object
-      description: "Пользователь"
-      properties:
-        id:
-          type: integer
-          description: "Уникальный ключ"
-        name:
-          type: string
-          description: "Имя пользователя"
   parameters:
     budget_id:
       name: "budget_id"
