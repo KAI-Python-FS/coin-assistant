@@ -36,6 +36,7 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
 
         for each_filter_key, each_filter_value in filters.items():
             match each_filter_key:
+                # FIXME сейчас нельзя отфильтроваться по Целям без категорий
                 case "by_categories":
                     filter_condition.add(
                         Q(category_id__in=each_filter_value),

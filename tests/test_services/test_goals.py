@@ -1,11 +1,13 @@
-
+import datetime
 from typing import Any
 
 import pytest
 
 from server.app.goals.services import GoalRefillService
-from server.app.goals.enums import GoalTypeEnum
+from server.app.goals.enums import GoalTypeEnum, GoalStateEnum, GoalRefillRuleEnum
 from server.app.goals.models import Goal
+from tests.factories.category import CategoryFactory
+from tests.factories.goals import GoalRefillFactory
 from tests.factories.user import UserFactory
 
 
@@ -95,3 +97,96 @@ class TestGoalRefillService:
         )
 
         assert result.goal_type == GoalTypeEnum.REFILL
+
+    @pytest.mark.django_db()
+    def test_retrieve_list_filter_by_user(self):
+        """Тест проверки фильтрации данных по пользователю"""
+        goals_refills = GoalRefillFactory.create_batch(
+            2,
+        )
+
+        for each_goal in goals_refills:
+            service = GoalRefillService(user=each_goal.user)
+            goals = service.retrieve_list()
+
+            assert len(goals) == 1
+
+    @pytest.mark.django_db()
+    @pytest.mark.parametrize(
+        "filter_params, expected",
+        [
+            (
+                {
+                    "by_categories": (1,)
+                },
+                2
+            ),
+            (
+                {
+                    "by_state": GoalStateEnum.working,
+                },
+                2
+            ),
+            (
+                {
+                    "by_start_date": datetime.date.today() + datetime.timedelta(days=360),
+                },
+                0,
+            ),
+            (
+                {
+                    "by_start_date": datetime.date.today() - datetime.timedelta(days=10),
+                },
+                5,
+            ),
+            (
+                {
+                    "by_finish_date": datetime.date.today() + datetime.timedelta(days=360),
+                },
+                5,
+            ),
+            (
+                {
+                    "by_finish_date": datetime.date.today() + datetime.timedelta(days=3),
+                },
+                2,
+            ),
+            (
+                {
+                    "by_budget_rule": GoalRefillRuleEnum.eq,
+                },
+                2
+            ),
+            (
+                {
+                    "by_budget_rule": GoalRefillRuleEnum.gt,
+                },
+                3
+            ),
+        ],
+    )
+    def test_retrieve_list_filter_p(self, filter_params, expected):
+        """Тест проверки фильтрации данных по передаваемым параметрам"""
+        user = UserFactory()
+        category = CategoryFactory.create()
+        _ = GoalRefillFactory.create_batch(
+            2,
+            user=user,
+            category=category,
+            state=GoalStateEnum.working,
+            start_date=datetime.date.today(),
+            finish_date=datetime.date.today() + datetime.timedelta(days=3),
+            rule=GoalRefillRuleEnum.eq,
+        )
+        _ = GoalRefillFactory.create_batch(
+            3,
+            user=user,
+            state=GoalStateEnum.unknown,
+            start_date=datetime.date.today() + datetime.timedelta(days=10),
+            rule=GoalRefillRuleEnum.gt,
+        )
+
+        service = GoalRefillService(user=user)
+        goals = service.retrieve_list(**filter_params)
+
+        assert len(goals) == expected

@@ -47,7 +47,7 @@ class BudgetFactory(BaseGoalFactory):
     """Фабрика создания бюджета пользователя"""
 
     goal_type = GoalTypeEnum.SPENDING
-    rule = factory.fuzzy.FuzzyChoice(GoalRefillRuleEnum)
+    rule = factory.fuzzy.FuzzyChoice(BudgetRuleEnum)
 
     class Meta:
         model = Goal
@@ -57,7 +57,7 @@ class GoalRefillFactory(BaseGoalFactory):
     """Фабрика создания целей накопления пользователя"""
 
     goal_type = GoalTypeEnum.REFILL
-    rule = factory.fuzzy.FuzzyChoice(BudgetRuleEnum)
+    rule = factory.fuzzy.FuzzyChoice(GoalRefillRuleEnum)
 
     class Meta:
         model = Goal
