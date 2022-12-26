@@ -111,7 +111,7 @@ class TestGoalRefillService:
 
             assert len(goals) == 1
 
-    @pytest.mark.django_db()
+    @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
         "filter_params, expected",
         [
@@ -217,7 +217,7 @@ class TestGoalRefillService:
             else result is None
         )
 
-    @pytest.mark.django_db()
+    @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
         "update_params",
         [
