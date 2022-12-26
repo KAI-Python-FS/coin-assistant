@@ -222,7 +222,7 @@ class TestGoalRefillService:
     ):
         """Тест проверки обновления данных"""
         user = UserFactory()
-        CategoryFactory.create_batch(3)
+        CategoryFactory.create()
         existing_goal = GoalRefillFactory(
             user=user,
             state=GoalStateEnum.unknown,
@@ -237,3 +237,16 @@ class TestGoalRefillService:
                 assert getattr(result, "category_id") == each_update_param_value
             else:
                 assert getattr(result, each_update_param_key) == each_update_param_value
+
+    @pytest.mark.django_db()
+    def test_delete(self):
+        """Тест проверки удаления записи"""
+        user = UserFactory()
+        existing_goal = GoalRefillFactory(
+            user=user,
+        )
+
+        service = GoalRefillService(user=user)
+        service.delete(existing_goal.id)
+
+        assert Goal.objects.goals().count() == 0
