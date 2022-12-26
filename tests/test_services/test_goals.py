@@ -3,9 +3,9 @@ from typing import Any
 
 import pytest
 
-from server.app.goals.services import GoalRefillService
 from server.app.goals.enums import GoalTypeEnum, GoalStateEnum, GoalRefillRuleEnum
 from server.app.goals.models import Goal
+from server.app.goals.services import GoalRefillService
 from tests.factories.category import CategoryFactory
 from tests.factories.goals import GoalRefillFactory
 from tests.factories.user import UserFactory
