@@ -162,7 +162,7 @@ class TestGoalRefillService:
             ),
         ],
     )
-    def test_retrieve_list_filter_p(self, filter_params, expected):
+    def test_retrieve_list_filter(self, filter_params, expected):
         """Тест проверки фильтрации данных по передаваемым параметрам"""
         user = UserFactory()
         category = CategoryFactory.create()
