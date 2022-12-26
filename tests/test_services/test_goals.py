@@ -1,16 +1,38 @@
 
+from typing import Any
+
 import pytest
 
 from server.app.goals.services import GoalRefillService
 from server.app.goals.models import Goal
-from server.app.goals.enums import GoalRefillRuleEnum
 from tests.factories.user import UserFactory
 
 
 TEST_DATA_SERVICE_CREATE = [
-    ("Тест", None, None, None, None, None, 1, GoalRefillRuleEnum.eq, 1),
+    # Часть параметров дб указано
     pytest.param(
-        None, None, None, None, None, None, 1, GoalRefillRuleEnum.eq, 1, marks=pytest.mark.xfail,
+        {
+            "name": None,
+            "description": None,
+            "category": None,
+            "start_date": None,
+            "finish_date": None,
+            "state": None,
+            "value": None,
+            "rule": None,
+        },
+        0,
+        marks=pytest.mark.xfail,
+        id="all_params_none"
+    ),
+    # Проверка заполнения минимальным числом параметров
+    pytest.param(
+        {
+            "name": "Тест",
+            "value": 1,
+        },
+        1,
+        id="minimals_params"
     ),
 ]
 
@@ -20,34 +42,20 @@ class TestGoalRefillService:
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(
-        "name, description, category, start_date, finish_date, state, value, rule, expected",
+        "create_params, expected",
         TEST_DATA_SERVICE_CREATE,
     )
     def test_create(
         self,
-        name,
-        description,
-        category,
-        start_date,
-        finish_date,
-        state,
-        value,
-        rule,
+        create_params: dict[str, Any],
         expected
     ):
-        """Тест проверки создания цели накопления"""
+        """Тест проверки создания цели накопления с различным числом параметров"""
         user = UserFactory()
 
         service = GoalRefillService(user=user)
         _ = service.create(
-            name=name,
-            description=description,
-            category=category,
-            # start_date=start_date,
-            finish_date=finish_date,
-            state=state,
-            value=value,
-            rule=rule,
+            **create_params,
         )
 
         assert Goal.objects.goals().count() == expected
