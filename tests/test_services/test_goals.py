@@ -11,42 +11,39 @@ from tests.factories.goals import GoalRefillFactory
 from tests.factories.user import UserFactory
 
 
-TEST_DATA_SERVICE_CREATE = [
-    # Часть параметров дб указано
-    pytest.param(
-        {
-            "name": None,
-            "description": None,
-            "category": None,
-            "start_date": None,
-            "finish_date": None,
-            "state": None,
-            "value": None,
-            "rule": None,
-        },
-        0,
-        marks=pytest.mark.xfail,
-        id="all_params_none"
-    ),
-    # Проверка заполнения минимальным числом параметров
-    pytest.param(
-        {
-            "name": "Тест",
-            "value": 1,
-        },
-        1,
-        id="minimals_params"
-    ),
-]
-
-
 class TestGoalRefillService:
     """Проверка основных методов сервиса"""
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(
         "create_params, expected",
-        TEST_DATA_SERVICE_CREATE,
+        [
+            # Часть параметров дб указано
+            pytest.param(
+                {
+                    "name": None,
+                    "description": None,
+                    "category": None,
+                    "start_date": None,
+                    "finish_date": None,
+                    "state": None,
+                    "value": None,
+                    "rule": None,
+                },
+                0,
+                marks=pytest.mark.xfail,
+                id="all_params_none"
+            ),
+            # Проверка заполнения минимальным числом параметров
+            pytest.param(
+                {
+                    "name": "Тест",
+                    "value": 1,
+                },
+                1,
+                id="minimals_params"
+            ),
+        ]
     )
     def test_create(
         self,
