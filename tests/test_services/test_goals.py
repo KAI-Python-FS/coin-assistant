@@ -190,3 +190,50 @@ class TestGoalRefillService:
         goals = service.retrieve_list(**filter_params)
 
         assert len(goals) == expected
+
+    @pytest.mark.django_db()
+    @pytest.mark.parametrize(
+        "update_params",
+        [
+            {
+                "name": "тест321",
+                "description": "интересное описание",
+                "category": 1,
+                "start_date": datetime.date.today(),
+                "finish_date": datetime.date.today() + datetime.timedelta(days=3),
+                "value": 3,
+                "state": GoalStateEnum.succeed,
+                "rule": GoalRefillRuleEnum.gte,
+            },
+            {
+                "category": None,
+            },
+            pytest.param(
+                {
+                    "goal_type": GoalTypeEnum.SPENDING,
+                },
+                marks=pytest.mark.xfail,
+            ),
+        ]
+    )
+    def test_update(
+        self,
+        update_params: dict,
+    ):
+        """Тест проверки обновления данных"""
+        user = UserFactory()
+        CategoryFactory.create_batch(3)
+        existing_goal = GoalRefillFactory(
+            user=user,
+            state=GoalStateEnum.unknown,
+            rule=GoalRefillRuleEnum.eq,
+        )
+
+        service = GoalRefillService(user=user)
+        result = service.update(existing_goal.id, **update_params)
+
+        for each_update_param_key, each_update_param_value in update_params.items():
+            if each_update_param_key == "category":
+                assert getattr(result, "category_id") == each_update_param_value
+            else:
+                assert getattr(result, each_update_param_key) == each_update_param_value

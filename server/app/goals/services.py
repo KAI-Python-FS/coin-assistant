@@ -4,6 +4,7 @@ from django.db.models.query import QuerySet
 
 from django.db.models import Q
 
+from server.app.base.exceptions import ValidationException
 from server.app.base.services import BaseModelUserFilterCRUDService
 
 from .enums import GoalTypeEnum
@@ -151,3 +152,21 @@ class BudgetService(BaseModelUserFilterCRUDService):
         })
 
         return super().create(*args, **object_data)  # type: ignore
+
+    def update(self, object_id: int, **object_data: dict) -> Goal | None:
+        """Обновление объекта"""
+        ready_to_update_fields = [
+            "name",
+            "description",
+            "category",
+            "start_date",
+            "finish_date",
+            "value",
+            "state",
+            "rule",
+        ]
+
+        if set(object_data.keys()) - set(ready_to_update_fields):
+            raise ValidationException()
+
+        return super().update(object_id, **object_data)
