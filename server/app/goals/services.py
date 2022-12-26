@@ -4,6 +4,7 @@ from django.db.models.query import QuerySet
 
 from django.db.models import Q
 
+from server.app.base.exceptions import ValidationException
 from server.app.base.services import BaseModelUserFilterCRUDService
 
 from .enums import GoalTypeEnum
@@ -36,6 +37,7 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
 
         for each_filter_key, each_filter_value in filters.items():
             match each_filter_key:
+                # FIXME сейчас нельзя отфильтроваться по Целям без категорий
                 case "by_categories":
                     filter_condition.add(
                         Q(category_id__in=each_filter_value),
@@ -66,7 +68,7 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
 
         return filter_condition
 
-    def create(self, *args, **object_data: dict[str, Any]) -> Goal:
+    def create(self, **object_data) -> Goal:
         """Создание объекта"""
         # TODO возможно стоит вынести в родительский метод разбор является ли переданное поле FK
         raw_category = object_data.get("category")
@@ -78,7 +80,7 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
             "goal_type": GoalTypeEnum.REFILL.value,
         })
 
-        return super().create(*args, **object_data)  # type: ignore
+        return super().create(**object_data)  # type: ignore
 
 
 class BudgetService(BaseModelUserFilterCRUDService):
@@ -150,3 +152,21 @@ class BudgetService(BaseModelUserFilterCRUDService):
         })
 
         return super().create(*args, **object_data)  # type: ignore
+
+    def update(self, object_id: int, **object_data: dict) -> Goal | None:
+        """Обновление объекта"""
+        ready_to_update_fields = [
+            "name",
+            "description",
+            "category",
+            "start_date",
+            "finish_date",
+            "value",
+            "state",
+            "rule",
+        ]
+
+        if set(object_data.keys()) - set(ready_to_update_fields):
+            raise ValidationException()
+
+        return super().update(object_id, **object_data)

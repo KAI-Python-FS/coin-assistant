@@ -22,7 +22,7 @@ class BaseGoalSerializer(BaseModel):
     finish_date: datetime.date | None
     state: enums.GoalStateEnum
     value: float | None
-    rule: enums.GoalRefillEnum
+    rule: enums.GoalRefillRuleEnum
 
     class Config:
         orm_mode = True
@@ -35,7 +35,7 @@ class GoalRefillListFilterSerializer(BaseModel):
     by_state: enums.GoalStateEnum | None
     by_start_date: datetime.date | None
     by_finish_date: datetime.date | None
-    by_goal_rule: enums.GoalRefillEnum | None
+    by_goal_rule: enums.GoalRefillRuleEnum | None
 
 
 class GoalRefillListItemOutputSerializer(BaseGoalSerializer):
@@ -52,7 +52,7 @@ class GoalRefillCreateInputSerializer(BaseModel):
     finish_date: datetime.date | None
     state: enums.GoalStateEnum
     value: float | None
-    rule: enums.GoalRefillEnum
+    rule: enums.GoalRefillRuleEnum
 
 
 class GoalRefillCreateOutputSerializer(BaseGoalSerializer):
@@ -73,7 +73,7 @@ class GoalRefillUpdateInputSerializer(BaseModel):
     finish_date: datetime.date | None
     state: enums.GoalStateEnum | None
     value: float | None
-    rule: enums.GoalRefillEnum | None
+    rule: enums.GoalRefillRuleEnum | None
 
 
 class GoalRefillUpdateOutputSerializer(BaseGoalSerializer):
