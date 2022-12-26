@@ -4,6 +4,7 @@ from typing import Any
 import pytest
 
 from server.app.goals.services import GoalRefillService
+from server.app.goals.enums import GoalTypeEnum
 from server.app.goals.models import Goal
 from tests.factories.user import UserFactory
 
@@ -48,7 +49,7 @@ class TestGoalRefillService:
     def test_create(
         self,
         create_params: dict[str, Any],
-        expected
+        expected,
     ):
         """Тест проверки создания цели накопления с различным числом параметров"""
         user = UserFactory()
@@ -59,3 +60,38 @@ class TestGoalRefillService:
         )
 
         assert Goal.objects.goals().count() == expected
+
+    @pytest.mark.django_db()
+    @pytest.mark.parametrize(
+        "create_params",
+        [
+            pytest.param(
+                {
+                    "name": "Тест",
+                    "value": 1,
+                },
+                id="no_state",
+            ),
+            pytest.param(
+                {
+                    "name": "Тест",
+                    "value": 1,
+                    "state": GoalTypeEnum.SPENDING,
+                },
+                id="incorrect_state",
+            ),
+        ]
+    )
+    def test_create_default_type(
+        self,
+        create_params: dict[str, Any],
+    ):
+        """Тест проверки цели накопления с определенным типом"""
+        user = UserFactory()
+
+        service = GoalRefillService(user=user)
+        result = service.create(
+            **create_params,
+        )
+
+        assert result.goal_type == GoalTypeEnum.REFILL
