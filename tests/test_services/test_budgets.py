@@ -1,22 +1,24 @@
+
 import datetime
+
 from typing import Any
 
 import pytest
 
-from server.app.goals.enums import GoalTypeEnum, GoalStateEnum, GoalRefillRuleEnum
+from server.app.goals.enums import BudgetRuleEnum, GoalTypeEnum, GoalStateEnum
+from server.app.goals.services import BudgetService
 from server.app.goals.models import Goal
-from server.app.goals.services import GoalRefillService
 from tests.factories.category import CategoryFactory
-from tests.factories.goals import GoalRefillFactory
+from tests.factories.goals import BudgetFactory
 from tests.factories.user import UserFactory
 
 
-class TestGoalRefillService:
+class TestBudgetService:
     """Проверка основных методов сервиса"""
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(
-        "create_params, expected",
+        "create_params",
         [
             # Часть параметров дб указано
             pytest.param(
@@ -30,7 +32,6 @@ class TestGoalRefillService:
                     "value": None,
                     "rule": None,
                 },
-                0,
                 marks=pytest.mark.xfail,
                 id="all_params_none"
             ),
@@ -40,7 +41,6 @@ class TestGoalRefillService:
                     "name": "Тест",
                     "value": 1,
                 },
-                1,
                 id="minimals_params"
             ),
         ]
@@ -48,17 +48,16 @@ class TestGoalRefillService:
     def test_create(
         self,
         create_params: dict[str, Any],
-        expected,
     ):
-        """Тест проверки создания цели накопления с различным числом параметров"""
+        """Тест проверки создания бюджета с различным числом параметров"""
         user = UserFactory()
 
-        service = GoalRefillService(user=user)
+        service = BudgetService(user=user)
         _ = service.create(
             **create_params,
         )
 
-        assert Goal.objects.goals().count() == expected
+        assert Goal.objects.budgets().count() == 1
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(
@@ -85,25 +84,25 @@ class TestGoalRefillService:
         self,
         create_params: dict[str, Any],
     ):
-        """Тест проверки цели накопления с определенным типом"""
+        """Тест проверки бюджета с определенным типом"""
         user = UserFactory()
 
-        service = GoalRefillService(user=user)
+        service = BudgetService(user=user)
         result = service.create(
             **create_params,
         )
 
-        assert result.goal_type == GoalTypeEnum.REFILL
+        assert result.goal_type == GoalTypeEnum.SPENDING
 
     @pytest.mark.django_db()
     def test_retrieve_list_filter_by_user(self):
-        """Тест проверки фильтрации данных по пользователю"""
-        goals_refills = GoalRefillFactory.create_batch(
+        """Тест проверки фильтрации бюджетов по пользователю"""
+        goals_refills = BudgetFactory.create_batch(
             2,
         )
 
         for each_goal in goals_refills:
-            service = GoalRefillService(user=each_goal.user)
+            service = BudgetService(user=each_goal.user)
             goals = service.retrieve_list()
 
             assert len(goals) == 1
@@ -113,101 +112,101 @@ class TestGoalRefillService:
         "filter_params, expected",
         [
             (
-                {
-                    "by_categories": (1,)
-                },
-                2
+                    {
+                        "by_categories": (1,)
+                    },
+                    2
             ),
             (
-                {
-                    "by_state": GoalStateEnum.working,
-                },
-                2
+                    {
+                        "by_state": GoalStateEnum.working,
+                    },
+                    2
             ),
             (
-                {
-                    "by_start_date": datetime.date.today() + datetime.timedelta(days=360),
-                },
-                0,
+                    {
+                        "by_start_date": datetime.date.today() + datetime.timedelta(days=360),
+                    },
+                    0,
             ),
             (
-                {
-                    "by_start_date": datetime.date.today() - datetime.timedelta(days=10),
-                },
-                5,
+                    {
+                        "by_start_date": datetime.date.today() - datetime.timedelta(days=10),
+                    },
+                    5,
             ),
             (
-                {
-                    "by_finish_date": datetime.date.today() + datetime.timedelta(days=360),
-                },
-                5,
+                    {
+                        "by_finish_date": datetime.date.today() + datetime.timedelta(days=360),
+                    },
+                    5,
             ),
             (
-                {
-                    "by_finish_date": datetime.date.today() + datetime.timedelta(days=3),
-                },
-                2,
+                    {
+                        "by_finish_date": datetime.date.today() + datetime.timedelta(days=3),
+                    },
+                    2,
             ),
             (
-                {
-                    "by_budget_rule": GoalRefillRuleEnum.eq,
-                },
-                2
+                    {
+                        "by_budget_rule": BudgetRuleEnum.eq,
+                    },
+                    2
             ),
             (
-                {
-                    "by_budget_rule": GoalRefillRuleEnum.gt,
-                },
-                3
+                    {
+                        "by_budget_rule": BudgetRuleEnum.lt,
+                    },
+                    3
             ),
         ],
     )
     def test_retrieve_list_filter(self, filter_params, expected):
-        """Тест проверки фильтрации данных по передаваемым параметрам"""
+        """Тест проверки фильтрации бюджета по передаваемым параметрам"""
         user = UserFactory()
         category = CategoryFactory.create()
-        _ = GoalRefillFactory.create_batch(
+        _ = BudgetFactory.create_batch(
             2,
             user=user,
             category=category,
             state=GoalStateEnum.working,
             start_date=datetime.date.today(),
             finish_date=datetime.date.today() + datetime.timedelta(days=3),
-            rule=GoalRefillRuleEnum.eq,
+            rule=BudgetRuleEnum.eq,
         )
-        _ = GoalRefillFactory.create_batch(
+        _ = BudgetFactory.create_batch(
             3,
             user=user,
             state=GoalStateEnum.unknown,
             start_date=datetime.date.today() + datetime.timedelta(days=10),
-            rule=GoalRefillRuleEnum.gt,
+            rule=BudgetRuleEnum.lt,
         )
 
-        service = GoalRefillService(user=user)
+        service = BudgetService(user=user)
         goals = service.retrieve_list(**filter_params)
 
         assert len(goals) == expected
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(
-        "goal_id, expected",
+        "budget_id, expected",
         [
-            pytest.param(1, 1, id="users_goal_refill"),
-            pytest.param(4, None, id="another_user_goal_refill"),
+            pytest.param(1, 1, id="user_budget"),
+            pytest.param(4, None, id="another_user_budget"),
         ]
     )
-    def test_retrieve_single(self, goal_id: int, expected: int | None):
+    def test_retrieve_single(self, budget_id: int, expected: int | None):
         """Тест проверки получения единственной записи"""
         user = UserFactory()
         _ = [
-            GoalRefillFactory(
+            BudgetFactory(
                 user=user,
             ),
-            GoalRefillFactory(),
+            BudgetFactory(),
         ]
 
-        service = GoalRefillService(user=user)
-        result = service.retrieve_single(goal_id)
+        service = BudgetService(user=user)
+        result = service.retrieve_single(budget_id)
 
         assert (
             result.id == expected if result is not None
@@ -226,14 +225,14 @@ class TestGoalRefillService:
                 "finish_date": datetime.date.today() + datetime.timedelta(days=3),
                 "value": 3,
                 "state": GoalStateEnum.succeed,
-                "rule": GoalRefillRuleEnum.gte,
+                "rule": BudgetRuleEnum.lte,
             },
             {
                 "category": None,
             },
             pytest.param(
                 {
-                    "goal_type": GoalTypeEnum.SPENDING,
+                    "goal_type": GoalTypeEnum.REFILL,
                 },
                 marks=pytest.mark.xfail,
             ),
@@ -246,13 +245,13 @@ class TestGoalRefillService:
         """Тест проверки обновления данных"""
         user = UserFactory()
         CategoryFactory.create()
-        existing_goal = GoalRefillFactory(
+        existing_goal = BudgetFactory(
             user=user,
             state=GoalStateEnum.unknown,
-            rule=GoalRefillRuleEnum.eq,
+            rule=BudgetRuleEnum.eq,
         )
 
-        service = GoalRefillService(user=user)
+        service = BudgetService(user=user)
         result = service.update(existing_goal.id, **update_params)
 
         for each_update_param_key, each_update_param_value in update_params.items():
@@ -265,11 +264,11 @@ class TestGoalRefillService:
     def test_delete(self):
         """Тест проверки удаления записи"""
         user = UserFactory()
-        existing_goal = GoalRefillFactory(
+        existing_goal = BudgetFactory(
             user=user,
         )
 
-        service = GoalRefillService(user=user)
+        service = BudgetService(user=user)
         service.delete(existing_goal.id)
 
-        assert Goal.objects.goals().count() == 0
+        assert Goal.objects.budgets().count() == 0
