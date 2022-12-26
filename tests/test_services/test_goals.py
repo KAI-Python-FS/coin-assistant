@@ -193,6 +193,32 @@ class TestGoalRefillService:
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(
+        "goal_id, expected",
+        [
+            pytest.param(1, 1, id="users_goal_refill"),
+            pytest.param(4, None, id="another_user_goal_refill"),
+        ]
+    )
+    def test_retrieve_single(self, goal_id: int, expected: int | None):
+        """Тест проверки получения единственной записи"""
+        user = UserFactory()
+        _ = [
+            GoalRefillFactory(
+                user=user,
+            ),
+            GoalRefillFactory(),
+        ]
+
+        service = GoalRefillService(user=user)
+        result = service.retrieve_single(goal_id)
+
+        assert (
+            result.id == expected if result is not None
+            else result is None
+        )
+
+    @pytest.mark.django_db()
+    @pytest.mark.parametrize(
         "update_params",
         [
             {
