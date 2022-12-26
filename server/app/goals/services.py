@@ -66,7 +66,7 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
 
         return filter_condition
 
-    def create(self, *args, **object_data: dict[str, Any]) -> Goal:
+    def create(self, **object_data) -> Goal:
         """Создание объекта"""
         # TODO возможно стоит вынести в родительский метод разбор является ли переданное поле FK
         raw_category = object_data.get("category")
@@ -78,7 +78,7 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
             "goal_type": GoalTypeEnum.REFILL.value,
         })
 
-        return super().create(*args, **object_data)  # type: ignore
+        return super().create(**object_data)  # type: ignore
 
 
 class BudgetService(BaseModelUserFilterCRUDService):
