@@ -218,19 +218,19 @@ class TestGoalRefillService:
     @pytest.mark.parametrize(
         "update_params",
         [
-            # {
-            #     "name": "тест321",
-            #     "description": "интересное описание",
-            #     "category": 1,
-            #     "start_date": datetime.date.today(),
-            #     "finish_date": datetime.date.today() + datetime.timedelta(days=3),
-            #     "value": 3,
-            #     "state": GoalStateEnum.succeed,
-            #     "rule": GoalRefillRuleEnum.gte,
-            # },
-            # {
-            #     "category": None,
-            # },
+            {
+                "name": "тест321",
+                "description": "интересное описание",
+                "category": 1,
+                "start_date": datetime.date.today(),
+                "finish_date": datetime.date.today() + datetime.timedelta(days=3),
+                "value": 3,
+                "state": GoalStateEnum.succeed,
+                "rule": GoalRefillRuleEnum.gte,
+            },
+            {
+                "category": None,
+            },
             pytest.param(
                 {
                     "goal_type": GoalTypeEnum.SPENDING,

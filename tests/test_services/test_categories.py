@@ -66,3 +66,28 @@ class TestCategoryService:
             result.id == expected if result is not None
             else result is None
         )
+
+    @pytest.mark.django_db(reset_sequences=True)
+    @pytest.mark.parametrize(
+        "update_params",
+        [
+            {
+                "name": "тест321"
+            },
+            pytest.param(
+                {
+                    "name": None
+                },
+                marks=pytest.mark.xfail,
+            ),
+        ]
+    )
+    def test_update(self, update_params):
+        """Тест проверки обновления данных"""
+        existing_category = CategoryFactory.create()
+
+        service = CategoryService()
+        result = service.update(existing_category.id, **update_params)
+
+        for each_update_param_key, each_update_param_value in update_params.items():
+            assert getattr(result, each_update_param_key) == each_update_param_value
