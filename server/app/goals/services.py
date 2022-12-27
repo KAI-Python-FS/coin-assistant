@@ -82,6 +82,24 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
 
         return super().create(**object_data)  # type: ignore
 
+    def update(self, object_id: int, **object_data: dict) -> Goal | None:
+        """Обновление объекта"""
+        ready_to_update_fields = [
+            "name",
+            "description",
+            "category",
+            "start_date",
+            "finish_date",
+            "value",
+            "state",
+            "rule",
+        ]
+
+        if set(object_data.keys()) - set(ready_to_update_fields):
+            raise ValidationException()
+
+        return super().update(object_id, **object_data)
+
 
 class BudgetService(BaseModelUserFilterCRUDService):
     """Класс описания бизнес логики работы с Бюджетами пользователей"""
