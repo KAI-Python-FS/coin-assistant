@@ -46,3 +46,23 @@ class TestCategoryService:
         service = CategoryService()
 
         assert service.retrieve_list().count() == 3
+
+    @pytest.mark.django_db(reset_sequences=True)
+    @pytest.mark.parametrize(
+        "category_id, expected",
+        [
+            pytest.param(1, 1),
+            pytest.param(4, None),
+        ]
+    )
+    def test_retrieve_single(self, category_id: int, expected: int | None):
+        """Тест проверки получения единственной записи"""
+        _ = CategoryFactory.create_batch(3)
+
+        service = CategoryService()
+        result = service.retrieve_single(category_id)
+
+        assert (
+            result.id == expected if result is not None
+            else result is None
+        )
