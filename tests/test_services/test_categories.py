@@ -91,3 +91,13 @@ class TestCategoryService:
 
         for each_update_param_key, each_update_param_value in update_params.items():
             assert getattr(result, each_update_param_key) == each_update_param_value
+
+    @pytest.mark.django_db()
+    def test_delete(self):
+        """Тест проверки удаления записи"""
+        existing_category = CategoryFactory.create()
+
+        service = CategoryService()
+        service.delete(existing_category.id)
+
+        assert Category.objects.count() == 0
