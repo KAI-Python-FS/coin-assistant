@@ -31,6 +31,7 @@ class TestCategoryService:
         self,
         create_params: dict[str, Any],
     ):
+        """Тест проверки создания категории"""
         service = CategoryService()
         _ = service.create(**create_params)
 
