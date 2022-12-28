@@ -5,6 +5,8 @@ from typing import Any
 
 import pytest
 
+from django.db.models.query import QuerySet
+
 from server.app.goals.enums import BudgetRuleEnum, GoalTypeEnum, GoalStateEnum
 from server.app.goals.services import BudgetService
 from server.app.goals.models import Goal
@@ -53,10 +55,11 @@ class TestBudgetService:
         user = UserFactory()
 
         service = BudgetService(user=user)
-        _ = service.create(
+        result = service.create(
             **create_params,
         )
 
+        assert isinstance(result, Goal)
         assert Goal.objects.budgets().count() == 1
 
     @pytest.mark.django_db()
@@ -103,9 +106,10 @@ class TestBudgetService:
 
         for each_goal in goals_refills:
             service = BudgetService(user=each_goal.user)
-            goals = service.retrieve_list()
+            result = service.retrieve_list()
 
-            assert len(goals) == 1
+            assert isinstance(result, QuerySet)
+            assert result.count() == 1
 
     @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
@@ -209,6 +213,10 @@ class TestBudgetService:
         result = service.retrieve_single(budget_id)
 
         assert (
+            isinstance(result, Goal) if result is not None
+            else result is None
+        )
+        assert (
             result.id == expected if result is not None
             else result is None
         )
@@ -254,6 +262,7 @@ class TestBudgetService:
         service = BudgetService(user=user)
         result = service.update(existing_goal.id, **update_params)
 
+        assert isinstance(result, Goal)
         for each_update_param_key, each_update_param_value in update_params.items():
             if each_update_param_key == "category":
                 assert getattr(result, "category_id") == each_update_param_value
@@ -269,6 +278,7 @@ class TestBudgetService:
         )
 
         service = BudgetService(user=user)
-        service.delete(existing_goal.id)
+        result = service.delete(existing_goal.id)
 
+        assert isinstance(result, bool)
         assert Goal.objects.budgets().count() == 0
