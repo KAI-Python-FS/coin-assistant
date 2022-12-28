@@ -32,6 +32,24 @@ class TestOperationService:
                 },
                 marks=pytest.mark.xfail,
             ),
+            # Проверка создания операции Пополнения со значением 0
+            pytest.param(
+                {
+                    "name": "Пополнение",
+                    "operation_type": OperationTypeEnum.REFILL,
+                    "cost": 0,
+                },
+                marks=pytest.mark.xfail,
+            ),
+            # Проверка создания операции Пополнения со значением -1
+            pytest.param(
+                {
+                    "name": "Пополнение",
+                    "operation_type": OperationTypeEnum.REFILL,
+                    "cost": -1,
+                },
+                marks=pytest.mark.xfail,
+            ),
             # Проверка создания операции Пополнения
             pytest.param(
                 {
@@ -39,6 +57,24 @@ class TestOperationService:
                     "operation_type": OperationTypeEnum.REFILL,
                     "cost": 1,
                 }
+            ),
+            # Проверка создания операции Списания со значением 0
+            pytest.param(
+                {
+                    "name": "Списание",
+                    "operation_type": OperationTypeEnum.SPENDING,
+                    "cost": 0,
+                },
+                marks=pytest.mark.xfail,
+            ),
+            # Проверка создания операции Списания со значением -1
+            pytest.param(
+                {
+                    "name": "Списание",
+                    "operation_type": OperationTypeEnum.SPENDING,
+                    "cost": -1,
+                },
+                marks=pytest.mark.xfail,
             ),
             # Проверка создания операции Списания
             pytest.param(
