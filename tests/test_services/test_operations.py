@@ -238,3 +238,67 @@ class TestOperationService:
             result.id == expected if result is not None
             else result is None
         )
+
+    @pytest.mark.django_db(reset_sequences=True)
+    @pytest.mark.parametrize(
+        "update_params",
+        [
+            pytest.param(
+                {
+                    "name": "Новое название",
+                    "description": "Новое описание",
+                    "operation_type": OperationTypeEnum.REFILL,
+                    "cost": 4,
+                },
+                id="update_operation_refill_most_params",
+            ),
+            pytest.param(
+                {
+                    "name": "Новое название",
+                    "description": "Новое описание",
+                    "operation_type": OperationTypeEnum.REFILL,
+                    "cost": 4,
+                    "category": 1,
+                },
+                id="update_operation_refill_category",
+            ),
+            pytest.param(
+                {
+                    "name": "Новое название",
+                    "description": "Новое описание",
+                    "operation_type": OperationTypeEnum.SPENDING,
+                    "cost": 4,
+                },
+                id="update_operation_spending_most_params",
+            ),
+            pytest.param(
+                {
+                    "name": "Новое название",
+                    "description": "Новое описание",
+                    "operation_type": OperationTypeEnum.SPENDING,
+                    "cost": 4,
+                    "category": 1,
+                },
+                id="update_operation_spending_category",
+            ),
+        ]
+    )
+    def test_update(
+        self,
+        update_params: dict,
+    ):
+        """Тест проверки обновления данных"""
+        user = UserFactory()
+        CategoryFactory.create()
+        existing_operation = OperationFactory(
+            user=user,
+        )
+
+        service = OperationService(user=user)
+        result = service.update(existing_operation.id, **update_params)
+
+        for each_update_param_key, each_update_param_value in update_params.items():
+            if each_update_param_key == "category":
+                assert getattr(result, "category_id") == each_update_param_value
+            else:
+                assert getattr(result, each_update_param_key) == each_update_param_value
