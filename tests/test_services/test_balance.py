@@ -93,13 +93,14 @@ class TestBalanceService:
 
         assert result == user1_expected
 
-    @pytest.mark.django_db()
+    @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
         "spending_operation_params, refill_operation_params, expected",
         [
-            # pytest.param(
-            #     [], [], BalanceDetailedByCategories(spending=[], refill=[], balance=0),
-            # ),
+            pytest.param(
+                [], [], BalanceDetailedByCategories(spending=[], refill=[], balance=0),
+                id="no_user_operations"
+            ),
             pytest.param(
                 [
                     {
@@ -127,22 +128,23 @@ class TestBalanceService:
                         BalanceDetailedByCategoriesCategoryItem(
                             category_id=None,
                             category_name=None,
-                            total=1,
+                            total=1.0,
                         ),
                         BalanceDetailedByCategoriesCategoryItem(
                             category_id=1,
                             category_name="Категория 1",
-                            total=3,
+                            total=3.0,
                         ),
                         BalanceDetailedByCategoriesCategoryItem(
                             category_id=2,
                             category_name="Категория 2",
-                            total=4,
+                            total=4.0,
                         ),
                     ],
                     refill=[],
-                    balance=-8,
+                    balance=-8.0,
                 ),
+                id="only_spending_operations",
             )
         ],
     )
@@ -154,7 +156,7 @@ class TestBalanceService:
     ):
         """Тест детализации текущего баланса"""
         user = UserFactory.create()
-        for each_idx in range(4):
+        for each_idx in range(1, 5):
             CategoryFactory.create(
                 name=f"Категория {each_idx}"
             )

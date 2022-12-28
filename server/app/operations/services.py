@@ -1,6 +1,6 @@
 from typing import Any
 
-from django.db.models import Sum, Q
+from django.db.models import F, Sum, Q
 
 from server.app.base.services import BaseModelCRUDService, BaseModelUserFilterCRUDService
 
@@ -115,9 +115,7 @@ class BalanceService:
                     filter=Q(operation_type=OperationTypeEnum.SPENDING.value),
                 ),
             ).order_by(
-                "category__pk",
-            ).asc(
-                nulls_first=True
+                F("category__pk").asc(nulls_first=True)
             ).all()
         )
 
