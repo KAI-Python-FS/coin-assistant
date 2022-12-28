@@ -5,8 +5,8 @@ from dataclasses import dataclass
 class BalanceDetailedByCategoriesCategoryItem:
     """Дата-класс детализированных данных об одной категории баланса пользователя"""
 
-    category_id: str
-    category_name: str
+    category_id: int | None
+    category_name: str | None
     total: float
 
 

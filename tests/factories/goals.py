@@ -1,12 +1,11 @@
 
 import datetime
 
-from pytz import UTC
-
 import factory
 import factory.fuzzy
 
 from factory.django import DjangoModelFactory
+from pytz import UTC
 
 from server.app.goals.enums import (
     BudgetRuleEnum,

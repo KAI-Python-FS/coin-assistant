@@ -1,6 +1,6 @@
 from typing import Any
 
-from django.db.models import Sum, Q
+from django.db.models import F, Sum, Q
 
 from server.app.base.services import BaseModelCRUDService, BaseModelUserFilterCRUDService
 
@@ -54,14 +54,14 @@ class OperationService(BaseModelUserFilterCRUDService):
 
         return filter_condition
 
-    def create(self, *args, **object_data: dict[str, Any]) -> Operation:
+    def create(self, **object_data: dict[str, Any]) -> Operation:
         """Создание объекта"""
         raw_category = object_data.get("category")
         if raw_category is not None and isinstance(raw_category, int):
             object_data.pop("category")
             object_data["category_id"] = raw_category
 
-        return super().create(*args, **object_data)  # type: ignore
+        return super().create(**object_data)  # type: ignore
 
 
 class BalanceService:
@@ -78,7 +78,7 @@ class BalanceService:
 
     def retrieve_current_balance(self) -> float:
         """Получение текущего баланса текущего пользователя"""
-        balance = Operation.objects.filter(
+        balance_qs = Operation.objects.filter(
             user=self.user
         ).aggregate(
             refill=Sum(
@@ -91,7 +91,8 @@ class BalanceService:
             )
         )
 
-        return balance["refill"] or 0 - balance["spending"] or 0
+        balance = (balance_qs["refill"] or 0) - (balance_qs["spending"] or 0)
+        return round(balance, 2)
 
     def retrieve_current_balance_detailed(self) -> BalanceDetailedByCategories:
         """Получение детализированного представления текущего баланса текущего пользователя"""
@@ -104,7 +105,6 @@ class BalanceService:
             ).values(
                 "category__pk",
                 "category__name",
-                "cost",
             ).annotate(
                 refill=Sum(
                     "cost",
@@ -114,6 +114,8 @@ class BalanceService:
                     "cost",
                     filter=Q(operation_type=OperationTypeEnum.SPENDING.value),
                 ),
+            ).order_by(
+                F("category__pk").asc(nulls_first=True)
             ).all()
         )
 
