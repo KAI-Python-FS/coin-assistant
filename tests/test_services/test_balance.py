@@ -191,6 +191,86 @@ class TestBalanceService:
                 ),
                 id="only_refill_operations",
             ),
+            pytest.param(
+                [
+                    {
+                        "value": 1,
+                    },
+                    {
+                        "value": 1,
+                        "category": 1,
+                        "category_name": "Категория 1",
+                    },
+                    {
+                        "value": 2,
+                        "category": 1,
+                        "category_name": "Категория 1",
+                    },
+                    {
+                        "value": 4,
+                        "category": 2,
+                        "category_name": "Категория 2",
+                    },
+                ],
+                [
+                    {
+                        "value": 1,
+                    },
+                    {
+                        "value": 2,
+                        "category": 1,
+                        "category_name": "Категория 1",
+                    },
+                    {
+                        "value": 3,
+                        "category": 2,
+                        "category_name": "Категория 2",
+                    },
+                    {
+                        "value": 4,
+                        "category": 2,
+                        "category_name": "Категория 2",
+                    },
+                ],
+                BalanceDetailedByCategories(
+                    spending=[
+                        BalanceDetailedByCategoriesCategoryItem(
+                            category_id=None,
+                            category_name=None,
+                            total=1.0,
+                        ),
+                        BalanceDetailedByCategoriesCategoryItem(
+                            category_id=1,
+                            category_name="Категория 1",
+                            total=3.0,
+                        ),
+                        BalanceDetailedByCategoriesCategoryItem(
+                            category_id=2,
+                            category_name="Категория 2",
+                            total=4.0,
+                        ),
+                    ],
+                    refill=[
+                        BalanceDetailedByCategoriesCategoryItem(
+                            category_id=None,
+                            category_name=None,
+                            total=1.0,
+                        ),
+                        BalanceDetailedByCategoriesCategoryItem(
+                            category_id=1,
+                            category_name="Категория 1",
+                            total=2.0,
+                        ),
+                        BalanceDetailedByCategoriesCategoryItem(
+                            category_id=2,
+                            category_name="Категория 2",
+                            total=7.0,
+                        ),
+                    ],
+                    balance=2.0,
+                ),
+                id="all_operations",
+            ),
         ],
     )
     def test_retrieve_current_balance_detailed(
