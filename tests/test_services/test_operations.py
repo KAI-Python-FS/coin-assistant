@@ -214,3 +214,27 @@ class TestOperationService:
         operations = service.retrieve_list(**filter_params)
 
         assert operations.count() == expected
+
+    @pytest.mark.django_db(reset_sequences=True)
+    @pytest.mark.parametrize(
+        "operation_id, expected",
+        [
+            pytest.param(1, 1, id="operation_user"),
+            pytest.param(4, None, id="operation_user_another_user"),
+        ]
+    )
+    def test_retrieve_single(self, operation_id: int, expected: int | None):
+        """Тест проверки получения единственной записи"""
+        user = UserFactory.create()
+        _ = [
+            OperationFactory.create(user=user),
+            OperationFactory.create(),
+        ]
+
+        service = OperationService(user=user)
+        result = service.retrieve_single(operation_id)
+
+        assert (
+            result.id == expected if result is not None
+            else result is None
+        )
