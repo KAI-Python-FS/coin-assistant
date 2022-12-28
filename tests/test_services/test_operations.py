@@ -131,3 +131,86 @@ class TestOperationService:
         operations = service.retrieve_list()
 
         assert operations.count() == expected
+
+    @pytest.mark.django_db()
+    @pytest.mark.parametrize(
+        "filter_params, expected",
+        [
+            pytest.param(
+                {
+                    "by_categories":  (1, )
+                },
+                2,
+                id="filter_by_category",
+            ),
+            pytest.param(
+                {
+                    "by_operation_type": OperationTypeEnum.REFILL
+                },
+                2,
+                id="filter_by_operation_type_refill",
+            ),
+            pytest.param(
+                {
+                    "by_operation_type": OperationTypeEnum.SPENDING
+                },
+                3,
+                id="filter_by_operation_type_spending",
+            ),
+            pytest.param(
+                {
+                    "by_operation_start_date": datetime.date.today() + datetime.timedelta(days=360),
+                },
+                0,
+                id="filter_by_operation_start_date_next_date",
+            ),
+            pytest.param(
+                {
+                    "by_operation_start_date": datetime.date.today() - datetime.timedelta(days=10),
+                },
+                5,
+                id="filter_by_operation_start_date_current_date",
+            ),
+            pytest.param(
+                {
+                    "by_operation_finish_date": datetime.date.today() + datetime.timedelta(days=360),
+                },
+                5,
+                id="filter_by_operation_finish_date_current_date",
+            ),
+            pytest.param(
+                {
+                    "by_operation_finish_date": datetime.date.today() + datetime.timedelta(days=3),
+                },
+                2,
+                id="filter_by_operation_finish_date_next_date",
+            ),
+        ]
+    )
+    def test_retrieve_list_filter(self, filter_params: dict[str, Any], expected: int):
+        """Тест проверки данных по передаваемым параметрам"""
+        user, category = UserFactory.create(), CategoryFactory.create()
+        _ = OperationFactory.create_batch(
+            2,
+            user=user,
+            name="Операция",
+            description="Описание",
+            operation_type=OperationTypeEnum.REFILL,
+            operation_at=datetime.datetime.now() + datetime.timedelta(days=2),
+            cost=1,
+            category=category,
+        )
+        _ = OperationFactory.create_batch(
+            3,
+            user=user,
+            name="Операция",
+            description="Описание",
+            operation_type=OperationTypeEnum.SPENDING,
+            operation_at=datetime.datetime.now() + datetime.timedelta(days=10),
+            cost=3,
+        )
+
+        service = OperationService(user=user)
+        operations = service.retrieve_list(**filter_params)
+
+        assert operations.count() == expected
