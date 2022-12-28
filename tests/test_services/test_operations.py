@@ -302,3 +302,27 @@ class TestOperationService:
                 assert getattr(result, "category_id") == each_update_param_value
             else:
                 assert getattr(result, each_update_param_key) == each_update_param_value
+
+    @pytest.mark.django_db()
+    def test_delete(self):
+        """Тест проверки удаления записи"""
+        existing_operation = OperationFactory.create()
+
+        service = OperationService(
+            user=existing_operation.user,
+        )
+        result = service.delete(existing_operation.id)
+
+        assert isinstance(result, bool)
+        assert Operation.objects.count() == 0
+
+    @pytest.mark.django_db()
+    def test_delete_non_exist(self):
+        """Тест проверки удаления записи"""
+        user = UserFactory.create()
+        existing_operation = OperationFactory.create()
+
+        service = OperationService(user=user)
+        result = service.delete(existing_operation.id + 1)
+
+        assert result is None
