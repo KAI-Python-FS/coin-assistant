@@ -3,6 +3,8 @@ from typing import Any
 
 import pytest
 
+from django.db.models.query import QuerySet
+
 from server.app.goals.enums import GoalTypeEnum, GoalStateEnum, GoalRefillRuleEnum
 from server.app.goals.models import Goal
 from server.app.goals.services import GoalRefillService
@@ -54,10 +56,11 @@ class TestGoalRefillService:
         user = UserFactory()
 
         service = GoalRefillService(user=user)
-        _ = service.create(
+        result = service.create(
             **create_params,
         )
 
+        assert isinstance(result, Goal)
         assert Goal.objects.goals().count() == expected
 
     @pytest.mark.django_db()
@@ -93,6 +96,7 @@ class TestGoalRefillService:
             **create_params,
         )
 
+        assert isinstance(result, Goal)
         assert result.goal_type == GoalTypeEnum.REFILL
 
     @pytest.mark.django_db()
@@ -104,9 +108,10 @@ class TestGoalRefillService:
 
         for each_goal in goals_refills:
             service = GoalRefillService(user=each_goal.user)
-            goals = service.retrieve_list()
+            result = service.retrieve_list()
 
-            assert len(goals) == 1
+            assert isinstance(result, QuerySet)
+            assert result.count() == 1
 
     @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
@@ -184,9 +189,9 @@ class TestGoalRefillService:
         )
 
         service = GoalRefillService(user=user)
-        goals = service.retrieve_list(**filter_params)
+        result = service.retrieve_list(**filter_params)
 
-        assert len(goals) == expected
+        assert result.count() == expected
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(
@@ -209,6 +214,10 @@ class TestGoalRefillService:
         service = GoalRefillService(user=user)
         result = service.retrieve_single(goal_id)
 
+        assert (
+            isinstance(result, Goal) if result is not None
+            else result is None
+        )
         assert (
             result.id == expected if result is not None
             else result is None
@@ -255,6 +264,7 @@ class TestGoalRefillService:
         service = GoalRefillService(user=user)
         result = service.update(existing_goal.id, **update_params)
 
+        assert isinstance(result, Goal)
         for each_update_param_key, each_update_param_value in update_params.items():
             if each_update_param_key == "category":
                 assert getattr(result, "category_id") == each_update_param_value
@@ -270,6 +280,7 @@ class TestGoalRefillService:
         )
 
         service = GoalRefillService(user=user)
-        service.delete(existing_goal.id)
+        result = service.delete(existing_goal.id)
 
+        assert isinstance(result, bool)
         assert Goal.objects.goals().count() == 0
