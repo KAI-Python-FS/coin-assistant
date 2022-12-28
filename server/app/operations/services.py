@@ -78,7 +78,7 @@ class BalanceService:
 
     def retrieve_current_balance(self) -> float:
         """Получение текущего баланса текущего пользователя"""
-        balance = Operation.objects.filter(
+        balance_qs = Operation.objects.filter(
             user=self.user
         ).aggregate(
             refill=Sum(
@@ -91,7 +91,8 @@ class BalanceService:
             )
         )
 
-        return balance["refill"] or 0 - balance["spending"] or 0
+        balance = (balance_qs["refill"] or 0) - (balance_qs["spending"] or 0)
+        return round(balance, 2)
 
     def retrieve_current_balance_detailed(self) -> BalanceDetailedByCategories:
         """Получение детализированного представления текущего баланса текущего пользователя"""
