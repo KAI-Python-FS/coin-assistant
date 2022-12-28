@@ -3,6 +3,8 @@ from typing import Any
 
 import pytest
 
+from django.db.models.query import QuerySet
+
 from server.app.operations.enums import OperationTypeEnum
 from server.app.operations.models import Operation
 from server.app.operations.services import OperationService
@@ -100,6 +102,7 @@ class TestOperationService:
         result = service.create(**create_params)
 
         # Проверка создания записи
+        assert isinstance(result, Operation)
         assert Operation.objects.count() == 1
 
         # Проверка атрибутов
@@ -130,9 +133,10 @@ class TestOperationService:
         service = OperationService(user=user)
         operations = service.retrieve_list()
 
+        assert isinstance(operations, QuerySet)
         assert operations.count() == expected
 
-    @pytest.mark.django_db()
+    @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
         "filter_params, expected",
         [
@@ -213,6 +217,7 @@ class TestOperationService:
         service = OperationService(user=user)
         operations = service.retrieve_list(**filter_params)
 
+        assert isinstance(operations, QuerySet)
         assert operations.count() == expected
 
     @pytest.mark.django_db(reset_sequences=True)
@@ -234,6 +239,10 @@ class TestOperationService:
         service = OperationService(user=user)
         result = service.retrieve_single(operation_id)
 
+        assert (
+            isinstance(result, Operation) if result
+            else result is None
+        )
         assert (
             result.id == expected if result is not None
             else result is None
@@ -297,6 +306,7 @@ class TestOperationService:
         service = OperationService(user=user)
         result = service.update(existing_operation.id, **update_params)
 
+        assert isinstance(result, Operation)
         for each_update_param_key, each_update_param_value in update_params.items():
             if each_update_param_key == "category":
                 assert getattr(result, "category_id") == each_update_param_value
