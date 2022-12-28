@@ -4,9 +4,10 @@ from typing import Any
 import pytest
 
 from server.app.operations.enums import OperationTypeEnum
-from server.app.operations.models import Category, Operation
+from server.app.operations.models import Operation
 from server.app.operations.services import OperationService
 from tests.factories.goals import CategoryFactory
+from tests.factories.operations import OperationFactory
 from tests.factories.user import UserFactory
 
 
@@ -109,3 +110,24 @@ class TestOperationService:
             )
 
             assert current_value == each_create_param_value
+
+    @pytest.mark.django_db()
+    @pytest.mark.parametrize(
+        "user_id, expected",
+        [
+            (1, 1),
+            (None, 0),
+        ]
+    )
+    def test_retrieve_list_filter_by_user(self, user_id: int | None, expected: int):
+        """Тест проверки фильтрации данных по пользователю"""
+        user = UserFactory.create()
+        _ = (
+            OperationFactory.create(user=user) if user_id
+            else OperationFactory.create()
+        )
+
+        service = OperationService(user=user)
+        operations = service.retrieve_list()
+
+        assert operations.count() == expected
