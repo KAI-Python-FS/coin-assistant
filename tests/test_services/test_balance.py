@@ -1,9 +1,17 @@
 
 import pytest
 
+from typing import Any
+
+from server.app.operations.dataclasses import (
+    BalanceDetailedByCategories,
+    BalanceDetailedByCategoriesCategoryItem,
+)
 from server.app.operations.enums import OperationTypeEnum
+from server.app.operations.models import Category
 from server.app.operations.services import BalanceService
 
+from tests.factories.category import CategoryFactory
 from tests.factories.operations import OperationFactory
 from tests.factories.user import UserFactory
 
@@ -84,3 +92,100 @@ class TestBalanceService:
         result = service.retrieve_current_balance()
 
         assert result == user1_expected
+
+    @pytest.mark.django_db()
+    @pytest.mark.parametrize(
+        "spending_operation_params, refill_operation_params, expected",
+        [
+            # pytest.param(
+            #     [], [], BalanceDetailedByCategories(spending=[], refill=[], balance=0),
+            # ),
+            pytest.param(
+                [
+                    {
+                        "value": 1,
+                    },
+                    {
+                        "value": 1,
+                        "category": 1,
+                        "category_name": "Категория 1",
+                    },
+                    {
+                        "value": 2,
+                        "category": 1,
+                        "category_name": "Категория 1",
+                    },
+                    {
+                        "value": 4,
+                        "category": 2,
+                        "category_name": "Категория 2",
+                    },
+                ],
+                [],
+                BalanceDetailedByCategories(
+                    spending=[
+                        BalanceDetailedByCategoriesCategoryItem(
+                            category_id=None,
+                            category_name=None,
+                            total=1,
+                        ),
+                        BalanceDetailedByCategoriesCategoryItem(
+                            category_id=1,
+                            category_name="Категория 1",
+                            total=3,
+                        ),
+                        BalanceDetailedByCategoriesCategoryItem(
+                            category_id=2,
+                            category_name="Категория 2",
+                            total=4,
+                        ),
+                    ],
+                    refill=[],
+                    balance=-8,
+                ),
+            )
+        ],
+    )
+    def test_retrieve_current_balance_detailed(
+        self,
+        spending_operation_params: list[dict[str, Any]],
+        refill_operation_params: list[dict[str, Any]],
+        expected: BalanceDetailedByCategories,
+    ):
+        """Тест детализации текущего баланса"""
+        user = UserFactory.create()
+        for each_idx in range(4):
+            CategoryFactory.create(
+                name=f"Категория {each_idx}"
+            )
+        for each_refill_operation_value in spending_operation_params:
+            category_id = (
+                each_refill_operation_value.get("category")
+            )
+            OperationFactory.create(
+                cost=each_refill_operation_value["value"],
+                category=(
+                    Category.objects.get(pk=category_id) if category_id
+                    else None
+                ),
+                user=user,
+                operation_type=OperationTypeEnum.SPENDING,
+            )
+        for each_refill_operation_value in refill_operation_params:
+            category_id = (
+                each_refill_operation_value.get("category")
+            )
+            OperationFactory.create(
+                cost=each_refill_operation_value["value"],
+                category=(
+                    Category.objects.get(pk=category_id) if category_id
+                    else None
+                ),
+                operation_type=OperationTypeEnum.REFILL,
+                user=user,
+            )
+
+        service = BalanceService(user=user)
+        result = service.retrieve_current_balance_detailed()
+
+        assert result == expected

@@ -105,7 +105,6 @@ class BalanceService:
             ).values(
                 "category__pk",
                 "category__name",
-                "cost",
             ).annotate(
                 refill=Sum(
                     "cost",
@@ -115,6 +114,10 @@ class BalanceService:
                     "cost",
                     filter=Q(operation_type=OperationTypeEnum.SPENDING.value),
                 ),
+            ).order_by(
+                "category__pk",
+            ).asc(
+                nulls_first=True
             ).all()
         )
 
