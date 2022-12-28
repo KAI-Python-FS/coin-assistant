@@ -54,14 +54,14 @@ class OperationService(BaseModelUserFilterCRUDService):
 
         return filter_condition
 
-    def create(self, *args, **object_data: dict[str, Any]) -> Operation:
+    def create(self, **object_data: dict[str, Any]) -> Operation:
         """Создание объекта"""
         raw_category = object_data.get("category")
         if raw_category is not None and isinstance(raw_category, int):
             object_data.pop("category")
             object_data["category_id"] = raw_category
 
-        return super().create(*args, **object_data)  # type: ignore
+        return super().create(**object_data)  # type: ignore
 
 
 class BalanceService:
