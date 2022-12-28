@@ -3,7 +3,8 @@ from datetime import datetime
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from server.app.operations.enums import OperationTypeEnum
+from .enums import OperationTypeEnum
+from .validation import validate_operation_cost
 
 
 User = get_user_model()
@@ -44,9 +45,9 @@ class Operation(models.Model):
         choices=OperationTypeEnum.choices,
         max_length=64,
     )
-    # TODO добавить валидатор Стоимость > 0
     cost = models.FloatField(
         verbose_name="Стоимость",
+        validators=[validate_operation_cost],
     )
     user = models.ForeignKey(
         User,
