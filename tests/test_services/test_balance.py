@@ -13,44 +13,74 @@ class TestBalanceService:
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(
-        "spending_operation_values, refill_operation_values, expected",
+        "user1_spending_operation_values, user1_refill_operation_values, "
+        "user2_spending_operation_values, user2_refill_operation_values, user1_expected",
         [
             pytest.param(
-                [], [], 0, id="no_user_operation"
+                [], [], [], [], 0, id="no_users_operations",
             ),
             pytest.param(
-                [1.1, 2.2], [], -3.3, id="user_operation_only_spending",
+                [1, 2], [], [], [], -3, id="user1_only_spending",
             ),
             pytest.param(
-                [], [1.2, 3.4], 4.6, id="user_operation_only_refill",
+                [], [1, 2], [], [], 3, id="user1_only_refill",
             ),
             pytest.param(
-                [2, 1.3], [4.4, 1.2], 2.3, id="user_operations_both",
-            )
+                [], [], [1, 2], [], 0, id="user1_no_operations_user2_only_spending",
+            ),
+            pytest.param(
+                [], [], [], [1, 2], 0, id="user1_no_operations_user2_only_refill",
+            ),
+            pytest.param(
+                [1, 2], [3, 4], [], [], 4, id="user1_all_operations_user2_no_operations",
+            ),
+            pytest.param(
+                [1, 2], [3, 4], [5, 6], [], 4, id="user1_all_operations_user2_only_spending",
+            ),
+            pytest.param(
+                [1, 2], [3, 4], [], [7, 9], 4, id="user1_all_operations_user2_only_refill",
+            ),
+            pytest.param(
+                [1, 2], [3, 4], [5, 6], [7, 9], 4, id="user1_all_operations_user2_all_operations",
+            ),
         ]
     )
-    def test_retrieve_current_balance(
+    def test_retrieve_current_balance_with_few_users(
         self,
-        spending_operation_values: list[float],
-        refill_operation_values: list[float],
-        expected: float,
+        user1_spending_operation_values: list[float],
+        user1_refill_operation_values: list[float],
+        user1_expected: float,
+        user2_spending_operation_values: list[float],
+        user2_refill_operation_values: list[float],
     ):
-        """Тест текущего баланса пользователя"""
-        user = UserFactory.create()
-        for each_value in spending_operation_values:
+        """Тест текущего баланса с учетом нескольких пользователей"""
+        user1, user2 = UserFactory.create_batch(2)
+        for each_value in user1_spending_operation_values:
             OperationFactory.create(
-                user=user,
+                user=user1,
                 cost=each_value,
                 operation_type=OperationTypeEnum.SPENDING,
             )
-        for each_value in refill_operation_values:
+        for each_value in user1_refill_operation_values:
             OperationFactory.create(
-                user=user,
+                user=user1,
+                cost=each_value,
+                operation_type=OperationTypeEnum.REFILL,
+            )
+        for each_value in user2_spending_operation_values:
+            OperationFactory.create(
+                user=user2,
+                cost=each_value,
+                operation_type=OperationTypeEnum.SPENDING,
+            )
+        for each_value in user2_refill_operation_values:
+            OperationFactory.create(
+                user=user2,
                 cost=each_value,
                 operation_type=OperationTypeEnum.REFILL,
             )
 
-        service = BalanceService(user=user)
+        service = BalanceService(user=user1)
         result = service.retrieve_current_balance()
 
-        assert result == expected
+        assert result == user1_expected
