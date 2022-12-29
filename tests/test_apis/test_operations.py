@@ -3,7 +3,7 @@ import json
 
 import pytest
 
-from tests.factories.category import CategoryFactory
+from server.app.operations.enums import OperationTypeEnum
 from tests.factories.operations import OperationFactory
 
 
@@ -62,13 +62,30 @@ class TestOperationEndpoints:
             assert response_as_json[each_create_param_name] == each_create_param_value
 
     @pytest.mark.django_db()
-    def test_retrieve_single(self, api_client_authorized, api_user):
+    @pytest.mark.parametrize(
+        "create_params",
+        [
+            {
+                "operation_type": OperationTypeEnum.REFILL,
+            },
+            {
+                "operation_type": OperationTypeEnum.SPENDING,
+            },
+            {
+                "operation_type": OperationTypeEnum.REFILL,
+                "category": None,
+            },
+            {
+                "operation_type": OperationTypeEnum.SPENDING,
+                "category": None,
+            },
+        ]
+    )
+    def test_retrieve_single(self, api_client_authorized, api_user, create_params):
         """Проверка получения Операции"""
         operation = OperationFactory.create(
             user=api_user,
-            name="Тестовое название",
-            description="Тестовое описание",
-            cost=1.2,
+            **create_params,
         )
         url = f'{self.endpoint}{operation.id}'
         expected = {
@@ -81,7 +98,7 @@ class TestOperationEndpoints:
             "category": {
                 "id": operation.category.id,
                 "name": operation.category.name,
-            }
+            } if operation.category else None,
         }
 
         response = api_client_authorized.get(url)
