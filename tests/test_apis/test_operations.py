@@ -56,7 +56,35 @@ class TestOperationEndpoints:
         )
 
         assert response.status_code == 201
-        response_as_json = json.loads(response.content)
         # Проверка наличия переданных значений в ответе
+        response_as_json = json.loads(response.content)
         for each_create_param_name, each_create_param_value in expected.items():
             assert response_as_json[each_create_param_name] == each_create_param_value
+
+    @pytest.mark.django_db()
+    def test_retrieve_single(self, api_client_authorized, api_user):
+        """Проверка получения Операции"""
+        operation = OperationFactory.create(
+            user=api_user,
+            name="Тестовое название",
+            description="Тестовое описание",
+            cost=1.2,
+        )
+        url = f'{self.endpoint}{operation.id}'
+        expected = {
+            "id": operation.id,
+            "name": operation.name,
+            "description": operation.description,
+            "operation_type": operation.operation_type,
+            "cost": operation.cost,
+            "operation_at": operation.operation_at.strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+            "category": {
+                "id": operation.category.id,
+                "name": operation.category.name,
+            }
+        }
+
+        response = api_client_authorized.get(url)
+
+        assert response.status_code == 200
+        assert json.loads(response.content) == expected
