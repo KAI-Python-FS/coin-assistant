@@ -3,7 +3,6 @@ import json
 
 import pytest
 
-from server.app.operations.serializers import CategoryCreateInputSerializer, CategoryCreateOutputSerializer
 from tests.factories.category import CategoryFactory
 from tests.factories.user import UserFactory
 
@@ -54,4 +53,25 @@ class TestCategoryEndpoints:
         assert json.loads(response.content) == {
             "id": category.id,
             "name": category.name,
+        }
+
+    @pytest.mark.django_db()
+    def test_update(self, api_client_authorized):
+        """Проверка обновления единственной категории"""
+        category = CategoryFactory.create()
+        url = f'{self.endpoint}{category.id}'
+        input_params = {
+            "name": "Тест2",
+        }
+
+        response = api_client_authorized.put(
+            url,
+            data=input_params,
+            format="json",
+        )
+
+        assert response.status_code == 200
+        assert json.loads(response.content) == {
+            "id": category.id,
+            "name": input_params["name"],
         }
