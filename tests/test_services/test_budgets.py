@@ -5,11 +5,12 @@ from typing import Any
 
 import pytest
 
+from django.core.exceptions import ValidationError
 from django.db.models.query import QuerySet
 
 from server.app.goals.enums import BudgetRuleEnum, GoalTypeEnum, GoalStateEnum
-from server.app.goals.services import BudgetService
 from server.app.goals.models import Goal
+from server.app.goals.services import BudgetService
 from tests.factories.category import CategoryFactory
 from tests.factories.goals import BudgetFactory
 from tests.factories.user import UserFactory
@@ -22,21 +23,6 @@ class TestBudgetService:
     @pytest.mark.parametrize(
         "create_params",
         [
-            # Часть параметров дб указано
-            pytest.param(
-                {
-                    "name": None,
-                    "description": None,
-                    "category": None,
-                    "start_date": None,
-                    "finish_date": None,
-                    "state": None,
-                    "value": None,
-                    "rule": None,
-                },
-                marks=pytest.mark.xfail,
-                id="all_params_none"
-            ),
             # Проверка заполнения минимальным числом параметров
             pytest.param(
                 {
@@ -72,14 +58,6 @@ class TestBudgetService:
                     "value": 1,
                 },
                 id="no_state",
-            ),
-            pytest.param(
-                {
-                    "name": "Тест",
-                    "value": 1,
-                    "state": GoalTypeEnum.SPENDING,
-                },
-                id="incorrect_state",
             ),
         ]
     )
@@ -238,12 +216,6 @@ class TestBudgetService:
             {
                 "category": None,
             },
-            pytest.param(
-                {
-                    "goal_type": GoalTypeEnum.REFILL,
-                },
-                marks=pytest.mark.xfail,
-            ),
         ]
     )
     def test_update(
@@ -268,6 +240,39 @@ class TestBudgetService:
                 assert getattr(result, "category_id") == each_update_param_value
             else:
                 assert getattr(result, each_update_param_key) == each_update_param_value
+
+    @pytest.mark.django_db(reset_sequences=True)
+    @pytest.mark.parametrize(
+        "update_params",
+        [
+            pytest.param(
+                {
+                    "goal_type": GoalTypeEnum.REFILL,
+                },
+                id="existing_field"
+            ),
+            pytest.param(
+                {
+                    "field1": 1,
+                },
+                id="non_existing_field"
+            ),
+        ]
+    )
+    def test_update_with_validation_error_on_non_existing_fields(self, update_params: dict[str, Any]):
+        """Тест проверки возникновения ошибки валидации при обновлении"""
+        user = UserFactory()
+        CategoryFactory.create()
+
+        existing_goal = BudgetFactory(
+            user=user,
+            state=GoalStateEnum.unknown,
+            rule=BudgetRuleEnum.eq,
+        )
+
+        service = BudgetService(user=user)
+        with pytest.raises(ValidationError):
+            service.update(existing_goal.id, **update_params)
 
     @pytest.mark.django_db()
     def test_delete(self):

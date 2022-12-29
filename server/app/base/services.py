@@ -56,6 +56,8 @@ class BaseModelCRUDService(InterfaceCRUDService):
     def create(self, *args, **object_data: dict[str, Any]) -> Model:
         """Создание объекта"""
         object_ = self.model.objects.create(**object_data)
+        object_.full_clean()
+
         return object_
 
     def retrieve_single(self, object_id: int, *args, **kwargs) -> Model | None:
@@ -88,6 +90,7 @@ class BaseModelCRUDService(InterfaceCRUDService):
             if current_value != update_value:
                 setattr(object_, model_update_field.attname, update_value)
         else:
+            object_.full_clean()
             object_.save()
 
         return object_

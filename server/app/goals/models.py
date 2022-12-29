@@ -34,9 +34,10 @@ class Goal(models.Model):
 
     name = models.CharField(
         max_length=255,
-        verbose_name="Название цели"
+        verbose_name="Название цели",
     )
     description = models.TextField(
+        blank=True,
         null=True,
         verbose_name="Описание",
     )
@@ -54,6 +55,7 @@ class Goal(models.Model):
     )
     category = models.ForeignKey(
         "operations.Category",
+        blank=True,
         null=True,
         on_delete=models.CASCADE,
         related_name="goals",
@@ -64,6 +66,7 @@ class Goal(models.Model):
         verbose_name="Дата начала цели",
     )
     finish_date = models.DateField(
+        blank=True,
         null=True,
         verbose_name="Дата окончания цели",
     )
@@ -74,7 +77,6 @@ class Goal(models.Model):
         verbose_name="Состояние цели"
     )
     value = models.FloatField(
-        null=True,
         verbose_name="Значение цели",
     )
     rule = models.CharField(
