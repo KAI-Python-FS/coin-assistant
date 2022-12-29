@@ -33,6 +33,7 @@ class Operation(models.Model):
         verbose_name="Наименование операции",
     )
     description = models.TextField(
+        blank=True,
         null=True,
         verbose_name="Описание операции",
     )
@@ -57,6 +58,7 @@ class Operation(models.Model):
     )
     category = models.ForeignKey(
         Category,
+        blank=True,
         null=True,
         on_delete=models.CASCADE,
         related_name="operations",
