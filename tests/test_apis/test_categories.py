@@ -41,3 +41,17 @@ class TestCategoryEndpoints:
             "id": 1,
             "name": input_params["name"],
         }
+
+    @pytest.mark.django_db()
+    def test_retrieve_single(self, api_client_authorized):
+        """Проверка получения единственной категории"""
+        category = CategoryFactory.create()
+        url = f'{self.endpoint}{category.id}'
+
+        response = api_client_authorized.get(url)
+
+        assert response.status_code == 200
+        assert json.loads(response.content) == {
+            "id": category.id,
+            "name": category.name,
+        }
