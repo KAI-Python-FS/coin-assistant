@@ -3,6 +3,8 @@ from typing import Any
 
 import pytest
 
+from django.core.exceptions import ValidationError
+
 from server.app.operations.models import Category
 from server.app.operations.services import CategoryService
 from tests.factories.category import CategoryFactory
@@ -15,12 +17,6 @@ class TestCategoryService:
     @pytest.mark.parametrize(
         "create_params",
         [
-            pytest.param(
-                {
-                    "name": None,
-                },
-                marks=pytest.mark.xfail,
-            ),
             pytest.param(
                 {
                     "name": "Категория123",
@@ -67,19 +63,13 @@ class TestCategoryService:
             else result is None
         )
 
-    @pytest.mark.django_db(reset_sequences=True)
+    @pytest.mark.django_db()
     @pytest.mark.parametrize(
         "update_params",
         [
             {
                 "name": "тест321"
             },
-            pytest.param(
-                {
-                    "name": None
-                },
-                marks=pytest.mark.xfail,
-            ),
         ]
     )
     def test_update(self, update_params):
@@ -91,6 +81,23 @@ class TestCategoryService:
 
         for each_update_param_key, each_update_param_value in update_params.items():
             assert getattr(result, each_update_param_key) == each_update_param_value
+
+    @pytest.mark.django_db()
+    @pytest.mark.parametrize(
+        "update_params",
+        [
+            {
+                "name": None
+            },
+        ]
+    )
+    def test_update_with_validation_error(self, update_params):
+        """Тест проверки обновления данных и возникновения ошибки валидации"""
+        existing_category = CategoryFactory.create()
+
+        service = CategoryService()
+        with pytest.raises(ValidationError):
+            service.update(existing_category.id, **update_params)
 
     @pytest.mark.django_db()
     def test_delete(self):
