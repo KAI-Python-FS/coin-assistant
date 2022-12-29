@@ -105,3 +105,45 @@ class TestOperationEndpoints:
 
         assert response.status_code == 200
         assert json.loads(response.content) == expected
+
+    @pytest.mark.django_db()
+    @pytest.mark.parametrize(
+        "update_params",
+        [
+            {
+                "name": "Новое название операции",
+            },
+            {
+                "category": None,
+            },
+        ]
+    )
+    def test_update(self, api_client_authorized, api_user, update_params):
+        """Проверка обновления Операции"""
+        operation = OperationFactory.create(
+            user=api_user,
+        )
+        url = f'{self.endpoint}{operation.id}'
+        expected = {
+            "id": operation.id,
+            "name": update_params.get("name") or operation.name,
+            "description": operation.description,
+            "operation_type": operation.operation_type,
+            "cost": operation.cost,
+            "operation_at": operation.operation_at.strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+            "category": ({
+                    "id": operation.category.id,
+                    "name": operation.category.name,
+                } if "category" not in update_params.keys()
+                else None
+            ),
+        }
+
+        response = api_client_authorized.put(
+            url,
+            data=update_params,
+            format="json",
+        )
+
+        assert response.status_code == 200
+        assert json.loads(response.content) == expected
