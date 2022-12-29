@@ -4,7 +4,6 @@ import json
 import pytest
 
 from tests.factories.category import CategoryFactory
-from tests.factories.user import UserFactory
 
 
 class TestCategoryEndpoints:
@@ -75,3 +74,13 @@ class TestCategoryEndpoints:
             "id": category.id,
             "name": input_params["name"],
         }
+
+    @pytest.mark.django_db()
+    def test_delete(self, api_client_authorized):
+        """Проверка удаления единственной категории"""
+        category = CategoryFactory.create()
+        url = f'{self.endpoint}{category.id}'
+
+        response = api_client_authorized.delete(url)
+
+        assert json.loads(response.content) == True
