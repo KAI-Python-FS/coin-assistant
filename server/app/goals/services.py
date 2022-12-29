@@ -3,8 +3,8 @@ from typing import Any
 from django.db.models.query import QuerySet
 
 from django.db.models import Q
+from django.core.exceptions import ValidationError
 
-from server.app.base.exceptions import ValidationException
 from server.app.base.services import BaseModelUserFilterCRUDService
 
 from .enums import GoalTypeEnum
@@ -95,8 +95,9 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
             "rule",
         ]
 
-        if set(object_data.keys()) - set(ready_to_update_fields):
-            raise ValidationException()
+        fields_diff = set(object_data.keys()) - set(ready_to_update_fields)
+        if fields_diff:
+            raise ValidationError(f"Переданы поля {fields_diff}, недоступные к обновлению")
 
         return super().update(object_id, **object_data)
 
@@ -184,7 +185,8 @@ class BudgetService(BaseModelUserFilterCRUDService):
             "rule",
         ]
 
-        if set(object_data.keys()) - set(ready_to_update_fields):
-            raise ValidationException()
+        fields_diff = set(object_data.keys()) - set(ready_to_update_fields)
+        if fields_diff:
+            raise ValidationError(f"Переданы поля {fields_diff}, недоступные к обновлению")
 
         return super().update(object_id, **object_data)
