@@ -3,6 +3,7 @@ from typing import Any
 
 import pytest
 
+from django.core.exceptions import ValidationError
 from django.db.models.query import QuerySet
 
 from server.app.operations.enums import OperationTypeEnum
@@ -20,36 +21,6 @@ class TestOperationService:
     @pytest.mark.parametrize(
         "create_params",
         [
-            # Часть параметров дб указано
-            pytest.param(
-                {
-                    "name": None,
-                    "description": None,
-                    "operation_at": None,
-                    "operation_type": None,
-                    "cost": None,
-                    "category": None,
-                },
-                marks=pytest.mark.xfail,
-            ),
-            # Проверка создания операции Пополнения со значением 0
-            pytest.param(
-                {
-                    "name": "Пополнение",
-                    "operation_type": OperationTypeEnum.REFILL,
-                    "cost": 0,
-                },
-                marks=pytest.mark.xfail,
-            ),
-            # Проверка создания операции Пополнения со значением -1
-            pytest.param(
-                {
-                    "name": "Пополнение",
-                    "operation_type": OperationTypeEnum.REFILL,
-                    "cost": -1,
-                },
-                marks=pytest.mark.xfail,
-            ),
             # Проверка создания операции Пополнения
             pytest.param(
                 {
@@ -57,24 +28,6 @@ class TestOperationService:
                     "operation_type": OperationTypeEnum.REFILL,
                     "cost": 1,
                 }
-            ),
-            # Проверка создания операции Списания со значением 0
-            pytest.param(
-                {
-                    "name": "Списание",
-                    "operation_type": OperationTypeEnum.SPENDING,
-                    "cost": 0,
-                },
-                marks=pytest.mark.xfail,
-            ),
-            # Проверка создания операции Списания со значением -1
-            pytest.param(
-                {
-                    "name": "Списание",
-                    "operation_type": OperationTypeEnum.SPENDING,
-                    "cost": -1,
-                },
-                marks=pytest.mark.xfail,
             ),
             # Проверка создания операции Списания
             pytest.param(
@@ -149,6 +102,56 @@ class TestOperationService:
             )
 
             assert current_value == each_create_param_value
+
+    @pytest.mark.django_db(reset_sequences=True)
+    @pytest.mark.parametrize(
+        "create_params",
+        [
+            # Проверка создания операции Списания со значением 0
+            pytest.param(
+                {
+                    "name": "Списание",
+                    "operation_type": OperationTypeEnum.SPENDING,
+                    "cost": 0,
+                },
+            ),
+            # Проверка создания операции Списания со значением -1
+            pytest.param(
+                {
+                    "name": "Списание",
+                    "operation_type": OperationTypeEnum.SPENDING,
+                    "cost": -1,
+                },
+            ),
+            # Проверка создания операции Пополнения со значением 0
+            pytest.param(
+                {
+                    "name": "Пополнение",
+                    "operation_type": OperationTypeEnum.REFILL,
+                    "cost": 0,
+                },
+            ),
+            # Проверка создания операции Пополнения со значением -1
+            pytest.param(
+                {
+                    "name": "Пополнение",
+                    "operation_type": OperationTypeEnum.REFILL,
+                    "cost": -1,
+                },
+            ),
+        ],
+    )
+    def test_create_with_validation_error(
+        self,
+        create_params: dict[str, Any],
+    ):
+        """Тест проверки наличия ошибок валидации при создании операции пользователя"""
+        user = UserFactory.create()
+        _ = CategoryFactory.create()
+
+        service = OperationService(user)
+        with pytest.raises(ValidationError):
+            service.create(**create_params)
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(
