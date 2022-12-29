@@ -352,6 +352,64 @@ class TestOperationService:
             else:
                 assert getattr(result, each_update_param_key) == each_update_param_value
 
+    @pytest.mark.django_db(reset_sequences=True)
+    @pytest.mark.parametrize(
+        "update_params",
+        [
+            pytest.param(
+                {
+                    "cost": 0,
+                },
+                id="cost_equal_to_zero",
+            ),
+            pytest.param(
+                {
+                    "cost": -1,
+                },
+                id="cost_lt_zero",
+            ),
+            pytest.param(
+                {
+                    "cost": 0,
+                    "operation_type": OperationTypeEnum.REFILL,
+                },
+                id="cost_equal_to_zero_operation_type_refill",
+            ),
+            pytest.param(
+                {
+                    "cost": 0,
+                    "operation_type": OperationTypeEnum.SPENDING,
+                },
+                id="cost_equal_to_zero_operation_type_spending",
+            ),
+            pytest.param(
+                {
+                    "cost": -1,
+                    "operation_type": OperationTypeEnum.REFILL,
+                },
+                id="cost_lt_zero_operation_type_refill",
+            ),
+            pytest.param(
+                {
+                    "cost": -1,
+                    "operation_type": OperationTypeEnum.SPENDING,
+                },
+                id="cost_lt_zero_operation_type_spending",
+            ),
+        ]
+    )
+    def test_update_with_validation_error(self, update_params: dict[str, Any]):
+        """Тест проверки обновления данных с возникающей ошибкой валидации"""
+        user = UserFactory()
+        CategoryFactory.create()
+        existing_operation = OperationFactory(
+            user=user,
+        )
+
+        service = OperationService(user=user)
+        with pytest.raises(ValidationError):
+            service.update(existing_operation.id, **update_params)
+
     @pytest.mark.django_db()
     def test_delete(self):
         """Тест проверки удаления записи"""
