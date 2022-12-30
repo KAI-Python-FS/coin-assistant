@@ -36,7 +36,11 @@ class OperationService(BaseModelUserFilterCRUDService):
                     )
                 case "by_categories":
                     filter_condition.add(
-                        Q(category_id__in=each_filter_value),
+                        (
+                            Q(category_id__in=each_filter_value)
+                            if each_filter_value
+                            else Q(category__isnull=True)
+                        ),
                         Q.AND
                     )
                 case "by_operation_start_date":

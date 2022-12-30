@@ -41,7 +41,7 @@ class OperationGeneralView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         service = OperationService(user=request.user)
-        result = service.retrieve_list(**filter_serializer.dict(exclude_none=True))
+        result = service.retrieve_list(**filter_serializer.dict(exclude_unset=True))
 
         return Response(
             data=[
@@ -76,7 +76,7 @@ class OperationConcreteView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         service = OperationService(user=request.user)
-        result = service.update(operation_id, **serializer.dict(exclude_none=True))
+        result = service.update(operation_id, **serializer.dict(exclude_unset=True))
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
