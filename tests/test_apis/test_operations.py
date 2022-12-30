@@ -1,9 +1,11 @@
-
+import datetime
 import json
 
 import pytest
 
 from server.app.operations.enums import OperationTypeEnum
+from tests.utils import get_formatted_datetime
+from tests.factories.category import CategoryFactory
 from tests.factories.operations import OperationFactory
 
 
@@ -21,6 +23,74 @@ class TestOperationEndpoints:
 
         assert response.status_code == 200
         assert len(json.loads(response.content)) == 3
+
+    @pytest.mark.django_db(reset_sequences=True)
+    @pytest.mark.parametrize(
+        "filter_params, expected",
+        [
+            pytest.param(
+                {"by_operation_type": OperationTypeEnum.REFILL},
+                4,
+            ),
+            pytest.param(
+                {"by_operation_type": OperationTypeEnum.SPENDING},
+                5,
+            ),
+            pytest.param(
+                {"by_categories": ""},
+                4,
+            ),
+            pytest.param(
+                {"by_categories": (1,)},
+                5,
+            ),
+            pytest.param({
+                    "by_operation_start_date": get_formatted_datetime(datetime.datetime.now()),
+                },
+                9,
+            ),
+            pytest.param({
+                "by_operation_start_date": (
+                    get_formatted_datetime(datetime.datetime.now() + datetime.timedelta(days=3)),
+                )},
+                5,
+            ),
+            pytest.param({
+                "by_operation_finish_date": (
+                    get_formatted_datetime(datetime.datetime.now() + datetime.timedelta(days=60)),
+                )},
+                9,
+            ),
+            pytest.param({
+                "by_operation_finish_date": (
+                    get_formatted_datetime(datetime.datetime.now() + datetime.timedelta(days=2))
+                )},
+                4,
+            ),
+        ]
+    )
+    def test_list_filter(self, api_client_authorized, api_user, filter_params: dict, expected: int):
+        """Проверка работы фильтров операций пользователя"""
+        existing_categories = CategoryFactory.create_batch(3)
+        OperationFactory.create_batch(
+            4,
+            user=api_user,
+            operation_type=OperationTypeEnum.REFILL,
+            operation_at=datetime.datetime.now(),
+            category=None,
+        )
+        OperationFactory.create_batch(
+            5,
+            user=api_user,
+            operation_type=OperationTypeEnum.SPENDING,
+            category=existing_categories[0],
+            operation_at=datetime.datetime.now() + datetime.timedelta(days=20),
+        )
+
+        response = api_client_authorized.get(self.endpoint, filter_params)
+
+        assert response.status_code == 200
+        assert len(json.loads(response.content)) == expected
 
     @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
