@@ -99,3 +99,57 @@ class TestBudgetEndpoints:
 
         assert response.status_code == 200
         assert json.loads(response.content) == expected
+
+    @pytest.mark.django_db()
+    @pytest.mark.parametrize(
+        "update_params",
+        [
+            {
+                "name": "Новое название бюджета",
+            },
+            {
+                "category": None,
+            },
+            {
+                "value": 45,
+            },
+            {
+                "rule": BudgetRuleEnum.lte,
+            }
+        ]
+    )
+    def test_update(self, api_client_authorized, api_user, update_params):
+        """Проверка обновления Бюджета пользователя"""
+        budget = BudgetFactory.create(
+            user=api_user,
+            **update_params,
+        )
+        url = f'{self.endpoint}{budget.id}'
+        expected = {
+            "id": budget.id,
+            "name": budget.name,
+            "description": budget.description,
+            "category": ({
+                             "id": budget.category.id,
+                             "name": budget.category.name,
+                         } if budget.category
+                         else None
+                         ),
+            "start_date": get_formatted_date(budget.start_date),
+            "finish_date": (
+                get_formatted_date(budget.finish_date) if budget.finish_date
+                else None
+            ),
+            "state": budget.state,
+            "value": budget.value,
+            "rule": budget.rule,
+        }
+
+        response = api_client_authorized.put(
+            url,
+            data=update_params,
+            format="json",
+        )
+
+        assert response.status_code == 200
+        assert json.loads(response.content) == expected
