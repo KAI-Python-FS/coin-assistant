@@ -23,7 +23,7 @@ class TestBudgetEndpoints:
         assert response.status_code == 200
         assert len(json.loads(response.content)) == 3
 
-    @pytest.mark.django_db()
+    @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
         "create_params",
         [
