@@ -100,3 +100,57 @@ class TestGoalRefillEndpoints:
 
         assert response.status_code == 200
         assert json.loads(response.content) == expected
+
+    @pytest.mark.django_db()
+    @pytest.mark.parametrize(
+        "update_params",
+        [
+            {
+                "name": "Новое название цели накопления",
+            },
+            {
+                "category": None,
+            },
+            {
+                "value": 45,
+            },
+            {
+                "rule": GoalRefillRuleEnum.gte,
+            }
+        ]
+    )
+    def test_update(self, api_client_authorized, api_user, update_params):
+        """Проверка обновления Цели накопления пользователя"""
+        goal_refill = GoalRefillFactory.create(
+            user=api_user,
+            **update_params,
+        )
+        url = f'{self.endpoint}{goal_refill.id}'
+        expected = {
+            "id": goal_refill.id,
+            "name": goal_refill.name,
+            "description": goal_refill.description,
+            "category": ({
+                    "id": goal_refill.category.id,
+                    "name": goal_refill.category.name,
+                } if goal_refill.category
+                else None
+            ),
+            "start_date": get_formatted_date(goal_refill.start_date),
+            "finish_date": (
+                get_formatted_date(goal_refill.finish_date) if goal_refill.finish_date
+                else None
+            ),
+            "state": goal_refill.state,
+            "value": goal_refill.value,
+            "rule": goal_refill.rule,
+        }
+
+        response = api_client_authorized.put(
+            url,
+            data=update_params,
+            format="json",
+        )
+
+        assert response.status_code == 200
+        assert json.loads(response.content) == expected
