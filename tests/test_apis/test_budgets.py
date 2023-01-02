@@ -3,20 +3,20 @@ import json
 
 import pytest
 
-from server.app.goals.enums import GoalStateEnum, GoalRefillRuleEnum
-from tests.factories.goals import GoalRefillFactory
+from server.app.goals.enums import BudgetRuleEnum, GoalStateEnum
+from tests.factories.goals import BudgetFactory
 from tests.utils import get_formatted_date
 
 
-class TestGoalRefillEndpoints:
-    """Тест эндпоинта целей накопления пользователя"""
+class TestBudgetEndpoints:
+    """Тест эндпоинта Бюджета пользователя"""
 
-    endpoint = "/goal/"
+    endpoint = "/budget/"
 
     @pytest.mark.django_db()
     def test_list(self, api_client_authorized, api_user):
-        """Проверка получения списка целей накопления пользователя"""
-        GoalRefillFactory.create_batch(3, user=api_user)
+        """Проверка получения списка Бюджетов пользователя"""
+        BudgetFactory.create_batch(3, user=api_user)
 
         response = api_client_authorized.get(self.endpoint)
 
@@ -32,13 +32,13 @@ class TestGoalRefillEndpoints:
                     "name": "тестовое имя",
                     "value": 2,
                     "state": GoalStateEnum.unknown,
-                    "rule": GoalRefillRuleEnum.eq,
+                    "rule": BudgetRuleEnum.eq,
                 },
             ),
         ]
     )
     def test_create(self, api_client_authorized, create_params: dict):
-        """Проверка создания цели накопления"""
+        """Проверка создания Бюджета"""
         expected = {
             "id": 1,
             **create_params,
@@ -69,8 +69,8 @@ class TestGoalRefillEndpoints:
         ]
     )
     def test_retrieve_single(self, api_client_authorized, api_user, create_params: dict):
-        """Проверка получения Цели накопления пользователя"""
-        goal_refill = GoalRefillFactory.create(
+        """Проверка получения Бюджета пользователя"""
+        goal_refill = BudgetFactory.create(
             user=api_user,
             **create_params,
         )
@@ -80,10 +80,10 @@ class TestGoalRefillEndpoints:
             "name": goal_refill.name,
             "description": goal_refill.description,
             "category": ({
-                    "id": goal_refill.category.id,
-                    "name": goal_refill.category.name,
-                } if goal_refill.category
-                else None
+                     "id": goal_refill.category.id,
+                     "name": goal_refill.category.name,
+                 } if goal_refill.category
+                 else None
              ),
             "start_date": get_formatted_date(goal_refill.start_date),
             "finish_date": (
@@ -105,7 +105,7 @@ class TestGoalRefillEndpoints:
         "update_params",
         [
             {
-                "name": "Новое название цели накопления",
+                "name": "Новое название бюджета",
             },
             {
                 "category": None,
@@ -114,35 +114,35 @@ class TestGoalRefillEndpoints:
                 "value": 45,
             },
             {
-                "rule": GoalRefillRuleEnum.gte,
+                "rule": BudgetRuleEnum.lte,
             }
         ]
     )
     def test_update(self, api_client_authorized, api_user, update_params):
-        """Проверка обновления Цели накопления пользователя"""
-        goal_refill = GoalRefillFactory.create(
+        """Проверка обновления Бюджета пользователя"""
+        budget = BudgetFactory.create(
             user=api_user,
             **update_params,
         )
-        url = f'{self.endpoint}{goal_refill.id}'
+        url = f'{self.endpoint}{budget.id}'
         expected = {
-            "id": goal_refill.id,
-            "name": goal_refill.name,
-            "description": goal_refill.description,
+            "id": budget.id,
+            "name": budget.name,
+            "description": budget.description,
             "category": ({
-                    "id": goal_refill.category.id,
-                    "name": goal_refill.category.name,
-                } if goal_refill.category
-                else None
-            ),
-            "start_date": get_formatted_date(goal_refill.start_date),
+                             "id": budget.category.id,
+                             "name": budget.category.name,
+                         } if budget.category
+                         else None
+                         ),
+            "start_date": get_formatted_date(budget.start_date),
             "finish_date": (
-                get_formatted_date(goal_refill.finish_date) if goal_refill.finish_date
+                get_formatted_date(budget.finish_date) if budget.finish_date
                 else None
             ),
-            "state": goal_refill.state,
-            "value": goal_refill.value,
-            "rule": goal_refill.rule,
+            "state": budget.state,
+            "value": budget.value,
+            "rule": budget.rule,
         }
 
         response = api_client_authorized.put(
@@ -156,8 +156,8 @@ class TestGoalRefillEndpoints:
 
     @pytest.mark.django_db()
     def test_delete(self, api_client_authorized, api_user):
-        """Проверка удаления Цели накопления пользователя"""
-        goal_refill = GoalRefillFactory.create(
+        """Проверка удаления бюджета пользователя"""
+        goal_refill = BudgetFactory.create(
             user=api_user,
         )
         url = f'{self.endpoint}{goal_refill.id}'
