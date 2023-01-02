@@ -153,3 +153,15 @@ class TestBudgetEndpoints:
 
         assert response.status_code == 200
         assert json.loads(response.content) == expected
+
+    @pytest.mark.django_db()
+    def test_delete(self, api_client_authorized, api_user):
+        """Проверка удаления бюджета пользователя"""
+        goal_refill = BudgetFactory.create(
+            user=api_user,
+        )
+        url = f'{self.endpoint}{goal_refill.id}'
+
+        response = api_client_authorized.delete(url)
+
+        assert json.loads(response.content) == True
