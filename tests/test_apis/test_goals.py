@@ -4,7 +4,7 @@ import json
 import pytest
 
 from server.app.goals.enums import GoalStateEnum, GoalTypeEnum, GoalRefillRuleEnum
-from tests.utils import get_formatted_datetime
+from tests.utils import get_formatted_datetime, get_formatted_date
 from tests.factories.category import CategoryFactory
 from tests.factories.goals import GoalRefillFactory
 
@@ -56,3 +56,47 @@ class TestGoalRefillEndpoints:
         response_as_json = json.loads(response.content)
         for each_create_param_name, each_create_param_value in expected.items():
             assert response_as_json[each_create_param_name] == each_create_param_value
+
+    @pytest.mark.django_db(reset_sequences=True)
+    @pytest.mark.parametrize(
+        "create_params",
+        [
+            pytest.param({}),
+            pytest.param(
+                {
+                    "finish_date": datetime.datetime.now(),
+                },
+            ),
+        ]
+    )
+    def test_retrieve_single(self, api_client_authorized, api_user, create_params: dict):
+        """Проверка получения Цели накопления пользователя"""
+        goal_refill = GoalRefillFactory.create(
+            user=api_user,
+            **create_params,
+        )
+        url = f'{self.endpoint}{goal_refill.id}'
+        expected = {
+            "id": goal_refill.id,
+            "name": goal_refill.name,
+            "description": goal_refill.description,
+            "category": ({
+                    "id": goal_refill.category.id,
+                    "name": goal_refill.category.name,
+                } if goal_refill.category
+                else None
+             ),
+            "start_date": get_formatted_date(goal_refill.start_date),
+            "finish_date": (
+                get_formatted_date(goal_refill.finish_date) if goal_refill.finish_date
+                else None
+            ),
+            "state": goal_refill.state,
+            "value": goal_refill.value,
+            "rule": goal_refill.rule,
+        }
+
+        response = api_client_authorized.get(url)
+
+        assert response.status_code == 200
+        assert json.loads(response.content) == expected
