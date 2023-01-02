@@ -154,3 +154,15 @@ class TestGoalRefillEndpoints:
 
         assert response.status_code == 200
         assert json.loads(response.content) == expected
+
+    @pytest.mark.django_db()
+    def test_delete(self, api_client_authorized, api_user):
+        """Проверка удаления Цели накопления пользователя"""
+        goal_refill = GoalRefillFactory.create(
+            user=api_user,
+        )
+        url = f'{self.endpoint}{goal_refill.id}'
+
+        response = api_client_authorized.delete(url)
+
+        assert json.loads(response.content) == True
