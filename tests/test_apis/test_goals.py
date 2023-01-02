@@ -3,9 +3,8 @@ import json
 
 import pytest
 
-from server.app.goals.enums import GoalStateEnum, GoalTypeEnum, GoalRefillRuleEnum
-from tests.utils import get_formatted_datetime, get_formatted_date
-from tests.factories.category import CategoryFactory
+from server.app.goals.enums import GoalStateEnum, GoalRefillRuleEnum
+from tests.utils import get_formatted_date
 from tests.factories.goals import GoalRefillFactory
 
 
