@@ -10,7 +10,6 @@ from server.settings.components.common import (
     ALLOWED_HOSTS,
     DATABASES,
     INSTALLED_APPS,
-    MIDDLEWARE,
 )
 
 # Setting the development status:

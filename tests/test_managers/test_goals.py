@@ -10,7 +10,7 @@ class TestGoalManager:
     @pytest.mark.django_db()
     def test_goal_queryset(self):
         """Тест проверки получения целей накопления"""
-        budgets, goal_refills = (
+        _, goal_refills = (
             BudgetFactory.create_batch(size=3),
             GoalRefillFactory.create_batch(size=4),
         )

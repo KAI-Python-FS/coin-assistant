@@ -268,4 +268,4 @@ class TestOperationEndpoints:
 
         response = api_client_authorized.delete(url)
 
-        assert json.loads(response.content) == True
+        assert json.loads(response.content)
