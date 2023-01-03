@@ -131,7 +131,7 @@ class BalanceService:
                 BalanceDetailedByCategoriesCategoryItem(
                     category_id=each_detailed_info["category__pk"],
                     category_name=each_detailed_info["category__name"],
-                    total=round(each_detailed_info["spending"], 2),
+                    total=each_detailed_info["spending"],
                 )
                 for each_detailed_info in detailed_info
                 if each_detailed_info["spending"] is not None
@@ -140,7 +140,7 @@ class BalanceService:
                 BalanceDetailedByCategoriesCategoryItem(
                     category_id=each_detailed_info["category__pk"],
                     category_name=each_detailed_info["category__name"],
-                    total=round(each_detailed_info["refill"], 2),
+                    total=each_detailed_info["refill"],
                 )
                 for each_detailed_info in detailed_info
                 if each_detailed_info["refill"] is not None
