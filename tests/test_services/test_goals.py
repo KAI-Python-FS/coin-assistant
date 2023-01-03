@@ -5,8 +5,7 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.db.models.query import QuerySet
 
-from server.app.goals.enums import (GoalRefillRuleEnum, GoalStateEnum,
-                                    GoalTypeEnum)
+from server.app.goals.enums import GoalRefillRuleEnum, GoalStateEnum, GoalTypeEnum
 from server.app.goals.models import Goal
 from server.app.goals.services import GoalRefillService
 from tests.factories.category import CategoryFactory

@@ -17,8 +17,11 @@ from django.contrib import admin
 from django.urls import include, path
 
 from server.app.goals.urls import budget_patterns, goal_accumulation_patterns
-from server.app.operations.urls import (balance_patterns, category_patterns,
-                                        operation_patterns)
+from server.app.operations.urls import (
+    balance_patterns,
+    category_patterns,
+    operation_patterns,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),

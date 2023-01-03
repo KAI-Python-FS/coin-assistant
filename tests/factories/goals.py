@@ -5,8 +5,12 @@ import factory.fuzzy
 from factory.django import DjangoModelFactory
 from pytz import UTC
 
-from server.app.goals.enums import (BudgetRuleEnum, GoalRefillRuleEnum,
-                                    GoalStateEnum, GoalTypeEnum)
+from server.app.goals.enums import (
+    BudgetRuleEnum,
+    GoalRefillRuleEnum,
+    GoalStateEnum,
+    GoalTypeEnum,
+)
 from server.app.goals.models import Goal
 
 from .category import CategoryFactory

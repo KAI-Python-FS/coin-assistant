@@ -6,8 +6,12 @@ SECURITY WARNING: don't run with debug turned on in production!
 
 from typing import List
 
-from server.settings.components.common import (ALLOWED_HOSTS, DATABASES,
-                                               INSTALLED_APPS, MIDDLEWARE)
+from server.settings.components.common import (
+    ALLOWED_HOSTS,
+    DATABASES,
+    INSTALLED_APPS,
+    MIDDLEWARE,
+)
 
 # Setting the development status:
 

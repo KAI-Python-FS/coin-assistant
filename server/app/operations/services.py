@@ -2,11 +2,15 @@ from typing import Any
 
 from django.db.models import F, Q, Sum
 
-from server.app.base.services import (BaseModelCRUDService,
-                                      BaseModelUserFilterCRUDService)
+from server.app.base.services import (
+    BaseModelCRUDService,
+    BaseModelUserFilterCRUDService,
+)
 
-from .dataclasses import (BalanceDetailedByCategories,
-                          BalanceDetailedByCategoriesCategoryItem)
+from .dataclasses import (
+    BalanceDetailedByCategories,
+    BalanceDetailedByCategoriesCategoryItem,
+)
 from .enums import OperationTypeEnum
 from .models import Category, Operation
 

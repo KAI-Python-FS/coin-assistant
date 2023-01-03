@@ -3,7 +3,9 @@ from typing import Any
 import pytest
 
 from server.app.operations.dataclasses import (
-    BalanceDetailedByCategories, BalanceDetailedByCategoriesCategoryItem)
+    BalanceDetailedByCategories,
+    BalanceDetailedByCategoriesCategoryItem,
+)
 from server.app.operations.enums import OperationTypeEnum
 from server.app.operations.models import Category
 from server.app.operations.services import BalanceService
