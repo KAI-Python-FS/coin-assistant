@@ -25,8 +25,8 @@ class OperationGeneralView(APIView):
         service = OperationService(user=request.user)
         result = service.create(**serializer.dict(exclude_none=True))
 
-        output_deserialized = serializers.OperationCreateOutputSerializer.from_orm(
-            result
+        output_deserialized = (
+            serializers.OperationCreateOutputSerializer.from_orm(result)
         )
 
         return Response(
@@ -47,7 +47,9 @@ class OperationGeneralView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         service = OperationService(user=request.user)
-        result = service.retrieve_list(**filter_serializer.dict(exclude_unset=True))
+        result = service.retrieve_list(
+            **filter_serializer.dict(exclude_unset=True)
+        )
 
         return Response(
             data=[
@@ -70,8 +72,8 @@ class OperationConcreteView(APIView):
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        output_deserialized = serializers.OperationRetrieveOutputSerializer.from_orm(
-            result
+        output_deserialized = (
+            serializers.OperationRetrieveOutputSerializer.from_orm(result)
         )
 
         return Response(
@@ -88,12 +90,14 @@ class OperationConcreteView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         service = OperationService(user=request.user)
-        result = service.update(operation_id, **serializer.dict(exclude_unset=True))
+        result = service.update(
+            operation_id, **serializer.dict(exclude_unset=True)
+        )
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        output_deserialized = serializers.OperationRetrieveOutputSerializer.from_orm(
-            result
+        output_deserialized = (
+            serializers.OperationRetrieveOutputSerializer.from_orm(result)
         )
 
         return Response(

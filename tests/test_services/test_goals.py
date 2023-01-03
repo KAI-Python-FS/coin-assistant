@@ -5,7 +5,11 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.db.models.query import QuerySet
 
-from server.app.goals.enums import GoalRefillRuleEnum, GoalStateEnum, GoalTypeEnum
+from server.app.goals.enums import (
+    GoalRefillRuleEnum,
+    GoalStateEnum,
+    GoalTypeEnum,
+)
 from server.app.goals.models import Goal
 from server.app.goals.services import GoalRefillService
 from tests.factories.category import CategoryFactory
@@ -189,7 +193,9 @@ class TestGoalRefillService:
         service = GoalRefillService(user=user)
         result = service.retrieve_single(goal_id)
 
-        assert isinstance(result, Goal) if result is not None else result is None
+        assert (
+            isinstance(result, Goal) if result is not None else result is None
+        )
         assert result.id == expected if result is not None else result is None
 
     @pytest.mark.django_db(reset_sequences=True)
@@ -201,7 +207,8 @@ class TestGoalRefillService:
                 "description": "интересное описание",
                 "category": 1,
                 "start_date": datetime.date.today(),
-                "finish_date": datetime.date.today() + datetime.timedelta(days=3),
+                "finish_date": datetime.date.today()
+                + datetime.timedelta(days=3),
                 "value": 3,
                 "state": GoalStateEnum.succeed,
                 "rule": GoalRefillRuleEnum.gte,
@@ -228,11 +235,19 @@ class TestGoalRefillService:
         result = service.update(existing_goal.id, **update_params)
 
         assert isinstance(result, Goal)
-        for each_update_param_key, each_update_param_value in update_params.items():
+        for (
+            each_update_param_key,
+            each_update_param_value,
+        ) in update_params.items():
             if each_update_param_key == "category":
-                assert getattr(result, "category_id") == each_update_param_value
+                assert (
+                    getattr(result, "category_id") == each_update_param_value
+                )
             else:
-                assert getattr(result, each_update_param_key) == each_update_param_value
+                assert (
+                    getattr(result, each_update_param_key)
+                    == each_update_param_value
+                )
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(

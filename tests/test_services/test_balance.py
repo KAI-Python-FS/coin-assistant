@@ -333,7 +333,9 @@ class TestBalanceService:
             OperationFactory.create(
                 cost=each_refill_operation_value["value"],
                 category=(
-                    Category.objects.get(pk=category_id) if category_id else None
+                    Category.objects.get(pk=category_id)
+                    if category_id
+                    else None
                 ),
                 user=user,
                 operation_type=OperationTypeEnum.SPENDING,
@@ -343,7 +345,9 @@ class TestBalanceService:
             OperationFactory.create(
                 cost=each_refill_operation_value["value"],
                 category=(
-                    Category.objects.get(pk=category_id) if category_id else None
+                    Category.objects.get(pk=category_id)
+                    if category_id
+                    else None
                 ),
                 operation_type=OperationTypeEnum.REFILL,
                 user=user,

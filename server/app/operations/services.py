@@ -36,7 +36,9 @@ class OperationService(BaseModelUserFilterCRUDService):
         for each_filter_key, each_filter_value in filters.items():
             match each_filter_key:
                 case "by_operation_type":
-                    filter_condition.add(Q(operation_type=each_filter_value), Q.AND)
+                    filter_condition.add(
+                        Q(operation_type=each_filter_value), Q.AND
+                    )
                 case "by_categories":
                     filter_condition.add(
                         (
@@ -47,9 +49,13 @@ class OperationService(BaseModelUserFilterCRUDService):
                         Q.AND,
                     )
                 case "by_operation_start_date":
-                    filter_condition.add(Q(operation_at__gte=each_filter_value), Q.AND)
+                    filter_condition.add(
+                        Q(operation_at__gte=each_filter_value), Q.AND
+                    )
                 case "by_operation_finish_date":
-                    filter_condition.add(Q(operation_at__lte=each_filter_value), Q.AND)
+                    filter_condition.add(
+                        Q(operation_at__lte=each_filter_value), Q.AND
+                    )
                 case _:
                     raise Exception("Неизвестный фильтр")
 
@@ -80,9 +86,12 @@ class BalanceService:
     def retrieve_current_balance(self) -> float:
         """Получение текущего баланса текущего пользователя"""
         balance_qs = Operation.objects.filter(user=self.user).aggregate(
-            refill=Sum("cost", filter=Q(operation_type=OperationTypeEnum.REFILL.value)),
+            refill=Sum(
+                "cost", filter=Q(operation_type=OperationTypeEnum.REFILL.value)
+            ),
             spending=Sum(
-                "cost", filter=Q(operation_type=OperationTypeEnum.SPENDING.value)
+                "cost",
+                filter=Q(operation_type=OperationTypeEnum.SPENDING.value),
             ),
         )
 

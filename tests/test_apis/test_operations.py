@@ -56,7 +56,8 @@ class TestOperationEndpoints:
                 {
                     "by_operation_start_date": (
                         get_formatted_datetime(
-                            datetime.datetime.now() + datetime.timedelta(days=3)
+                            datetime.datetime.now()
+                            + datetime.timedelta(days=3)
                         ),
                     )
                 },
@@ -66,7 +67,8 @@ class TestOperationEndpoints:
                 {
                     "by_operation_finish_date": (
                         get_formatted_datetime(
-                            datetime.datetime.now() + datetime.timedelta(days=60)
+                            datetime.datetime.now()
+                            + datetime.timedelta(days=60)
                         ),
                     )
                 },
@@ -76,7 +78,8 @@ class TestOperationEndpoints:
                 {
                     "by_operation_finish_date": (
                         get_formatted_datetime(
-                            datetime.datetime.now() + datetime.timedelta(days=2)
+                            datetime.datetime.now()
+                            + datetime.timedelta(days=2)
                         )
                     )
                 },
@@ -85,7 +88,11 @@ class TestOperationEndpoints:
         ],
     )
     def test_list_filter(
-        self, api_client_authorized, api_user, filter_params: dict, expected: int
+        self,
+        api_client_authorized,
+        api_user,
+        filter_params: dict,
+        expected: int,
     ):
         """Проверка работы фильтров операций пользователя"""
         existing_categories = CategoryFactory.create_batch(3)
@@ -145,8 +152,14 @@ class TestOperationEndpoints:
         assert response.status_code == 201
         # Проверка наличия переданных значений в ответе
         response_as_json = json.loads(response.content)
-        for each_create_param_name, each_create_param_value in expected.items():
-            assert response_as_json[each_create_param_name] == each_create_param_value
+        for (
+            each_create_param_name,
+            each_create_param_value,
+        ) in expected.items():
+            assert (
+                response_as_json[each_create_param_name]
+                == each_create_param_value
+            )
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(
@@ -168,7 +181,9 @@ class TestOperationEndpoints:
             },
         ],
     )
-    def test_retrieve_single(self, api_client_authorized, api_user, create_params):
+    def test_retrieve_single(
+        self, api_client_authorized, api_user, create_params
+    ):
         """Проверка получения Операции"""
         operation = OperationFactory.create(
             user=api_user,
@@ -181,7 +196,9 @@ class TestOperationEndpoints:
             "description": operation.description,
             "operation_type": operation.operation_type,
             "cost": operation.cost,
-            "operation_at": operation.operation_at.strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+            "operation_at": operation.operation_at.strftime(
+                "%Y-%m-%dT%H:%M:%S.%fZ"
+            ),
             "category": {
                 "id": operation.category.id,
                 "name": operation.category.name,
@@ -219,7 +236,9 @@ class TestOperationEndpoints:
             "description": operation.description,
             "operation_type": operation.operation_type,
             "cost": operation.cost,
-            "operation_at": operation.operation_at.strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+            "operation_at": operation.operation_at.strftime(
+                "%Y-%m-%dT%H:%M:%S.%fZ"
+            ),
             "category": (
                 {
                     "id": operation.category.id,

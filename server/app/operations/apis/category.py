@@ -27,8 +27,8 @@ class CategoryGeneralView(APIView):
 
         result = self.service.create(**serializer.dict())
 
-        output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(
-            result
+        output_deserialized = (
+            serializers.CategoryRetrieveOutputSerializer.from_orm(result)
         )
         return Response(
             data=output_deserialized.dict(),
@@ -62,8 +62,8 @@ class CategoryConcreteView(APIView):
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(
-            result
+        output_deserialized = (
+            serializers.CategoryRetrieveOutputSerializer.from_orm(result)
         )
 
         return Response(
@@ -86,8 +86,8 @@ class CategoryConcreteView(APIView):
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(
-            result
+        output_deserialized = (
+            serializers.CategoryRetrieveOutputSerializer.from_orm(result)
         )
         return Response(
             data=output_deserialized.dict(),

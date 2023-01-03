@@ -22,9 +22,66 @@ flake8 = "^6.0.0"
 flake8-bandit = "^4.1.1"
 isort = "^5.11.4"
 mypy = "^0.991"
+pylint = "^2.15.9"
+pylint-pytest = "^1.1.2"
 
 [tool.poetry.dev-dependencies]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+skip_gitignore = true
+line_length = 79
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.darker]
+diff = true
+check = true
+isort = true
+line-length = 79
+log_level = "INFO"
+lint = [
+    "pylint"
+]
+
+[tool.pylint.MASTER]
+ignore-paths = [
+    "tests",
+]
+load-plugins=[
+    "pylint_pytest",
+    "pylint.extensions.code_style",
+    "pylint.extensions.typing",
+    "pylint.extensions.mccabe",
+    "pylint.extensions.broad_try_clause",
+    "pylint.extensions.confusing_elif",
+    "pylint.extensions.eq_without_hash",
+    "pylint.extensions.private_import",
+    "pylint.extensions.overlapping_exceptions",
+    "pylint.extensions.set_membership",
+]
+
+[tool.pylint.DESIGN]
+max-complexity=10
+
+[tool.pylint.SIMILARITIES]
+min-similarity-lines=4
+ignore-comments="yes"
+ignore-docstrings="yes"
+ignore-imports="yes"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--maxfail=1 -v -s --cov=./ --darker --disable-pytest-warnings"
+testpaths = [
+    "tests",
+]
+

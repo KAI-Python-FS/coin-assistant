@@ -27,7 +27,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="goal",
             name="description",
-            field=models.TextField(blank=True, null=True, verbose_name="Описание"),
+            field=models.TextField(
+                blank=True, null=True, verbose_name="Описание"
+            ),
         ),
         migrations.AlterField(
             model_name="goal",

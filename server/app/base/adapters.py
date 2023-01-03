@@ -21,7 +21,9 @@ def query_parameters_to_dict(
     params_as_dict = {}
     for each_key, each_value in query_dict.items():
         if each_key in list_params:
-            query_parameter_value = query_dict.getlist(each_key) if each_value else None
+            query_parameter_value = (
+                query_dict.getlist(each_key) if each_value else None
+            )
         else:
             query_parameter_value = each_value
 

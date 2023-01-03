@@ -10,6 +10,21 @@ python-versions = ">=3.7"
 tests = ["mypy (>=0.800)", "pytest-asyncio", "pytest"]
 
 [[package]]
+name = "astroid"
+version = "2.12.13"
+description = "An abstract syntax tree for Python with inference support."
+category = "main"
+optional = false
+python-versions = ">=3.7.2"
+
+[package.dependencies]
+lazy-object-proxy = ">=1.4.0"
+wrapt = [
+    {version = ">=1.11,<2", markers = "python_version < \"3.11\""},
+    {version = ">=1.14,<2", markers = "python_version >= \"3.11\""},
+]
+
+[[package]]
 name = "attrs"
 version = "22.2.0"
 description = "Classes Without Boilerplate"
@@ -101,6 +116,17 @@ color = ["Pygments (>=2.4.0)"]
 isort = ["isort (>=5.0.1)"]
 release = ["airium (>=0.2.3)", "click (>=8.0.0)", "defusedxml (>=0.7.1)", "requests-cache (>=0.7)"]
 test = ["airium (>=0.2.3)", "black (>=21.7b1)", "cryptography (>=3.3.2)", "defusedxml (>=0.7.1)", "isort (>=5.0.1)", "pygments", "pytest (>=6.2.0)", "pytest-darker", "pytest-kwparametrize (>=0.0.3)", "regex (>=2021.4.4)", "requests-cache (>=0.7)", "ruamel.yaml (>=0.17.21)", "twine (>=2.0.0)", "types-requests (>=2.27.9)", "types-toml (>=0.10.4)", "urllib3 (>=1.25.9)", "wheel (>=0.21.0)"]
+
+[[package]]
+name = "dill"
+version = "0.3.6"
+description = "serialize all of python"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+graph = ["objgraph (>=1.7.2)"]
 
 [[package]]
 name = "django"
@@ -257,6 +283,14 @@ pipfile-deprecated-finder = ["pipreqs", "requirementslib"]
 plugins = ["setuptools"]
 
 [[package]]
+name = "lazy-object-proxy"
+version = "1.8.0"
+description = "A fast and thorough lazy object proxy."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
 name = "mccabe"
 version = "0.7.0"
 description = "McCabe checker, plugin for flake8"
@@ -377,6 +411,43 @@ description = "passive checker of Python programs"
 category = "main"
 optional = false
 python-versions = ">=3.6"
+
+[[package]]
+name = "pylint"
+version = "2.15.9"
+description = "python code static checker"
+category = "main"
+optional = false
+python-versions = ">=3.7.2"
+
+[package.dependencies]
+astroid = ">=2.12.13,<=2.14.0-dev0"
+colorama = {version = ">=0.4.5", markers = "sys_platform == \"win32\""}
+dill = [
+    {version = ">=0.2", markers = "python_version < \"3.11\""},
+    {version = ">=0.3.6", markers = "python_version >= \"3.11\""},
+]
+isort = ">=4.2.5,<6"
+mccabe = ">=0.6,<0.8"
+platformdirs = ">=2.2.0"
+tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
+tomlkit = ">=0.10.1"
+
+[package.extras]
+spelling = ["pyenchant (>=3.2,<4.0)"]
+testutils = ["gitpython (>3)"]
+
+[[package]]
+name = "pylint-pytest"
+version = "1.1.2"
+description = "A Pylint plugin to suppress pytest-related false positives."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+pylint = "*"
+pytest = ">=4.6"
 
 [[package]]
 name = "pytest"
@@ -500,6 +571,14 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "tomlkit"
+version = "0.11.6"
+description = "Style preserving TOML library"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "typing-extensions"
 version = "4.4.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -515,19 +594,29 @@ category = "main"
 optional = false
 python-versions = ">=2"
 
+[[package]]
+name = "wrapt"
+version = "1.14.1"
+description = "Module for decorators, wrappers and monkey patching."
+category = "main"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "30aa8d92537b77e6375f91df094204ef302474cb185c0de8c7ea48efa4fa12d2"
+content-hash = "fff7d2f69217b32232864e6febbaf593992d9829788a7d5aada7cdf73899a980"
 
 [metadata.files]
 asgiref = []
+astroid = []
 attrs = []
 bandit = []
 black = []
 click = []
 colorama = []
 darker = []
+dill = []
 django = []
 django-cors-headers = []
 django-split-settings = []
@@ -547,6 +636,7 @@ iniconfig = [
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
 ]
 isort = []
+lazy-object-proxy = []
 mccabe = []
 mypy = []
 mypy-extensions = [
@@ -565,6 +655,8 @@ psycopg2-binary = []
 pycodestyle = []
 pydantic = []
 pyflakes = []
+pylint = []
+pylint-pytest = []
 pytest = []
 pytest-django = []
 python-dateutil = [
@@ -629,5 +721,7 @@ tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
+tomlkit = []
 typing-extensions = []
 tzdata = []
+wrapt = []

@@ -91,7 +91,10 @@ class TestOperationService:
         assert Operation.objects.count() == 1
 
         # Проверка атрибутов
-        for each_create_param_name, each_create_param_value in create_params.items():
+        for (
+            each_create_param_name,
+            each_create_param_value,
+        ) in create_params.items():
             current_value = (
                 getattr(result, each_create_param_name)
                 if each_create_param_name != "category"
@@ -158,10 +161,16 @@ class TestOperationService:
             (None, 0),
         ],
     )
-    def test_retrieve_list_filter_by_user(self, user_id: int | None, expected: int):
+    def test_retrieve_list_filter_by_user(
+        self, user_id: int | None, expected: int
+    ):
         """Тест проверки фильтрации данных по пользователю"""
         user = UserFactory.create()
-        _ = OperationFactory.create(user=user) if user_id else OperationFactory.create()
+        _ = (
+            OperationFactory.create(user=user)
+            if user_id
+            else OperationFactory.create()
+        )
 
         service = OperationService(user=user)
         operations = service.retrieve_list()
@@ -222,7 +231,9 @@ class TestOperationService:
             ),
         ],
     )
-    def test_retrieve_list_filter(self, filter_params: dict[str, Any], expected: int):
+    def test_retrieve_list_filter(
+        self, filter_params: dict[str, Any], expected: int
+    ):
         """Тест проверки данных по передаваемым параметрам"""
         user, category = UserFactory.create(), CategoryFactory.create()
         _ = OperationFactory.create_batch(
@@ -332,11 +343,19 @@ class TestOperationService:
         result = service.update(existing_operation.id, **update_params)
 
         assert isinstance(result, Operation)
-        for each_update_param_key, each_update_param_value in update_params.items():
+        for (
+            each_update_param_key,
+            each_update_param_value,
+        ) in update_params.items():
             if each_update_param_key == "category":
-                assert getattr(result, "category_id") == each_update_param_value
+                assert (
+                    getattr(result, "category_id") == each_update_param_value
+                )
             else:
-                assert getattr(result, each_update_param_key) == each_update_param_value
+                assert (
+                    getattr(result, each_update_param_key)
+                    == each_update_param_value
+                )
 
     @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(

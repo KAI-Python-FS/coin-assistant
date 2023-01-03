@@ -53,8 +53,14 @@ class TestBudgetEndpoints:
         assert response.status_code == 201
         # Проверка наличия переданных значений в ответе
         response_as_json = json.loads(response.content)
-        for each_create_param_name, each_create_param_value in expected.items():
-            assert response_as_json[each_create_param_name] == each_create_param_value
+        for (
+            each_create_param_name,
+            each_create_param_value,
+        ) in expected.items():
+            assert (
+                response_as_json[each_create_param_name]
+                == each_create_param_value
+            )
 
     @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
@@ -144,7 +150,9 @@ class TestBudgetEndpoints:
             ),
             "start_date": get_formatted_date(budget.start_date),
             "finish_date": (
-                get_formatted_date(budget.finish_date) if budget.finish_date else None
+                get_formatted_date(budget.finish_date)
+                if budget.finish_date
+                else None
             ),
             "state": budget.state,
             "value": budget.value,

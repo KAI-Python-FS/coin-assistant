@@ -9,7 +9,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("operations", "0002_remove_operation_category_alter_operation_user_and_more"),
+        (
+            "operations",
+            "0002_remove_operation_category_alter_operation_user_and_more",
+        ),
         ("goals", "0001_initial"),
     ]
 
@@ -33,7 +36,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="goal",
             name="finish_date",
-            field=models.DateField(null=True, verbose_name="Дата окончания цели"),
+            field=models.DateField(
+                null=True, verbose_name="Дата окончания цели"
+            ),
         ),
         migrations.AddField(
             model_name="goal",

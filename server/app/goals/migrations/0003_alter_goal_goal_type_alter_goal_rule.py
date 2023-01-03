@@ -6,7 +6,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("goals", "0002_goal_category_goal_description_goal_finish_date_and_more"),
+        (
+            "goals",
+            "0002_goal_category_goal_description_goal_finish_date_and_more",
+        ),
     ]
 
     operations = [

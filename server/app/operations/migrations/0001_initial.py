@@ -30,7 +30,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(max_length=64, verbose_name="Название категории"),
+                    models.CharField(
+                        max_length=64, verbose_name="Название категории"
+                    ),
                 ),
             ],
             options={
@@ -50,21 +52,30 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("name", models.TextField(verbose_name="Наименование операции")),
+                (
+                    "name",
+                    models.TextField(verbose_name="Наименование операции"),
+                ),
                 (
                     "description",
-                    models.TextField(null=True, verbose_name="Описание операции"),
+                    models.TextField(
+                        null=True, verbose_name="Описание операции"
+                    ),
                 ),
                 (
                     "operation_at",
                     models.DateTimeField(
-                        default=datetime.datetime.now, verbose_name="Дата операции"
+                        default=datetime.datetime.now,
+                        verbose_name="Дата операции",
                     ),
                 ),
                 (
                     "operation_type",
                     models.CharField(
-                        choices=[("Трата", "Spending"), ("Пополнение", "Refill")],
+                        choices=[
+                            ("Трата", "Spending"),
+                            ("Пополнение", "Refill"),
+                        ],
                         max_length=64,
                         verbose_name="Тип операции",
                     ),

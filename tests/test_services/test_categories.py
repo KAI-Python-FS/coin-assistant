@@ -72,8 +72,14 @@ class TestCategoryService:
         service = CategoryService()
         result = service.update(existing_category.id, **update_params)
 
-        for each_update_param_key, each_update_param_value in update_params.items():
-            assert getattr(result, each_update_param_key) == each_update_param_value
+        for (
+            each_update_param_key,
+            each_update_param_value,
+        ) in update_params.items():
+            assert (
+                getattr(result, each_update_param_key)
+                == each_update_param_value
+            )
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(

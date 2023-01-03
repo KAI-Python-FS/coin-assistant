@@ -81,7 +81,9 @@ class BaseModelCRUDService(InterfaceCRUDService):
 
         for update_field_name, update_value in object_data.items():
             try:
-                model_update_field = self.model._meta.get_field(update_field_name)
+                model_update_field = self.model._meta.get_field(
+                    update_field_name
+                )
             except FieldDoesNotExist:
                 break
 

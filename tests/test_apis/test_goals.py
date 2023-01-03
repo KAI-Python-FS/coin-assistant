@@ -53,8 +53,14 @@ class TestGoalRefillEndpoints:
         assert response.status_code == 201
         # Проверка наличия переданных значений в ответе
         response_as_json = json.loads(response.content)
-        for each_create_param_name, each_create_param_value in expected.items():
-            assert response_as_json[each_create_param_name] == each_create_param_value
+        for (
+            each_create_param_name,
+            each_create_param_value,
+        ) in expected.items():
+            assert (
+                response_as_json[each_create_param_name]
+                == each_create_param_value
+            )
 
     @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
