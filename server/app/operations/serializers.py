@@ -105,7 +105,7 @@ class OperationUpdateInputSerializer(BaseModel):
 class BalanceDetailedCategoryOutputSerializer(BaseModel):
     """Сериализатор исходящих детализированных данных по одной Категории"""
 
-    category_id: str | None
+    category_id: int | None
     category_name: str | None
     total: float
 
