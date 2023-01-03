@@ -5,7 +5,6 @@ from django.db import models
 
 from server.app.goals import enums
 
-
 User = get_user_model()
 
 

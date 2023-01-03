@@ -4,9 +4,9 @@ import json
 import pytest
 
 from server.app.operations.enums import OperationTypeEnum
-from tests.utils import get_formatted_datetime
 from tests.factories.category import CategoryFactory
 from tests.factories.operations import OperationFactory
+from tests.utils import get_formatted_datetime
 
 
 class TestOperationEndpoints:

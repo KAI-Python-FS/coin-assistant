@@ -6,7 +6,6 @@ from django.db import models
 from .enums import OperationTypeEnum
 from .validation import validate_operation_cost
 
-
 User = get_user_model()
 
 

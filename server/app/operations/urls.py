@@ -1,14 +1,8 @@
 from django.urls import path
 
-from .apis import (
-    BalanceCurrentView,
-    BalanceDetailedView,
-    CategoryGeneralView,
-    CategoryConcreteView,
-    OperationGeneralView,
-    OperationConcreteView,
-)
-
+from .apis import (BalanceCurrentView, BalanceDetailedView,
+                   CategoryConcreteView, CategoryGeneralView,
+                   OperationConcreteView, OperationGeneralView)
 
 category_patterns = [
     path("", CategoryGeneralView.as_view(), name="category"),

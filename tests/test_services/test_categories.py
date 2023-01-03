@@ -1,7 +1,6 @@
 from typing import Any
 
 import pytest
-
 from django.core.exceptions import ValidationError
 
 from server.app.operations.models import Category

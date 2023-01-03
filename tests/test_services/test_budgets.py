@@ -1,13 +1,11 @@
 import datetime
-
 from typing import Any
 
 import pytest
-
 from django.core.exceptions import ValidationError
 from django.db.models.query import QuerySet
 
-from server.app.goals.enums import BudgetRuleEnum, GoalTypeEnum, GoalStateEnum
+from server.app.goals.enums import BudgetRuleEnum, GoalStateEnum, GoalTypeEnum
 from server.app.goals.models import Goal
 from server.app.goals.services import BudgetService
 from tests.factories.category import CategoryFactory

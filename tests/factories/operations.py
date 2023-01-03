@@ -2,7 +2,6 @@ import datetime
 
 import factory
 import factory.fuzzy
-
 from factory.django import DjangoModelFactory
 from pytz import UTC
 

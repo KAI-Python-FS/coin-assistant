@@ -1,12 +1,11 @@
 from dataclasses import asdict
 
-
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ..services import BalanceService
 from .. import serializers
+from ..services import BalanceService
 
 
 class BalanceCurrentView(APIView):

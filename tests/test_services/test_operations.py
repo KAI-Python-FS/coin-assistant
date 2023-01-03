@@ -2,7 +2,6 @@ import datetime
 from typing import Any
 
 import pytest
-
 from django.core.exceptions import ValidationError
 from django.db.models.query import QuerySet
 
