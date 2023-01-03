@@ -68,6 +68,9 @@ jobs:
         version: "~=1.6.1"
         lint: "flake8,pylint==2.13.1"
 
+    - name: Run linters
+      run: poetry run flake8
+
     - name: Run migrations
       run: poetry run python manage.py migrate
 
