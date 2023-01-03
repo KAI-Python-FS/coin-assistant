@@ -1,10 +1,8 @@
 import datetime
 
-from pydantic import BaseModel
-from rest_framework import serializers
+from pydantic import BaseModel, validator
 
 from .enums import OperationTypeEnum
-from .models import Category, Operation
 
 
 class BaseCategorySerializer(BaseModel):
@@ -105,9 +103,14 @@ class OperationUpdateInputSerializer(BaseModel):
 class BalanceDetailedCategoryOutputSerializer(BaseModel):
     """Сериализатор исходящих детализированных данных по одной Категории"""
 
-    category_id: str | None
+    category_id: int | None
     category_name: str | None
     total: float
+
+    @validator("total")
+    def round_total(cls, v):
+        """Округляет баланс"""
+        return round(v, 2)
 
 
 class BalanceDetailedOutputSerializer(BaseModel):
@@ -116,3 +119,8 @@ class BalanceDetailedOutputSerializer(BaseModel):
     spending: list[BalanceDetailedCategoryOutputSerializer]
     refill: list[BalanceDetailedCategoryOutputSerializer]
     balance: float
+
+    @validator("balance")
+    def round_balance(cls, v):
+        """Округляет баланс"""
+        return round(v, 2)
