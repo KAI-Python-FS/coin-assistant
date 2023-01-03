@@ -20,11 +20,11 @@ DEBUG = True
 CORS_ORIGIN_ALLOW_ALL = True
 
 ALLOWED_HOSTS += [
-    'localhost',
-    '0.0.0.0',  # noqa: S104
-    '127.0.0.1',
-    '[::1]',
-    '29d1-94-180-176-227.ngrok.io',
+    "localhost",
+    "0.0.0.0",  # noqa: S104
+    "127.0.0.1",
+    "[::1]",
+    "29d1-94-180-176-227.ngrok.io",
 ]
 
 
@@ -43,4 +43,4 @@ STATICFILES_DIRS: List[str] = []
 
 # Disable persistent DB connections
 # https://docs.djangoproject.com/en/3.2/ref/databases/#caveats
-DATABASES['default']['CONN_MAX_AGE'] = 0
+DATABASES["default"]["CONN_MAX_AGE"] = 0

@@ -44,32 +44,49 @@ class TestOperationEndpoints:
                 {"by_categories": (1,)},
                 5,
             ),
-            pytest.param({
-                    "by_operation_start_date": get_formatted_datetime(datetime.datetime.now()),
+            pytest.param(
+                {
+                    "by_operation_start_date": get_formatted_datetime(
+                        datetime.datetime.now()
+                    ),
                 },
                 9,
             ),
-            pytest.param({
-                "by_operation_start_date": (
-                    get_formatted_datetime(datetime.datetime.now() + datetime.timedelta(days=3)),
-                )},
+            pytest.param(
+                {
+                    "by_operation_start_date": (
+                        get_formatted_datetime(
+                            datetime.datetime.now() + datetime.timedelta(days=3)
+                        ),
+                    )
+                },
                 5,
             ),
-            pytest.param({
-                "by_operation_finish_date": (
-                    get_formatted_datetime(datetime.datetime.now() + datetime.timedelta(days=60)),
-                )},
+            pytest.param(
+                {
+                    "by_operation_finish_date": (
+                        get_formatted_datetime(
+                            datetime.datetime.now() + datetime.timedelta(days=60)
+                        ),
+                    )
+                },
                 9,
             ),
-            pytest.param({
-                "by_operation_finish_date": (
-                    get_formatted_datetime(datetime.datetime.now() + datetime.timedelta(days=2))
-                )},
+            pytest.param(
+                {
+                    "by_operation_finish_date": (
+                        get_formatted_datetime(
+                            datetime.datetime.now() + datetime.timedelta(days=2)
+                        )
+                    )
+                },
                 4,
             ),
-        ]
+        ],
     )
-    def test_list_filter(self, api_client_authorized, api_user, filter_params: dict, expected: int):
+    def test_list_filter(
+        self, api_client_authorized, api_user, filter_params: dict, expected: int
+    ):
         """Проверка работы фильтров операций пользователя"""
         existing_categories = CategoryFactory.create_batch(3)
         OperationFactory.create_batch(
@@ -110,7 +127,7 @@ class TestOperationEndpoints:
                     "cost": 3,
                 },
             ),
-        ]
+        ],
     )
     def test_create(self, api_client_authorized, create_params: dict):
         """Проверка создания Операции"""
@@ -149,7 +166,7 @@ class TestOperationEndpoints:
                 "operation_type": OperationTypeEnum.SPENDING,
                 "category": None,
             },
-        ]
+        ],
     )
     def test_retrieve_single(self, api_client_authorized, api_user, create_params):
         """Проверка получения Операции"""
@@ -157,7 +174,7 @@ class TestOperationEndpoints:
             user=api_user,
             **create_params,
         )
-        url = f'{self.endpoint}{operation.id}'
+        url = f"{self.endpoint}{operation.id}"
         expected = {
             "id": operation.id,
             "name": operation.name,
@@ -168,7 +185,9 @@ class TestOperationEndpoints:
             "category": {
                 "id": operation.category.id,
                 "name": operation.category.name,
-            } if operation.category else None,
+            }
+            if operation.category
+            else None,
         }
 
         response = api_client_authorized.get(url)
@@ -186,14 +205,14 @@ class TestOperationEndpoints:
             {
                 "category": None,
             },
-        ]
+        ],
     )
     def test_update(self, api_client_authorized, api_user, update_params):
         """Проверка обновления Операции"""
         operation = OperationFactory.create(
             user=api_user,
         )
-        url = f'{self.endpoint}{operation.id}'
+        url = f"{self.endpoint}{operation.id}"
         expected = {
             "id": operation.id,
             "name": update_params.get("name") or operation.name,
@@ -201,10 +220,12 @@ class TestOperationEndpoints:
             "operation_type": operation.operation_type,
             "cost": operation.cost,
             "operation_at": operation.operation_at.strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
-            "category": ({
+            "category": (
+                {
                     "id": operation.category.id,
                     "name": operation.category.name,
-                } if "category" not in update_params.keys()
+                }
+                if "category" not in update_params.keys()
                 else None
             ),
         }
@@ -224,7 +245,7 @@ class TestOperationEndpoints:
         operation = OperationFactory.create(
             user=api_user,
         )
-        url = f'{self.endpoint}{operation.id}'
+        url = f"{self.endpoint}{operation.id}"
 
         response = api_client_authorized.delete(url)
 

@@ -7,13 +7,16 @@ import server.app.operations.validation
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('operations', '0002_remove_operation_category_alter_operation_user_and_more'),
+        ("operations", "0002_remove_operation_category_alter_operation_user_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='operation',
-            name='cost',
-            field=models.FloatField(validators=[server.app.operations.validation.validate_operation_cost], verbose_name='Стоимость'),
+            model_name="operation",
+            name="cost",
+            field=models.FloatField(
+                validators=[server.app.operations.validation.validate_operation_cost],
+                verbose_name="Стоимость",
+            ),
         ),
     ]

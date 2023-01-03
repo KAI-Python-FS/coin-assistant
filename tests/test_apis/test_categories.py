@@ -1,4 +1,3 @@
-
 import json
 
 import pytest
@@ -44,7 +43,7 @@ class TestCategoryEndpoints:
     def test_retrieve_single(self, api_client_authorized):
         """Проверка получения единственной категории"""
         category = CategoryFactory.create()
-        url = f'{self.endpoint}{category.id}'
+        url = f"{self.endpoint}{category.id}"
 
         response = api_client_authorized.get(url)
 
@@ -58,7 +57,7 @@ class TestCategoryEndpoints:
     def test_update(self, api_client_authorized):
         """Проверка обновления единственной категории"""
         category = CategoryFactory.create()
-        url = f'{self.endpoint}{category.id}'
+        url = f"{self.endpoint}{category.id}"
         input_params = {
             "name": "Тест2",
         }
@@ -79,7 +78,7 @@ class TestCategoryEndpoints:
     def test_delete(self, api_client_authorized):
         """Проверка удаления единственной категории"""
         category = CategoryFactory.create()
-        url = f'{self.endpoint}{category.id}'
+        url = f"{self.endpoint}{category.id}"
 
         response = api_client_authorized.delete(url)
 

@@ -17,7 +17,9 @@ category_patterns = [
 
 operation_patterns = [
     path("", OperationGeneralView.as_view(), name="operation"),
-    path("<int:operation_id>", OperationConcreteView.as_view(), name="concrete_operation"),
+    path(
+        "<int:operation_id>", OperationConcreteView.as_view(), name="concrete_operation"
+    ),
 ]
 
 balance_patterns = [

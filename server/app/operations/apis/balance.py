@@ -1,4 +1,3 @@
-
 from dataclasses import asdict
 
 
@@ -34,11 +33,15 @@ class BalanceDetailedView(APIView):
         output_deserialized = serializers.BalanceDetailedOutputSerializer(
             balance=result.balance,
             refill=[
-                serializers.BalanceDetailedCategoryOutputSerializer(**asdict(each_refill))
+                serializers.BalanceDetailedCategoryOutputSerializer(
+                    **asdict(each_refill)
+                )
                 for each_refill in result.refill
             ],
             spending=[
-                serializers.BalanceDetailedCategoryOutputSerializer(**asdict(each_spending))
+                serializers.BalanceDetailedCategoryOutputSerializer(
+                    **asdict(each_spending)
+                )
                 for each_spending in result.spending
             ],
         )

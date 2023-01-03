@@ -77,12 +77,9 @@ class TestOperationService:
                     "category": None,
                 }
             ),
-        ]
+        ],
     )
-    def test_create(
-        self,
-        create_params: dict[str, Any]
-    ):
+    def test_create(self, create_params: dict[str, Any]):
         """Тест проверки создания операции пользователя"""
         user = UserFactory.create()
         _ = CategoryFactory.create()
@@ -97,7 +94,8 @@ class TestOperationService:
         # Проверка атрибутов
         for each_create_param_name, each_create_param_value in create_params.items():
             current_value = (
-                getattr(result, each_create_param_name) if each_create_param_name != "category"
+                getattr(result, each_create_param_name)
+                if each_create_param_name != "category"
                 else getattr(result, "category_id")
             )
 
@@ -159,15 +157,12 @@ class TestOperationService:
         [
             (1, 1),
             (None, 0),
-        ]
+        ],
     )
     def test_retrieve_list_filter_by_user(self, user_id: int | None, expected: int):
         """Тест проверки фильтрации данных по пользователю"""
         user = UserFactory.create()
-        _ = (
-            OperationFactory.create(user=user) if user_id
-            else OperationFactory.create()
-        )
+        _ = OperationFactory.create(user=user) if user_id else OperationFactory.create()
 
         service = OperationService(user=user)
         operations = service.retrieve_list()
@@ -180,55 +175,53 @@ class TestOperationService:
         "filter_params, expected",
         [
             pytest.param(
-                {
-                    "by_categories":  (1, )
-                },
+                {"by_categories": (1,)},
                 2,
                 id="filter_by_category",
             ),
             pytest.param(
-                {
-                    "by_operation_type": OperationTypeEnum.REFILL
-                },
+                {"by_operation_type": OperationTypeEnum.REFILL},
                 2,
                 id="filter_by_operation_type_refill",
             ),
             pytest.param(
-                {
-                    "by_operation_type": OperationTypeEnum.SPENDING
-                },
+                {"by_operation_type": OperationTypeEnum.SPENDING},
                 3,
                 id="filter_by_operation_type_spending",
             ),
             pytest.param(
                 {
-                    "by_operation_start_date": datetime.date.today() + datetime.timedelta(days=360),
+                    "by_operation_start_date": datetime.date.today()
+                    + datetime.timedelta(days=360),
                 },
                 0,
                 id="filter_by_operation_start_date_next_date",
             ),
             pytest.param(
                 {
-                    "by_operation_start_date": datetime.date.today() - datetime.timedelta(days=10),
+                    "by_operation_start_date": datetime.date.today()
+                    - datetime.timedelta(days=10),
                 },
                 5,
                 id="filter_by_operation_start_date_current_date",
             ),
             pytest.param(
                 {
-                    "by_operation_finish_date": datetime.date.today() + datetime.timedelta(days=360),
+                    "by_operation_finish_date": datetime.date.today()
+                    + datetime.timedelta(days=360),
                 },
                 5,
                 id="filter_by_operation_finish_date_current_date",
             ),
             pytest.param(
                 {
-                    "by_operation_finish_date": datetime.date.today() + datetime.timedelta(days=3),
+                    "by_operation_finish_date": datetime.date.today()
+                    + datetime.timedelta(days=3),
                 },
                 2,
                 id="filter_by_operation_finish_date_next_date",
             ),
-        ]
+        ],
     )
     def test_retrieve_list_filter(self, filter_params: dict[str, Any], expected: int):
         """Тест проверки данных по передаваемым параметрам"""
@@ -265,7 +258,7 @@ class TestOperationService:
         [
             pytest.param(1, 1, id="operation_user"),
             pytest.param(4, None, id="operation_user_another_user"),
-        ]
+        ],
     )
     def test_retrieve_single(self, operation_id: int, expected: int | None):
         """Тест проверки получения единственной записи"""
@@ -278,14 +271,8 @@ class TestOperationService:
         service = OperationService(user=user)
         result = service.retrieve_single(operation_id)
 
-        assert (
-            isinstance(result, Operation) if result
-            else result is None
-        )
-        assert (
-            result.id == expected if result is not None
-            else result is None
-        )
+        assert isinstance(result, Operation) if result else result is None
+        assert result.id == expected if result is not None else result is None
 
     @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
@@ -329,7 +316,7 @@ class TestOperationService:
                 },
                 id="update_operation_spending_category",
             ),
-        ]
+        ],
     )
     def test_update(
         self,
@@ -396,7 +383,7 @@ class TestOperationService:
                 },
                 id="cost_lt_zero_operation_type_spending",
             ),
-        ]
+        ],
     )
     def test_update_with_validation_error(self, update_params: dict[str, Any]):
         """Тест проверки обновления данных с возникающей ошибкой валидации"""

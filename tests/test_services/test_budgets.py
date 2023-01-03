@@ -1,4 +1,3 @@
-
 import datetime
 
 from typing import Any
@@ -29,9 +28,9 @@ class TestBudgetService:
                     "name": "Тест",
                     "value": 1,
                 },
-                id="minimals_params"
+                id="minimals_params",
             ),
-        ]
+        ],
     )
     def test_create(
         self,
@@ -59,7 +58,7 @@ class TestBudgetService:
                 },
                 id="no_state",
             ),
-        ]
+        ],
     )
     def test_create_default_type(
         self,
@@ -93,53 +92,52 @@ class TestBudgetService:
     @pytest.mark.parametrize(
         "filter_params, expected",
         [
+            ({"by_categories": (1,)}, 2),
             (
-                    {
-                        "by_categories": (1,)
-                    },
-                    2
+                {
+                    "by_state": GoalStateEnum.working,
+                },
+                2,
             ),
             (
-                    {
-                        "by_state": GoalStateEnum.working,
-                    },
-                    2
+                {
+                    "by_start_date": datetime.date.today()
+                    + datetime.timedelta(days=360),
+                },
+                0,
             ),
             (
-                    {
-                        "by_start_date": datetime.date.today() + datetime.timedelta(days=360),
-                    },
-                    0,
+                {
+                    "by_start_date": datetime.date.today()
+                    - datetime.timedelta(days=10),
+                },
+                5,
             ),
             (
-                    {
-                        "by_start_date": datetime.date.today() - datetime.timedelta(days=10),
-                    },
-                    5,
+                {
+                    "by_finish_date": datetime.date.today()
+                    + datetime.timedelta(days=360),
+                },
+                5,
             ),
             (
-                    {
-                        "by_finish_date": datetime.date.today() + datetime.timedelta(days=360),
-                    },
-                    5,
+                {
+                    "by_finish_date": datetime.date.today()
+                    + datetime.timedelta(days=3),
+                },
+                2,
             ),
             (
-                    {
-                        "by_finish_date": datetime.date.today() + datetime.timedelta(days=3),
-                    },
-                    2,
+                {
+                    "by_budget_rule": BudgetRuleEnum.eq,
+                },
+                2,
             ),
             (
-                    {
-                        "by_budget_rule": BudgetRuleEnum.eq,
-                    },
-                    2
-            ),
-            (
-                    {
-                        "by_budget_rule": BudgetRuleEnum.lt,
-                    },
-                    3
+                {
+                    "by_budget_rule": BudgetRuleEnum.lt,
+                },
+                3,
             ),
         ],
     )
@@ -175,7 +173,7 @@ class TestBudgetService:
         [
             pytest.param(1, 1, id="user_budget"),
             pytest.param(4, None, id="another_user_budget"),
-        ]
+        ],
     )
     def test_retrieve_single(self, budget_id: int, expected: int | None):
         """Тест проверки получения единственной записи"""
@@ -190,14 +188,8 @@ class TestBudgetService:
         service = BudgetService(user=user)
         result = service.retrieve_single(budget_id)
 
-        assert (
-            isinstance(result, Goal) if result is not None
-            else result is None
-        )
-        assert (
-            result.id == expected if result is not None
-            else result is None
-        )
+        assert isinstance(result, Goal) if result is not None else result is None
+        assert result.id == expected if result is not None else result is None
 
     @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
@@ -216,7 +208,7 @@ class TestBudgetService:
             {
                 "category": None,
             },
-        ]
+        ],
     )
     def test_update(
         self,
@@ -249,17 +241,19 @@ class TestBudgetService:
                 {
                     "goal_type": GoalTypeEnum.REFILL,
                 },
-                id="existing_field"
+                id="existing_field",
             ),
             pytest.param(
                 {
                     "field1": 1,
                 },
-                id="non_existing_field"
+                id="non_existing_field",
             ),
-        ]
+        ],
     )
-    def test_update_with_validation_error_on_non_existing_fields(self, update_params: dict[str, Any]):
+    def test_update_with_validation_error_on_non_existing_fields(
+        self, update_params: dict[str, Any]
+    ):
         """Тест проверки возникновения ошибки валидации при обновлении"""
         user = UserFactory()
         CategoryFactory.create()

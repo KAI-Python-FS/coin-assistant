@@ -8,49 +8,83 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('operations', '0002_remove_operation_category_alter_operation_user_and_more'),
-        ('goals', '0001_initial'),
+        ("operations", "0002_remove_operation_category_alter_operation_user_and_more"),
+        ("goals", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='goal',
-            name='category',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='goals', to='operations.category', verbose_name='Категория операций цели'),
+            model_name="goal",
+            name="category",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="goals",
+                to="operations.category",
+                verbose_name="Категория операций цели",
+            ),
         ),
         migrations.AddField(
-            model_name='goal',
-            name='description',
-            field=models.TextField(null=True, verbose_name='Описание'),
+            model_name="goal",
+            name="description",
+            field=models.TextField(null=True, verbose_name="Описание"),
         ),
         migrations.AddField(
-            model_name='goal',
-            name='finish_date',
-            field=models.DateField(null=True, verbose_name='Дата окончания цели'),
+            model_name="goal",
+            name="finish_date",
+            field=models.DateField(null=True, verbose_name="Дата окончания цели"),
         ),
         migrations.AddField(
-            model_name='goal',
-            name='goal_type',
-            field=models.CharField(choices=[('Трата', 'Spending'), ('Пополнение', 'Refill')], default='Трата', max_length=32, verbose_name='Категория операций цели'),
+            model_name="goal",
+            name="goal_type",
+            field=models.CharField(
+                choices=[("Трата", "Spending"), ("Пополнение", "Refill")],
+                default="Трата",
+                max_length=32,
+                verbose_name="Категория операций цели",
+            ),
         ),
         migrations.AddField(
-            model_name='goal',
-            name='rule',
-            field=models.CharField(choices=[('Меньше', 'Lt'), ('Меньше или равно', 'Lte'), ('Больше', 'Gt'), ('Больше или равно', 'Gte'), ('Равно', 'Eq')], default='Меньше или равно', max_length=16, verbose_name='Правило достижения цели'),
+            model_name="goal",
+            name="rule",
+            field=models.CharField(
+                choices=[
+                    ("Меньше", "Lt"),
+                    ("Меньше или равно", "Lte"),
+                    ("Больше", "Gt"),
+                    ("Больше или равно", "Gte"),
+                    ("Равно", "Eq"),
+                ],
+                default="Меньше или равно",
+                max_length=16,
+                verbose_name="Правило достижения цели",
+            ),
         ),
         migrations.AddField(
-            model_name='goal',
-            name='start_date',
-            field=models.DateField(default=datetime.date.today, verbose_name='Дата начала цели'),
+            model_name="goal",
+            name="start_date",
+            field=models.DateField(
+                default=datetime.date.today, verbose_name="Дата начала цели"
+            ),
         ),
         migrations.AddField(
-            model_name='goal',
-            name='state',
-            field=models.CharField(choices=[('Успешно выполнена', 'Succeed'), ('Не выполнена', 'Failed'), ('В процессе', 'Working'), ('Неизвестно', 'Unknown')], default='Неизвестно', max_length=32, verbose_name='Состояние цели'),
+            model_name="goal",
+            name="state",
+            field=models.CharField(
+                choices=[
+                    ("Успешно выполнена", "Succeed"),
+                    ("Не выполнена", "Failed"),
+                    ("В процессе", "Working"),
+                    ("Неизвестно", "Unknown"),
+                ],
+                default="Неизвестно",
+                max_length=32,
+                verbose_name="Состояние цели",
+            ),
         ),
         migrations.AddField(
-            model_name='goal',
-            name='value',
-            field=models.FloatField(null=True, verbose_name='Значение цели'),
+            model_name="goal",
+            name="value",
+            field=models.FloatField(null=True, verbose_name="Значение цели"),
         ),
     ]

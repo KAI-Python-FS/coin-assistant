@@ -8,6 +8,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
 # Loading `.env` files
 # See docs: https://gitlab.com/mkleehammer/autoconfig
-config = AutoConfig(search_path=BASE_DIR.joinpath('config'))
+config = AutoConfig(search_path=BASE_DIR.joinpath("config"))
 
-__all__ = ['config']
+__all__ = ["config"]

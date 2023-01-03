@@ -1,4 +1,3 @@
-
 from pydantic import ValidationError
 from rest_framework import status
 from rest_framework.response import Response
@@ -17,12 +16,13 @@ class GoalRefillGeneralView(APIView):
     def get(self, request: Request) -> Response:
         """Получение списка Целей накопления пользователя"""
         query_params = query_parameters_to_dict(
-            request.query_params,
-            list_params=("by_categories",)
+            request.query_params, list_params=("by_categories",)
         )
 
         try:
-            filter_serializer = serializers.GoalRefillListFilterSerializer(**query_params)
+            filter_serializer = serializers.GoalRefillListFilterSerializer(
+                **query_params
+            )
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -31,7 +31,9 @@ class GoalRefillGeneralView(APIView):
 
         return Response(
             data=[
-                serializers.GoalRefillListItemOutputSerializer.from_orm(each_result).dict()
+                serializers.GoalRefillListItemOutputSerializer.from_orm(
+                    each_result
+                ).dict()
                 for each_result in result
             ]
         )
@@ -39,14 +41,18 @@ class GoalRefillGeneralView(APIView):
     def post(self, request: Request) -> Response:
         """Добавление Цели накопления пользователем"""
         try:
-            serializer = serializers.GoalRefillCreateInputSerializer.parse_obj(request.data)
+            serializer = serializers.GoalRefillCreateInputSerializer.parse_obj(
+                request.data
+            )
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         service = GoalRefillService(user=request.user)
         result = service.create(**serializer.dict(exclude_none=True))
 
-        output_deserialized = serializers.GoalRefillCreateOutputSerializer.from_orm(result)
+        output_deserialized = serializers.GoalRefillCreateOutputSerializer.from_orm(
+            result
+        )
 
         return Response(
             data=output_deserialized.dict(),
@@ -65,7 +71,9 @@ class GoalRefillConcreteView(APIView):
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        output_deserialized = serializers.GoalRefillRetrieveOutputSerializer.from_orm(result)
+        output_deserialized = serializers.GoalRefillRetrieveOutputSerializer.from_orm(
+            result
+        )
 
         return Response(
             data=output_deserialized.dict(),
@@ -74,7 +82,9 @@ class GoalRefillConcreteView(APIView):
     def put(self, request: Request, goal_id: int) -> Response:
         """Обновление конкретной Цели пользователя"""
         try:
-            serializer = serializers.GoalRefillUpdateInputSerializer.parse_obj(request.data)
+            serializer = serializers.GoalRefillUpdateInputSerializer.parse_obj(
+                request.data
+            )
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -86,7 +96,9 @@ class GoalRefillConcreteView(APIView):
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        output_deserialized = serializers.GoalRefillUpdateOutputSerializer.from_orm(result)
+        output_deserialized = serializers.GoalRefillUpdateOutputSerializer.from_orm(
+            result
+        )
 
         return Response(
             data=output_deserialized.dict(),
@@ -109,8 +121,7 @@ class BudgetGeneralView(APIView):
     def get(self, request: Request) -> Response:
         """Получение списка Бюджетов пользователя"""
         query_params = query_parameters_to_dict(
-            request.query_params,
-            list_params=("by_categories",)
+            request.query_params, list_params=("by_categories",)
         )
 
         try:
@@ -157,7 +168,9 @@ class BudgetConcreteView(APIView):
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        output_deserialized = serializers.BudgetRetrieveOutputSerializer.from_orm(result)
+        output_deserialized = serializers.BudgetRetrieveOutputSerializer.from_orm(
+            result
+        )
 
         return Response(
             data=output_deserialized.dict(),

@@ -35,7 +35,7 @@ class TestGoalRefillEndpoints:
                     "rule": GoalRefillRuleEnum.eq,
                 },
             ),
-        ]
+        ],
     )
     def test_create(self, api_client_authorized, create_params: dict):
         """Проверка создания цели накопления"""
@@ -66,28 +66,33 @@ class TestGoalRefillEndpoints:
                     "finish_date": datetime.datetime.now(),
                 },
             ),
-        ]
+        ],
     )
-    def test_retrieve_single(self, api_client_authorized, api_user, create_params: dict):
+    def test_retrieve_single(
+        self, api_client_authorized, api_user, create_params: dict
+    ):
         """Проверка получения Цели накопления пользователя"""
         goal_refill = GoalRefillFactory.create(
             user=api_user,
             **create_params,
         )
-        url = f'{self.endpoint}{goal_refill.id}'
+        url = f"{self.endpoint}{goal_refill.id}"
         expected = {
             "id": goal_refill.id,
             "name": goal_refill.name,
             "description": goal_refill.description,
-            "category": ({
+            "category": (
+                {
                     "id": goal_refill.category.id,
                     "name": goal_refill.category.name,
-                } if goal_refill.category
+                }
+                if goal_refill.category
                 else None
-             ),
+            ),
             "start_date": get_formatted_date(goal_refill.start_date),
             "finish_date": (
-                get_formatted_date(goal_refill.finish_date) if goal_refill.finish_date
+                get_formatted_date(goal_refill.finish_date)
+                if goal_refill.finish_date
                 else None
             ),
             "state": goal_refill.state,
@@ -115,8 +120,8 @@ class TestGoalRefillEndpoints:
             },
             {
                 "rule": GoalRefillRuleEnum.gte,
-            }
-        ]
+            },
+        ],
     )
     def test_update(self, api_client_authorized, api_user, update_params):
         """Проверка обновления Цели накопления пользователя"""
@@ -124,20 +129,23 @@ class TestGoalRefillEndpoints:
             user=api_user,
             **update_params,
         )
-        url = f'{self.endpoint}{goal_refill.id}'
+        url = f"{self.endpoint}{goal_refill.id}"
         expected = {
             "id": goal_refill.id,
             "name": goal_refill.name,
             "description": goal_refill.description,
-            "category": ({
+            "category": (
+                {
                     "id": goal_refill.category.id,
                     "name": goal_refill.category.name,
-                } if goal_refill.category
+                }
+                if goal_refill.category
                 else None
             ),
             "start_date": get_formatted_date(goal_refill.start_date),
             "finish_date": (
-                get_formatted_date(goal_refill.finish_date) if goal_refill.finish_date
+                get_formatted_date(goal_refill.finish_date)
+                if goal_refill.finish_date
                 else None
             ),
             "state": goal_refill.state,
@@ -160,7 +168,7 @@ class TestGoalRefillEndpoints:
         goal_refill = GoalRefillFactory.create(
             user=api_user,
         )
-        url = f'{self.endpoint}{goal_refill.id}'
+        url = f"{self.endpoint}{goal_refill.id}"
 
         response = api_client_authorized.delete(url)
 

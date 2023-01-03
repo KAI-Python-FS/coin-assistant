@@ -28,9 +28,9 @@ class TestGoalRefillService:
                     "value": 1,
                 },
                 1,
-                id="minimal_params"
+                id="minimal_params",
             ),
-        ]
+        ],
     )
     def test_create(
         self,
@@ -59,7 +59,7 @@ class TestGoalRefillService:
                 },
                 id="no_state",
             ),
-        ]
+        ],
     )
     def test_create_default_type(
         self,
@@ -94,39 +94,38 @@ class TestGoalRefillService:
     @pytest.mark.parametrize(
         "filter_params, expected",
         [
-            (
-                {
-                    "by_categories": (1,)
-                },
-                2
-            ),
+            ({"by_categories": (1,)}, 2),
             (
                 {
                     "by_state": GoalStateEnum.working,
                 },
-                2
+                2,
             ),
             (
                 {
-                    "by_start_date": datetime.date.today() + datetime.timedelta(days=360),
+                    "by_start_date": datetime.date.today()
+                    + datetime.timedelta(days=360),
                 },
                 0,
             ),
             (
                 {
-                    "by_start_date": datetime.date.today() - datetime.timedelta(days=10),
+                    "by_start_date": datetime.date.today()
+                    - datetime.timedelta(days=10),
                 },
                 5,
             ),
             (
                 {
-                    "by_finish_date": datetime.date.today() + datetime.timedelta(days=360),
+                    "by_finish_date": datetime.date.today()
+                    + datetime.timedelta(days=360),
                 },
                 5,
             ),
             (
                 {
-                    "by_finish_date": datetime.date.today() + datetime.timedelta(days=3),
+                    "by_finish_date": datetime.date.today()
+                    + datetime.timedelta(days=3),
                 },
                 2,
             ),
@@ -134,13 +133,13 @@ class TestGoalRefillService:
                 {
                     "by_budget_rule": GoalRefillRuleEnum.eq,
                 },
-                2
+                2,
             ),
             (
                 {
                     "by_budget_rule": GoalRefillRuleEnum.gt,
                 },
-                3
+                3,
             ),
         ],
     )
@@ -176,7 +175,7 @@ class TestGoalRefillService:
         [
             pytest.param(1, 1, id="users_goal_refill"),
             pytest.param(4, None, id="another_user_goal_refill"),
-        ]
+        ],
     )
     def test_retrieve_single(self, goal_id: int, expected: int | None):
         """Тест проверки получения единственной записи"""
@@ -191,14 +190,8 @@ class TestGoalRefillService:
         service = GoalRefillService(user=user)
         result = service.retrieve_single(goal_id)
 
-        assert (
-            isinstance(result, Goal) if result is not None
-            else result is None
-        )
-        assert (
-            result.id == expected if result is not None
-            else result is None
-        )
+        assert isinstance(result, Goal) if result is not None else result is None
+        assert result.id == expected if result is not None else result is None
 
     @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
@@ -217,7 +210,7 @@ class TestGoalRefillService:
             {
                 "category": None,
             },
-        ]
+        ],
     )
     def test_update(
         self,
@@ -250,17 +243,19 @@ class TestGoalRefillService:
                 {
                     "goal_type": GoalTypeEnum.REFILL,
                 },
-                id="existing_field"
+                id="existing_field",
             ),
             pytest.param(
                 {
                     "field1": 1,
                 },
-                id="non_existing_field"
+                id="non_existing_field",
             ),
-        ]
+        ],
     )
-    def test_update_with_validation_error_on_non_existing_fields(self, update_params: dict[str, Any]):
+    def test_update_with_validation_error_on_non_existing_fields(
+        self, update_params: dict[str, Any]
+    ):
         """Тест проверки возникновения ошибки валидации при передаче полей, недоступных к обновлению"""
         user = UserFactory()
         CategoryFactory.create()

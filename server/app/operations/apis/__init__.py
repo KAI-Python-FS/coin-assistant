@@ -1,4 +1,3 @@
-
 from .balance import BalanceCurrentView, BalanceDetailedView
 from .category import CategoryConcreteView, CategoryGeneralView
 from .operation import OperationConcreteView, OperationGeneralView

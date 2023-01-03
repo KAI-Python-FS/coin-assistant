@@ -76,9 +76,11 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
             object_data.pop("category")
             object_data["category_id"] = raw_category
 
-        object_data.update({
-            "goal_type": GoalTypeEnum.REFILL.value,
-        })
+        object_data.update(
+            {
+                "goal_type": GoalTypeEnum.REFILL.value,
+            }
+        )
 
         return super().create(**object_data)  # type: ignore
 
@@ -97,7 +99,9 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
 
         fields_diff = set(object_data.keys()) - set(ready_to_update_fields)
         if fields_diff:
-            raise ValidationError(f"Переданы поля {fields_diff}, недоступные к обновлению")
+            raise ValidationError(
+                f"Переданы поля {fields_diff}, недоступные к обновлению"
+            )
 
         return super().update(object_id, **object_data)
 
@@ -166,9 +170,11 @@ class BudgetService(BaseModelUserFilterCRUDService):
             object_data.pop("category")
             object_data["category_id"] = raw_category
 
-        object_data.update({
-            "goal_type": GoalTypeEnum.SPENDING.value,
-        })
+        object_data.update(
+            {
+                "goal_type": GoalTypeEnum.SPENDING.value,
+            }
+        )
 
         return super().create(*args, **object_data)  # type: ignore
 
@@ -187,6 +193,8 @@ class BudgetService(BaseModelUserFilterCRUDService):
 
         fields_diff = set(object_data.keys()) - set(ready_to_update_fields)
         if fields_diff:
-            raise ValidationError(f"Переданы поля {fields_diff}, недоступные к обновлению")
+            raise ValidationError(
+                f"Переданы поля {fields_diff}, недоступные к обновлению"
+            )
 
         return super().update(object_id, **object_data)

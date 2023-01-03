@@ -1,4 +1,3 @@
-
 from typing import Any
 
 import pytest
@@ -22,7 +21,7 @@ class TestCategoryService:
                     "name": "Категория123",
                 },
             ),
-        ]
+        ],
     )
     def test_create(
         self,
@@ -49,7 +48,7 @@ class TestCategoryService:
         [
             pytest.param(1, 1),
             pytest.param(4, None),
-        ]
+        ],
     )
     def test_retrieve_single(self, category_id: int, expected: int | None):
         """Тест проверки получения единственной записи"""
@@ -58,19 +57,14 @@ class TestCategoryService:
         service = CategoryService()
         result = service.retrieve_single(category_id)
 
-        assert (
-            result.id == expected if result is not None
-            else result is None
-        )
+        assert result.id == expected if result is not None else result is None
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(
         "update_params",
         [
-            {
-                "name": "тест321"
-            },
-        ]
+            {"name": "тест321"},
+        ],
     )
     def test_update(self, update_params):
         """Тест проверки обновления данных"""
@@ -86,10 +80,8 @@ class TestCategoryService:
     @pytest.mark.parametrize(
         "update_params",
         [
-            {
-                "name": None
-            },
-        ]
+            {"name": None},
+        ],
     )
     def test_update_with_validation_error(self, update_params):
         """Тест проверки обновления данных и возникновения ошибки валидации"""

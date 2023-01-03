@@ -14,15 +14,11 @@ class GoalQuerySet(models.QuerySet):
 
     def goals(self) -> models.QuerySet:
         """Возвращает цели накопления пользователя"""
-        return self.filter(
-            goal_type=enums.GoalTypeEnum.REFILL
-        )
+        return self.filter(goal_type=enums.GoalTypeEnum.REFILL)
 
     def budgets(self) -> models.QuerySet:
         """Возвращает цели трат пользователя - бюджет"""
-        return self.filter(
-            goal_type=enums.GoalTypeEnum.SPENDING
-        )
+        return self.filter(goal_type=enums.GoalTypeEnum.SPENDING)
 
 
 class GoalManager(models.Manager):
@@ -74,7 +70,7 @@ class Goal(models.Model):
         choices=enums.GoalStateEnum.choices,
         default=enums.GoalStateEnum.unknown,
         max_length=32,
-        verbose_name="Состояние цели"
+        verbose_name="Состояние цели",
     )
     value = models.FloatField(
         verbose_name="Значение цели",

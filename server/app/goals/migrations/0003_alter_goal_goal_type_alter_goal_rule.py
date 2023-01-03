@@ -6,18 +6,34 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('goals', '0002_goal_category_goal_description_goal_finish_date_and_more'),
+        ("goals", "0002_goal_category_goal_description_goal_finish_date_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='goal',
-            name='goal_type',
-            field=models.CharField(choices=[('Трата', 'Spending'), ('Пополнение', 'Refill')], default='Трата', max_length=32, verbose_name='Тип операций цели'),
+            model_name="goal",
+            name="goal_type",
+            field=models.CharField(
+                choices=[("Трата", "Spending"), ("Пополнение", "Refill")],
+                default="Трата",
+                max_length=32,
+                verbose_name="Тип операций цели",
+            ),
         ),
         migrations.AlterField(
-            model_name='goal',
-            name='rule',
-            field=models.CharField(choices=[('Меньше', 'Lt'), ('Меньше или равно', 'Lte'), ('Больше', 'Gt'), ('Больше или равно', 'Gte'), ('Равно', 'Eq')], default='Равно', max_length=16, verbose_name='Правило достижения цели'),
+            model_name="goal",
+            name="rule",
+            field=models.CharField(
+                choices=[
+                    ("Меньше", "Lt"),
+                    ("Меньше или равно", "Lte"),
+                    ("Больше", "Gt"),
+                    ("Больше или равно", "Gte"),
+                    ("Равно", "Eq"),
+                ],
+                default="Равно",
+                max_length=16,
+                verbose_name="Правило достижения цели",
+            ),
         ),
     ]

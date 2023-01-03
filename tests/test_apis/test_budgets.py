@@ -35,7 +35,7 @@ class TestBudgetEndpoints:
                     "rule": BudgetRuleEnum.eq,
                 },
             ),
-        ]
+        ],
     )
     def test_create(self, api_client_authorized, create_params: dict):
         """Проверка создания Бюджета"""
@@ -66,28 +66,33 @@ class TestBudgetEndpoints:
                     "finish_date": datetime.datetime.now(),
                 },
             ),
-        ]
+        ],
     )
-    def test_retrieve_single(self, api_client_authorized, api_user, create_params: dict):
+    def test_retrieve_single(
+        self, api_client_authorized, api_user, create_params: dict
+    ):
         """Проверка получения Бюджета пользователя"""
         goal_refill = BudgetFactory.create(
             user=api_user,
             **create_params,
         )
-        url = f'{self.endpoint}{goal_refill.id}'
+        url = f"{self.endpoint}{goal_refill.id}"
         expected = {
             "id": goal_refill.id,
             "name": goal_refill.name,
             "description": goal_refill.description,
-            "category": ({
-                     "id": goal_refill.category.id,
-                     "name": goal_refill.category.name,
-                 } if goal_refill.category
-                 else None
-             ),
+            "category": (
+                {
+                    "id": goal_refill.category.id,
+                    "name": goal_refill.category.name,
+                }
+                if goal_refill.category
+                else None
+            ),
             "start_date": get_formatted_date(goal_refill.start_date),
             "finish_date": (
-                get_formatted_date(goal_refill.finish_date) if goal_refill.finish_date
+                get_formatted_date(goal_refill.finish_date)
+                if goal_refill.finish_date
                 else None
             ),
             "state": goal_refill.state,
@@ -115,8 +120,8 @@ class TestBudgetEndpoints:
             },
             {
                 "rule": BudgetRuleEnum.lte,
-            }
-        ]
+            },
+        ],
     )
     def test_update(self, api_client_authorized, api_user, update_params):
         """Проверка обновления Бюджета пользователя"""
@@ -124,21 +129,22 @@ class TestBudgetEndpoints:
             user=api_user,
             **update_params,
         )
-        url = f'{self.endpoint}{budget.id}'
+        url = f"{self.endpoint}{budget.id}"
         expected = {
             "id": budget.id,
             "name": budget.name,
             "description": budget.description,
-            "category": ({
-                             "id": budget.category.id,
-                             "name": budget.category.name,
-                         } if budget.category
-                         else None
-                         ),
+            "category": (
+                {
+                    "id": budget.category.id,
+                    "name": budget.category.name,
+                }
+                if budget.category
+                else None
+            ),
             "start_date": get_formatted_date(budget.start_date),
             "finish_date": (
-                get_formatted_date(budget.finish_date) if budget.finish_date
-                else None
+                get_formatted_date(budget.finish_date) if budget.finish_date else None
             ),
             "state": budget.state,
             "value": budget.value,
@@ -160,7 +166,7 @@ class TestBudgetEndpoints:
         goal_refill = BudgetFactory.create(
             user=api_user,
         )
-        url = f'{self.endpoint}{goal_refill.id}'
+        url = f"{self.endpoint}{goal_refill.id}"
 
         response = api_client_authorized.delete(url)
 

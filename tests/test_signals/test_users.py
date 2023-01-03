@@ -1,4 +1,3 @@
-
 import pytest
 
 from tests.factories.user import UserFactory

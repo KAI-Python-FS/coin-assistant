@@ -1,4 +1,3 @@
-
 from django.db import models
 
 
@@ -20,6 +19,7 @@ class GoalStateEnum(models.TextChoices):
 
 class BudgetRuleEnum(models.TextChoices):
     """Справочник условий Бюджета"""
+
     lt = "Меньше"
     lte = "Меньше или равно"
     eq = "Равно"  # Нужно ли??
@@ -35,8 +35,7 @@ class GoalRefillRuleEnum(models.TextChoices):
 
 # Собираем вручную уникальные значения возможных Целей пользователя
 UNIQUE_GOAL_ENUMS = [
-    (each_item.name, each_item.value)
-    for each_item in BudgetRuleEnum
+    (each_item.name, each_item.value) for each_item in BudgetRuleEnum
 ] + [
     (each_item.name, each_item.value)
     for each_item in GoalRefillRuleEnum
