@@ -485,6 +485,18 @@ docs = ["sphinx", "sphinx-rtd-theme"]
 testing = ["django", "django-configurations (>=2.0)"]
 
 [[package]]
+name = "pytest-flake8"
+version = "1.1.1"
+description = "pytest plugin to check FLAKE8 requirements"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+flake8 = ">=4.0"
+pytest = ">=7.0"
+
+[[package]]
 name = "python-dateutil"
 version = "2.8.2"
 description = "Extensions to the standard Python datetime module"
@@ -605,7 +617,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "fff7d2f69217b32232864e6febbaf593992d9829788a7d5aada7cdf73899a980"
+content-hash = "dbc10a93b19a7044ca74ec38004cd6293351209484c597c522e14079cbb5a366"
 
 [metadata.files]
 asgiref = []
@@ -659,6 +671,7 @@ pylint = []
 pylint-pytest = []
 pytest = []
 pytest-django = []
+pytest-flake8 = []
 python-dateutil = [
     {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
     {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
