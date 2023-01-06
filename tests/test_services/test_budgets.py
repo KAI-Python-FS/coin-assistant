@@ -189,7 +189,7 @@ class TestBudgetService:
         assert (
             isinstance(result, Goal) if result is not None else result is None
         )
-        assert result.id == expected if result is not None else result is None
+        assert result.pk == expected if result is not None else result is None
 
     @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(

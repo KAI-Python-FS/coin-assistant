@@ -1,7 +1,7 @@
-from typing import Any
+from typing import Any, Type
 
 from django.core.exceptions import ValidationError
-from django.db.models import Q
+from django.db.models import Model, Q
 from django.db.models.query import QuerySet
 
 from server.app.base.services import BaseModelUserFilterCRUDService
@@ -13,7 +13,7 @@ from .models import Goal
 class GoalRefillService(BaseModelUserFilterCRUDService):
     """Класс описания бизнес логики работы с Целями пользователей"""
 
-    model = Goal
+    model: Type[Model] = Goal
 
     def _get_qs_retrieve_single(self, object_id: int) -> QuerySet:
         """Возвращает кварисет получения конкретной записи объекта"""
@@ -108,7 +108,7 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
 class BudgetService(BaseModelUserFilterCRUDService):
     """Класс описания бизнес логики работы с Бюджетами пользователей"""
 
-    model = Goal
+    model: Type[Model] = Goal
 
     def _get_qs_retrieve_single(self, object_id: int) -> QuerySet:
         """Возвращает кварисет получения конкретной записи объекта"""

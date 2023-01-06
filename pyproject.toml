@@ -26,6 +26,7 @@ pylint = "^2.15.9"
 pylint-pytest = "^1.1.2"
 pytest-flake8 = "^1.1.1"
 types-pytz = "^2022.7.0"
+django-stubs = "^1.13.1"
 
 [tool.poetry.dev-dependencies]
 
@@ -43,6 +44,10 @@ line_length = 79
 
 [tool.mypy]
 ignore_missing_imports = true
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "server.settings"
 
 [tool.darker]
 diff = true

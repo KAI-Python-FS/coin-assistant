@@ -56,7 +56,7 @@ class TestCategoryService:
         service = CategoryService()
         result = service.retrieve_single(category_id)
 
-        assert result.id == expected if result is not None else result is None
+        assert result.pk == expected if result is not None else result is None
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(

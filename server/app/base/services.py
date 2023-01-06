@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Type
 
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Model, Q
@@ -30,7 +30,7 @@ class InterfaceCRUDService:
 class BaseModelCRUDService(InterfaceCRUDService):
     """Базовый класс описания CRUD-логики на основе модели"""
 
-    model: Model
+    model: Type[Model]
 
     def _filters_retrieve_single(self, object_id: int) -> Q:
         """Возвращает фильтры получения конкретной записи объекта"""
@@ -127,6 +127,6 @@ class BaseModelUserFilterCRUDService(BaseModelCRUDService):
         """Возвращает фильтры получения конкретной списка объектов согласно фильтрам"""
         return Q(user=self.user)
 
-    def create(self, **object_data: dict[str, Any]) -> Model:
+    def create(self, **object_data: dict[Any, Any]) -> Model:
         """Создание объекта"""
         return super().create(user=self.user, **object_data)

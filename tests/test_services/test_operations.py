@@ -282,7 +282,7 @@ class TestOperationService:
         result = service.retrieve_single(operation_id)
 
         assert isinstance(result, Operation) if result else result is None
-        assert result.id == expected if result is not None else result is None
+        assert result.pk == expected if result is not None else result is None
 
     @pytest.mark.django_db(reset_sequences=True)
     @pytest.mark.parametrize(
