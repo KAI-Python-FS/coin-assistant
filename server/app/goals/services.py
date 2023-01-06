@@ -13,7 +13,7 @@ from .models import Goal
 class GoalRefillService(BaseModelUserFilterCRUDService):
     """Класс описания бизнес логики работы с Целями пользователей"""
 
-    model: Type[Model] = Goal
+    model: Type[Goal] = Goal
 
     def _get_qs_retrieve_single(self, object_id: int) -> QuerySet:
         """Возвращает кварисет получения конкретной записи объекта"""
@@ -108,7 +108,7 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
 class BudgetService(BaseModelUserFilterCRUDService):
     """Класс описания бизнес логики работы с Бюджетами пользователей"""
 
-    model: Type[Model] = Goal
+    model: Type[Goal] = Goal
 
     def _get_qs_retrieve_single(self, object_id: int) -> QuerySet:
         """Возвращает кварисет получения конкретной записи объекта"""
