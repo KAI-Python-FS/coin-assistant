@@ -43,7 +43,8 @@ UNIQUE_GOAL_ENUMS = [
 ]
 
 
-GoalRuleEnum = models.TextChoices(
+# https://github.com/typeddjango/django-stubs/issues/729
+GoalRuleEnum = models.TextChoices(  # type: ignore
     "GoalRuleEnum",
     UNIQUE_GOAL_ENUMS,
 )
