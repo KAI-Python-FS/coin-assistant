@@ -1,7 +1,7 @@
 from typing import Any, Type
 
 from django.core.exceptions import FieldDoesNotExist
-from django.db.models import Field, Model, Q
+from django.db.models import Model, Q
 from django.db.models.query import QuerySet
 
 
@@ -81,16 +81,16 @@ class BaseModelCRUDService(InterfaceCRUDService):
 
         for update_field_name, update_value in object_data.items():
             try:
-                model_update_field: Field = self.model._meta.get_field(
+                model_update_field = self.model._meta.get_field(  # type: ignore
                     update_field_name
                 )
             except FieldDoesNotExist:
                 break
 
             # Обновление только изменившихся данных
-            current_value = getattr(object_, model_update_field.attname)
+            current_value = getattr(object_, model_update_field.attname)  # type: ignore
             if current_value != update_value:
-                setattr(object_, model_update_field.attname, update_value)
+                setattr(object_, model_update_field.attname, update_value)  # type: ignore
         else:
             object_.full_clean()
             object_.save()
