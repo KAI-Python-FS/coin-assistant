@@ -4,7 +4,7 @@ from django.http.request import QueryDict
 
 
 def query_parameters_to_dict(
-    query_dict: QueryDict, list_params: list[str] | tuple[str] = None
+    query_dict: QueryDict, list_params: list[str] | None = None
 ) -> dict[str, Any]:
     """
     Возвращает словарь параметров, переданных в запросе.

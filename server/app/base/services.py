@@ -20,7 +20,7 @@ class InterfaceCRUDService:
     def retrieve_list(self, *args, **filters) -> Any:
         """Получение списка объектов"""
 
-    def update(self, object_id: int, *args, **object_data) -> Any:
+    def update(self, object_id: int, **object_data) -> Any | None:
         """Обновление объекта"""
 
     def delete(self, object_id: int, **kwargs) -> Any:
@@ -53,7 +53,7 @@ class BaseModelCRUDService(InterfaceCRUDService):
 
         return self.model.objects.filter(qs_filters).all()
 
-    def create(self, *args, **object_data: dict[str, Any]) -> Model:
+    def create(self, **object_data: dict[str, Any]) -> Model:
         """Создание объекта"""
         object_ = self.model.objects.create(**object_data)
         object_.full_clean()

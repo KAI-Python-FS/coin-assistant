@@ -35,10 +35,10 @@ class GoalRefillRuleEnum(models.TextChoices):
 
 # Собираем вручную уникальные значения возможных Целей пользователя
 UNIQUE_GOAL_ENUMS = [
-    (each_item.name, each_item.value) for each_item in BudgetRuleEnum
+    (each_item.name, each_item.value) for each_item in BudgetRuleEnum  # type: ignore
 ] + [
     (each_item.name, each_item.value)
-    for each_item in GoalRefillRuleEnum
+    for each_item in GoalRefillRuleEnum  # type: ignore
     if each_item != GoalRefillRuleEnum.eq
 ]
 
