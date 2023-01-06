@@ -1,7 +1,6 @@
+from typing import Any
 
 import pytest
-
-from typing import Any
 
 from server.app.operations.dataclasses import (
     BalanceDetailedByCategories,
@@ -10,7 +9,6 @@ from server.app.operations.dataclasses import (
 from server.app.operations.enums import OperationTypeEnum
 from server.app.operations.models import Category
 from server.app.operations.services import BalanceService
-
 from tests.factories.category import CategoryFactory
 from tests.factories.operations import OperationFactory
 from tests.factories.user import UserFactory
@@ -25,33 +23,78 @@ class TestBalanceService:
         "user2_spending_operation_values, user2_refill_operation_values, user1_expected",
         [
             pytest.param(
-                [], [], [], [], 0, id="no_users_operations",
+                [],
+                [],
+                [],
+                [],
+                0,
+                id="no_users_operations",
             ),
             pytest.param(
-                [1, 2], [], [], [], -3, id="user1_only_spending",
+                [1, 2],
+                [],
+                [],
+                [],
+                -3,
+                id="user1_only_spending",
             ),
             pytest.param(
-                [], [1, 2], [], [], 3, id="user1_only_refill",
+                [],
+                [1, 2],
+                [],
+                [],
+                3,
+                id="user1_only_refill",
             ),
             pytest.param(
-                [], [], [1, 2], [], 0, id="user1_no_operations_user2_only_spending",
+                [],
+                [],
+                [1, 2],
+                [],
+                0,
+                id="user1_no_operations_user2_only_spending",
             ),
             pytest.param(
-                [], [], [], [1, 2], 0, id="user1_no_operations_user2_only_refill",
+                [],
+                [],
+                [],
+                [1, 2],
+                0,
+                id="user1_no_operations_user2_only_refill",
             ),
             pytest.param(
-                [1, 2], [3, 4], [], [], 4, id="user1_all_operations_user2_no_operations",
+                [1, 2],
+                [3, 4],
+                [],
+                [],
+                4,
+                id="user1_all_operations_user2_no_operations",
             ),
             pytest.param(
-                [1, 2], [3, 4], [5, 6], [], 4, id="user1_all_operations_user2_only_spending",
+                [1, 2],
+                [3, 4],
+                [5, 6],
+                [],
+                4,
+                id="user1_all_operations_user2_only_spending",
             ),
             pytest.param(
-                [1, 2], [3, 4], [], [7, 9], 4, id="user1_all_operations_user2_only_refill",
+                [1, 2],
+                [3, 4],
+                [],
+                [7, 9],
+                4,
+                id="user1_all_operations_user2_only_refill",
             ),
             pytest.param(
-                [1, 2], [3, 4], [5, 6], [7, 9], 4, id="user1_all_operations_user2_all_operations",
+                [1, 2],
+                [3, 4],
+                [5, 6],
+                [7, 9],
+                4,
+                id="user1_all_operations_user2_all_operations",
             ),
-        ]
+        ],
     )
     def test_retrieve_current_balance_with_few_users(
         self,
@@ -98,8 +141,10 @@ class TestBalanceService:
         "spending_operation_params, refill_operation_params, expected",
         [
             pytest.param(
-                [], [], BalanceDetailedByCategories(spending=[], refill=[], balance=0),
-                id="no_user_operations"
+                [],
+                [],
+                BalanceDetailedByCategories(spending=[], refill=[], balance=0),
+                id="no_user_operations",
             ),
             pytest.param(
                 [
@@ -282,30 +327,26 @@ class TestBalanceService:
         """Тест детализации текущего баланса"""
         user = UserFactory.create()
         for each_idx in range(1, 5):
-            CategoryFactory.create(
-                name=f"Категория {each_idx}"
-            )
+            CategoryFactory.create(name=f"Категория {each_idx}")
         for each_refill_operation_value in spending_operation_params:
-            category_id = (
-                each_refill_operation_value.get("category")
-            )
+            category_id = each_refill_operation_value.get("category")
             OperationFactory.create(
                 cost=each_refill_operation_value["value"],
                 category=(
-                    Category.objects.get(pk=category_id) if category_id
+                    Category.objects.get(pk=category_id)
+                    if category_id
                     else None
                 ),
                 user=user,
                 operation_type=OperationTypeEnum.SPENDING,
             )
         for each_refill_operation_value in refill_operation_params:
-            category_id = (
-                each_refill_operation_value.get("category")
-            )
+            category_id = each_refill_operation_value.get("category")
             OperationFactory.create(
                 cost=each_refill_operation_value["value"],
                 category=(
-                    Category.objects.get(pk=category_id) if category_id
+                    Category.objects.get(pk=category_id)
+                    if category_id
                     else None
                 ),
                 operation_type=OperationTypeEnum.REFILL,

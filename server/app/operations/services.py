@@ -1,12 +1,18 @@
 from typing import Any
 
-from django.db.models import F, Sum, Q
+from django.db.models import F, Q, Sum
 
-from server.app.base.services import BaseModelCRUDService, BaseModelUserFilterCRUDService
+from server.app.base.services import (
+    BaseModelCRUDService,
+    BaseModelUserFilterCRUDService,
+)
 
+from .dataclasses import (
+    BalanceDetailedByCategories,
+    BalanceDetailedByCategoriesCategoryItem,
+)
 from .enums import OperationTypeEnum
 from .models import Category, Operation
-from .dataclasses import BalanceDetailedByCategories, BalanceDetailedByCategoriesCategoryItem
 
 
 class CategoryService(BaseModelCRUDService):
@@ -31,8 +37,7 @@ class OperationService(BaseModelUserFilterCRUDService):
             match each_filter_key:
                 case "by_operation_type":
                     filter_condition.add(
-                        Q(operation_type=each_filter_value),
-                        Q.AND
+                        Q(operation_type=each_filter_value), Q.AND
                     )
                 case "by_categories":
                     filter_condition.add(
@@ -41,17 +46,15 @@ class OperationService(BaseModelUserFilterCRUDService):
                             if each_filter_value
                             else Q(category__isnull=True)
                         ),
-                        Q.AND
+                        Q.AND,
                     )
                 case "by_operation_start_date":
                     filter_condition.add(
-                        Q(operation_at__gte=each_filter_value),
-                        Q.AND
+                        Q(operation_at__gte=each_filter_value), Q.AND
                     )
                 case "by_operation_finish_date":
                     filter_condition.add(
-                        Q(operation_at__lte=each_filter_value),
-                        Q.AND
+                        Q(operation_at__lte=each_filter_value), Q.AND
                     )
                 case _:
                     raise Exception("Неизвестный фильтр")
@@ -82,17 +85,14 @@ class BalanceService:
 
     def retrieve_current_balance(self) -> float:
         """Получение текущего баланса текущего пользователя"""
-        balance_qs = Operation.objects.filter(
-            user=self.user
-        ).aggregate(
+        balance_qs = Operation.objects.filter(user=self.user).aggregate(
             refill=Sum(
-                "cost",
-                filter=Q(operation_type=OperationTypeEnum.REFILL.value)
+                "cost", filter=Q(operation_type=OperationTypeEnum.REFILL.value)
             ),
             spending=Sum(
                 "cost",
-                filter=Q(operation_type=OperationTypeEnum.SPENDING.value)
-            )
+                filter=Q(operation_type=OperationTypeEnum.SPENDING.value),
+            ),
         )
 
         balance = (balance_qs["refill"] or 0) - (balance_qs["spending"] or 0)
@@ -104,12 +104,12 @@ class BalanceService:
         current_balance = self.retrieve_current_balance()
 
         categories_qs = (
-            Operation.objects.filter(
-                user=self.user
-            ).values(
+            Operation.objects.filter(user=self.user)
+            .values(
                 "category__pk",
                 "category__name",
-            ).annotate(
+            )
+            .annotate(
                 refill=Sum(
                     "cost",
                     filter=Q(operation_type=OperationTypeEnum.REFILL.value),
@@ -118,9 +118,9 @@ class BalanceService:
                     "cost",
                     filter=Q(operation_type=OperationTypeEnum.SPENDING.value),
                 ),
-            ).order_by(
-                F("category__pk").asc(nulls_first=True)
-            ).all()
+            )
+            .order_by(F("category__pk").asc(nulls_first=True))
+            .all()
         )
 
         detailed_info: list[dict[str, Any]] = list(categories_qs)
@@ -144,7 +144,7 @@ class BalanceService:
                 )
                 for each_detailed_info in detailed_info
                 if each_detailed_info["refill"] is not None
-            ]
+            ],
         )
 
         return result

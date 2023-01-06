@@ -6,24 +6,20 @@ from django.db import models
 from .enums import OperationTypeEnum
 from .validation import validate_operation_cost
 
-
 User = get_user_model()
 
 
 class Category(models.Model):
     """Модель категории покупки"""
 
-    name = models.CharField(
-        max_length=64,
-        verbose_name="Название категории"
-    )
+    name = models.CharField(max_length=64, verbose_name="Название категории")
 
     class Meta:
-        verbose_name = 'Категория'
-        verbose_name_plural = 'Категории'
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
 
 
 class Operation(models.Model):
@@ -66,8 +62,8 @@ class Operation(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Операция'
-        verbose_name_plural = 'Операции'
+        verbose_name = "Операция"
+        verbose_name_plural = "Операции"
 
     def __str__(self):
-        return f'{self.user}-at-{self.operation_at}-{self.name}'
+        return f"{self.user}-at-{self.operation_at}-{self.name}"

@@ -14,15 +14,33 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Goal',
+            name="Goal",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, verbose_name='Название цели')),
-                ('user', models.ManyToManyField(to=settings.AUTH_USER_MODEL, verbose_name='Покупатель')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=255, verbose_name="Название цели"
+                    ),
+                ),
+                (
+                    "user",
+                    models.ManyToManyField(
+                        to=settings.AUTH_USER_MODEL, verbose_name="Покупатель"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Цель',
-                'verbose_name_plural': 'Цели',
+                "verbose_name": "Цель",
+                "verbose_name_plural": "Цели",
             },
         ),
     ]

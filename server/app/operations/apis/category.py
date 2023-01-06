@@ -19,13 +19,17 @@ class CategoryGeneralView(APIView):
     def post(self, request: Request) -> Response:
         """Добавление категории методом POST"""
         try:
-            serializer = serializers.CategoryCreateInputSerializer.parse_obj(request.data)
+            serializer = serializers.CategoryCreateInputSerializer.parse_obj(
+                request.data
+            )
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         result = self.service.create(**serializer.dict())
 
-        output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(result)
+        output_deserialized = (
+            serializers.CategoryRetrieveOutputSerializer.from_orm(result)
+        )
         return Response(
             data=output_deserialized.dict(),
             status=status.HTTP_201_CREATED,
@@ -37,7 +41,9 @@ class CategoryGeneralView(APIView):
 
         return Response(
             data=[
-                serializers.CategoryListItemOutputSerializer.from_orm(each_result).dict()
+                serializers.CategoryListItemOutputSerializer.from_orm(
+                    each_result
+                ).dict()
                 for each_result in result
             ],
         )
@@ -56,7 +62,9 @@ class CategoryConcreteView(APIView):
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(result)
+        output_deserialized = (
+            serializers.CategoryRetrieveOutputSerializer.from_orm(result)
+        )
 
         return Response(
             data=output_deserialized.dict(),
@@ -65,7 +73,9 @@ class CategoryConcreteView(APIView):
     def put(self, request: Request, category_id: int):
         """Обновление конкретной категории"""
         try:
-            serializer = serializers.CategoryUpdateInputSerializer.parse_obj(request.data)
+            serializer = serializers.CategoryUpdateInputSerializer.parse_obj(
+                request.data
+            )
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -76,7 +86,9 @@ class CategoryConcreteView(APIView):
         if not result:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        output_deserialized = serializers.CategoryRetrieveOutputSerializer.from_orm(result)
+        output_deserialized = (
+            serializers.CategoryRetrieveOutputSerializer.from_orm(result)
+        )
         return Response(
             data=output_deserialized.dict(),
         )

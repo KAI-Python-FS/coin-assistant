@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Type
 
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Model, Q
@@ -20,7 +20,7 @@ class InterfaceCRUDService:
     def retrieve_list(self, *args, **filters) -> Any:
         """Получение списка объектов"""
 
-    def update(self, object_id: int, *args, **object_data) -> Any:
+    def update(self, object_id: int, **object_data) -> Any | None:
         """Обновление объекта"""
 
     def delete(self, object_id: int, **kwargs) -> Any:
@@ -30,7 +30,7 @@ class InterfaceCRUDService:
 class BaseModelCRUDService(InterfaceCRUDService):
     """Базовый класс описания CRUD-логики на основе модели"""
 
-    model: Model
+    model: Type[Model]
 
     def _filters_retrieve_single(self, object_id: int) -> Q:
         """Возвращает фильтры получения конкретной записи объекта"""
@@ -53,7 +53,7 @@ class BaseModelCRUDService(InterfaceCRUDService):
 
         return self.model.objects.filter(qs_filters).all()
 
-    def create(self, *args, **object_data: dict[str, Any]) -> Model:
+    def create(self, **object_data: dict[str, Any]) -> Model:
         """Создание объекта"""
         object_ = self.model.objects.create(**object_data)
         object_.full_clean()
@@ -81,14 +81,16 @@ class BaseModelCRUDService(InterfaceCRUDService):
 
         for update_field_name, update_value in object_data.items():
             try:
-                model_update_field = self.model._meta.get_field(update_field_name)
+                model_update_field = self.model._meta.get_field(  # type: ignore
+                    update_field_name
+                )
             except FieldDoesNotExist:
                 break
 
             # Обновление только изменившихся данных
-            current_value = getattr(object_, model_update_field.attname)
+            current_value = getattr(object_, model_update_field.attname)  # type: ignore
             if current_value != update_value:
-                setattr(object_, model_update_field.attname, update_value)
+                setattr(object_, model_update_field.attname, update_value)  # type: ignore
         else:
             object_.full_clean()
             object_.save()
@@ -125,6 +127,6 @@ class BaseModelUserFilterCRUDService(BaseModelCRUDService):
         """Возвращает фильтры получения конкретной списка объектов согласно фильтрам"""
         return Q(user=self.user)
 
-    def create(self, **object_data: dict[str, Any]) -> Model:
+    def create(self, **object_data: dict[Any, Any]) -> Model:
         """Создание объекта"""
         return super().create(user=self.user, **object_data)
