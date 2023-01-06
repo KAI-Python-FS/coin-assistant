@@ -175,7 +175,7 @@ class TestOperationService:
         service = OperationService(user=user)
         operations = service.retrieve_list()
 
-        assert isinstance(operations, QuerySet)
+        assert isinstance(operations, QuerySet)  # type: ignore
         assert operations.count() == expected
 
     @pytest.mark.django_db(reset_sequences=True)
@@ -259,7 +259,7 @@ class TestOperationService:
         service = OperationService(user=user)
         operations = service.retrieve_list(**filter_params)
 
-        assert isinstance(operations, QuerySet)
+        assert isinstance(operations, QuerySet)  # type: ignore
         assert operations.count() == expected
 
     @pytest.mark.django_db(reset_sequences=True)

@@ -83,7 +83,7 @@ class TestBudgetService:
             service = BudgetService(user=each_goal.user)
             result = service.retrieve_list()
 
-            assert isinstance(result, QuerySet)
+            assert isinstance(result, QuerySet)  # type: ignore
             assert result.count() == 1
 
     @pytest.mark.django_db(reset_sequences=True)
