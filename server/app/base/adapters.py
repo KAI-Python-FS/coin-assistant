@@ -25,8 +25,8 @@ def query_parameters_to_dict(
                 query_dict.getlist(each_key) if each_value else None
             )
         else:
-            query_parameter_value = each_value
+            query_parameter_value = each_value  # type: ignore
 
-        params_as_dict.update({each_key: query_parameter_value})
+        params_as_dict[each_key] = query_parameter_value
 
     return params_as_dict
