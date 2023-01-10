@@ -67,7 +67,7 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
 
         return filter_condition
 
-    def create(self, **object_data) -> Goal:
+    def create(self, object_data, *args, **kwargs) -> Goal:
         """Создание объекта"""
         # TODO возможно стоит вынести в родительский метод разбор является ли переданное поле FK
         raw_category = object_data.get("category")
@@ -75,13 +75,9 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
             object_data.pop("category")
             object_data["category_id"] = raw_category
 
-        object_data.update(
-            {
-                "goal_type": GoalTypeEnum.REFILL.value,
-            }
-        )
+        object_data["goal_type"] = GoalTypeEnum.REFILL.value
 
-        return super().create(**object_data)  # type: ignore
+        return super().create(object_data, *args, **kwargs)  # type: ignore
 
     def update(self, object_id: int, **object_data: dict) -> Goal | None:
         """Обновление объекта"""
@@ -161,7 +157,7 @@ class BudgetService(BaseModelUserFilterCRUDService):
 
         return filter_condition
 
-    def create(self, *args, **object_data: dict[str, Any]) -> Goal:
+    def create(self, object_data: dict[str, Any], *args, **kwargs) -> Goal:
         """Создание объекта"""
         # TODO возможно стоит вынести в родительский метод разбор является ли переданное поле FK
         raw_category = object_data.get("category")
@@ -175,7 +171,7 @@ class BudgetService(BaseModelUserFilterCRUDService):
             }
         )
 
-        return super().create(*args, **object_data)  # type: ignore
+        return super().create(object_data, *args, **kwargs)  # type: ignore
 
     def update(self, object_id: int, **object_data: dict) -> Goal | None:
         """Обновление объекта"""

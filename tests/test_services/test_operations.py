@@ -84,7 +84,7 @@ class TestOperationService:
         _ = CategoryFactory.create()
 
         service = OperationService(user)
-        result = service.create(**create_params)
+        result = service.create(object_data=create_params)
 
         # Проверка создания записи
         assert isinstance(result, Operation)
@@ -151,7 +151,7 @@ class TestOperationService:
 
         service = OperationService(user)
         with pytest.raises(ValidationError):
-            service.create(**create_params)
+            service.create(object_data=create_params)
 
     @pytest.mark.django_db()
     @pytest.mark.parametrize(

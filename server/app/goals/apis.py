@@ -50,7 +50,7 @@ class GoalRefillGeneralView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         service = GoalRefillService(user=request.user)
-        result = service.create(**serializer.dict(exclude_none=True))
+        result = service.create(serializer.dict(exclude_none=True))
 
         output_deserialized = (
             serializers.GoalRefillCreateOutputSerializer.from_orm(result)
@@ -157,7 +157,7 @@ class BudgetGeneralView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         service = BudgetService(user=request.user)
-        result = service.create(**serializer.dict(exclude_none=True))
+        result = service.create(serializer.dict(exclude_none=True))
 
         output_deserialized = (
             serializers.BudgetCreateOutputSerializer.from_orm(result)
