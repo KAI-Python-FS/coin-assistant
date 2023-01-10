@@ -24,12 +24,17 @@ from server.app.operations.urls import (
 )
 
 urlpatterns = [
-    path("api/", include([
-        path("admin/", admin.site.urls),
-        path("balance/", include(balance_patterns)),
-        path("category/", include(category_patterns)),
-        path("operation/", include(operation_patterns)),
-        path("goal/", include(goal_accumulation_patterns)),
-        path("budget/", include(budget_patterns)),
-    ])),
+    path(
+        "api/",
+        include(
+            [
+                path("admin/", admin.site.urls),
+                path("balance/", include(balance_patterns)),
+                path("category/", include(category_patterns)),
+                path("operation/", include(operation_patterns)),
+                path("goal/", include(goal_accumulation_patterns)),
+                path("budget/", include(budget_patterns)),
+            ]
+        ),
+    ),
 ]
