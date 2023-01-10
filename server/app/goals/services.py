@@ -98,7 +98,7 @@ class GoalRefillService(BaseModelUserFilterCRUDService):
                 f"Переданы поля {fields_diff}, недоступные к обновлению"
             )
 
-        return super().update(object_id, **object_data)
+        return super().update(object_id, **object_data)  # type: ignore
 
 
 class BudgetService(BaseModelUserFilterCRUDService):
@@ -192,4 +192,4 @@ class BudgetService(BaseModelUserFilterCRUDService):
                 f"Переданы поля {fields_diff}, недоступные к обновлению"
             )
 
-        return super().update(object_id, **object_data)
+        return super().update(object_id, **object_data)  # type: ignore

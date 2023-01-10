@@ -13,18 +13,23 @@ class InterfaceCRUDService:
 
     def create(self, *args, **object_data) -> Any:
         """Создание объекта"""
+        raise NotImplementedError
 
     def retrieve_single(self, object_id: int, *args, **kwargs) -> Any:
         """Получение одной объекта"""
+        raise NotImplementedError
 
     def retrieve_list(self, *args, **filters) -> Any:
         """Получение списка объектов"""
+        raise NotImplementedError
 
-    def update(self, object_id: int, **object_data) -> Any | None:
+    def update(self, object_id: int, **object_data) -> Any:
         """Обновление объекта"""
+        raise NotImplementedError
 
     def delete(self, object_id: int, **kwargs) -> Any:
         """Удаление объекта"""
+        raise NotImplementedError
 
 
 class BaseModelCRUDService(InterfaceCRUDService):
