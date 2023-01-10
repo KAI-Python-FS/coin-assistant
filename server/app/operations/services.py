@@ -61,7 +61,9 @@ class OperationService(BaseModelUserFilterCRUDService):
 
         return filter_condition
 
-    def create(self, object_data: dict[str, Any], *args, **kwargs) -> Operation:
+    def create(
+        self, object_data: dict[str, Any], *args, **kwargs
+    ) -> Operation:
         """Создание объекта"""
         raw_category = object_data.get("category")
         if raw_category is not None and isinstance(raw_category, int):

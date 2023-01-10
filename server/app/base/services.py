@@ -134,7 +134,5 @@ class BaseModelUserFilterCRUDService(BaseModelCRUDService):
 
     def create(self, object_data: dict[Any, Any], *args, **kwargs) -> Model:
         """Создание объекта"""
-        object_data.update({
-            "user": self.user
-        })
+        object_data.update({"user": self.user})
         return super().create(object_data, *args, **kwargs)
