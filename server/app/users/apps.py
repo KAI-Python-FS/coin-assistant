@@ -8,4 +8,4 @@ class UsersConfig(AppConfig):
     name = "server.app.users"
 
     def ready(self):
-        from .receivers import create_auth_token  # noqa: C0415 W0611
+        from .receivers import create_auth_token  # noqa

@@ -59,6 +59,18 @@ jobs:
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install
 
+    - name: Run black
+      run: poetry run black . --check --verbose
+
+    - name: Run isort
+      run: poetry run isort . --check --diff
+
+    - name: Run flake8
+      run: poetry run flake8 .
+
+    - name: Run type checking
+      run: poetry run mypy .
+
     - name: Run migrations
       run: poetry run python manage.py migrate
 
