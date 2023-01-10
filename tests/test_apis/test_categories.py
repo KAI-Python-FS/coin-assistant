@@ -8,7 +8,7 @@ from tests.factories.category import CategoryFactory
 class TestCategoryEndpoints:
     """Тест эндпоинта категорий"""
 
-    endpoint = "/category/"
+    endpoint = "/api/category/"
 
     @pytest.mark.django_db()
     def test_list(self, api_client_authorized):

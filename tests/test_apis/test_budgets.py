@@ -11,7 +11,7 @@ from tests.utils import get_formatted_date
 class TestBudgetEndpoints:
     """Тест эндпоинта Бюджета пользователя"""
 
-    endpoint = "/budget/"
+    endpoint = "/api/budget/"
 
     @pytest.mark.django_db()
     def test_list(self, api_client_authorized, api_user):
