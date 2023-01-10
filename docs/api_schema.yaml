@@ -14,7 +14,7 @@ tags:
   - name: "API целей накопления"
     description: "API работы с целями накопления пользователя"
 paths:
-  /balance/:
+  /api/balance/:
     get:
       description: "Получение информации о балансе"
       tags:
@@ -26,7 +26,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BalanceOutput"
-  /balance/detailed/:
+  /api/balance/detailed/:
     get:
       description: "Детализация трат по категориям"
       tags:
@@ -38,7 +38,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BalanceDetailedOutput"
-  /balance/reports/change-by-mounths:
+  /api/balance/reports/change-by-mounths:
     post:
       description: "Отчет об изменении баланса в разрезе месяцев по категориям"
       tags:
@@ -51,7 +51,7 @@ paths:
               schema:
                 type: string
                 format: binary
-  /budget/:
+  /api/budget/:
     get:
       description: "Получение списка бюджетов пользователя"
       tags:
@@ -87,7 +87,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BudgetOutput"
-  /budget/{budget_id}:
+  /api/budget/{budget_id}:
     parameters:
       - $ref: "#/components/parameters/budget_id"
     get:
@@ -124,7 +124,7 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/success"
-  /category/:
+  /api/category/:
     get:
       description: "Получение списка категорий"
       tags:
@@ -154,7 +154,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CategoryOutput"
-  /category/{category_id}:
+  /api/category/{category_id}:
     parameters:
       - $ref: "#/components/parameters/category_id_path"
     get:
@@ -191,7 +191,7 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/success"
-  /goal/:
+  /api/goal/:
     get:
       description: "Получение списка целей накопления пользователя"
       tags:
@@ -227,7 +227,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GoalOutput'
-  /goal/{goal_id}:
+  /api/goal/{goal_id}:
     parameters:
       - $ref: '#/components/parameters/goal_id'
     get:
@@ -264,7 +264,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/success'
-  /operation/:
+  /api/operation/:
     get:
       description: "Получение списка операций пользователя"
       tags:
@@ -299,7 +299,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OperationOutput'
-  /operation/{id}:
+  /api/operation/{id}:
     parameters:
       - $ref: "#/components/parameters/operation_id"
     get:
