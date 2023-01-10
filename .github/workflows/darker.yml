@@ -14,4 +14,4 @@ jobs:
         with:
           src: "."
           version: "~=1.6.1"
-          lint: "flake8,pylint==2.13.1"
+          lint: "flake8,pylint==2.13.1,mypy"
