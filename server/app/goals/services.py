@@ -1,7 +1,7 @@
 from typing import Any, Type
 
 from django.core.exceptions import ValidationError
-from django.db.models import Model, Q
+from django.db.models import Q
 from django.db.models.query import QuerySet
 
 from server.app.base.services import BaseModelUserFilterCRUDService
