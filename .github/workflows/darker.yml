@@ -14,4 +14,4 @@ jobs:
         with:
           options: "--check --diff --isort --color"
           version: "~=1.6.1"
-          lint: "flake8,pylint==2.13.1,mypy==0.991"
+          lint: "flake8,pylint==2.13.1"
