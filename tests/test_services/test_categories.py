@@ -28,7 +28,7 @@ class TestCategoryService:
     ):
         """Тест проверки создания категории"""
         service = CategoryService()
-        _ = service.create(**create_params)
+        _ = service.create(object_data=create_params)
 
         assert Category.objects.count() == 1
 

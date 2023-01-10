@@ -39,7 +39,7 @@ class TestBudgetService:
 
         service = BudgetService(user=user)
         result = service.create(
-            **create_params,
+            object_data=create_params,
         )
 
         assert isinstance(result, Goal)
@@ -67,7 +67,7 @@ class TestBudgetService:
 
         service = BudgetService(user=user)
         result = service.create(
-            **create_params,
+            object_data=create_params,
         )
 
         assert result.goal_type == GoalTypeEnum.SPENDING

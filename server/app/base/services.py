@@ -13,18 +13,23 @@ class InterfaceCRUDService:
 
     def create(self, *args, **object_data) -> Any:
         """Создание объекта"""
+        raise NotImplementedError
 
     def retrieve_single(self, object_id: int, *args, **kwargs) -> Any:
         """Получение одной объекта"""
+        raise NotImplementedError
 
     def retrieve_list(self, *args, **filters) -> Any:
         """Получение списка объектов"""
+        raise NotImplementedError
 
-    def update(self, object_id: int, **object_data) -> Any | None:
+    def update(self, object_id: int, **object_data) -> Any:
         """Обновление объекта"""
+        raise NotImplementedError
 
     def delete(self, object_id: int, **kwargs) -> Any:
         """Удаление объекта"""
+        raise NotImplementedError
 
 
 class BaseModelCRUDService(InterfaceCRUDService):
@@ -53,7 +58,7 @@ class BaseModelCRUDService(InterfaceCRUDService):
 
         return self.model.objects.filter(qs_filters).all()
 
-    def create(self, **object_data: dict[str, Any]) -> Model:
+    def create(self, object_data: dict[str, Any], *args, **kwargs) -> Model:
         """Создание объекта"""
         object_ = self.model.objects.create(**object_data)
         object_.full_clean()
@@ -127,6 +132,7 @@ class BaseModelUserFilterCRUDService(BaseModelCRUDService):
         """Возвращает фильтры получения конкретной списка объектов согласно фильтрам"""
         return Q(user=self.user)
 
-    def create(self, **object_data: dict[Any, Any]) -> Model:
+    def create(self, object_data: dict[Any, Any], *args, **kwargs) -> Model:
         """Создание объекта"""
-        return super().create(user=self.user, **object_data)
+        object_data.update({"user": self.user})
+        return super().create(object_data, *args, **kwargs)

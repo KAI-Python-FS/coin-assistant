@@ -1,6 +1,6 @@
 name: Django CI
 
-on: push
+on: pull_request
 
 env:
   POSTGRES_USER: postgres

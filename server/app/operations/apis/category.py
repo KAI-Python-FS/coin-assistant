@@ -25,7 +25,7 @@ class CategoryGeneralView(APIView):
         except ValidationError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        result = self.service.create(**serializer.dict())
+        result = self.service.create(serializer.dict())
 
         output_deserialized = (
             serializers.CategoryRetrieveOutputSerializer.from_orm(result)
