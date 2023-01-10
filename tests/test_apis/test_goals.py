@@ -11,7 +11,7 @@ from tests.utils import get_formatted_date
 class TestGoalRefillEndpoints:
     """Тест эндпоинта целей накопления пользователя"""
 
-    endpoint = "/goal/"
+    endpoint = "/api/goal/"
 
     @pytest.mark.django_db()
     def test_list(self, api_client_authorized, api_user):

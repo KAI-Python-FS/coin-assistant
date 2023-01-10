@@ -10,7 +10,7 @@ from tests.factories.operations import OperationFactory
 class TestBalanceEndpoints:
     """Тест эндпоинта текущего баланса пользователя"""
 
-    endpoint = "/balance/"
+    endpoint = "/api/balance/"
 
     @staticmethod
     def _get_expected_balance(

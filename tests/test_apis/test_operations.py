@@ -12,7 +12,7 @@ from tests.utils import get_formatted_datetime
 class TestOperationEndpoints:
     """Тест эндпоинта операций пользователя"""
 
-    endpoint = "/operation/"
+    endpoint = "/api/operation/"
 
     @pytest.mark.django_db()
     def test_list(self, api_client_authorized, api_user):
